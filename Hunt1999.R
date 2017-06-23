@@ -1,5 +1,5 @@
 Hunt1999 <- function(d, S, Tr, t, lmda){
-  ## Hunt (1999) analytical model for streamflow depletion.
+  ## Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
   #'
   #' Reference:
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
