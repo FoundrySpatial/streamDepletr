@@ -1,5 +1,5 @@
 Wilson1993_SemiInfinite_Unconfined <- function(x, y, K, h.0, qa, d, Qw){
-  ## Wilson (1993) analytical model for streamflow depletion with ambient groundwater
+  ## Wilson (1993) analytical model for head distribution with ambient groundwater flow
   ## in a semi-infinite, unconfined aquifer.
   #'
   #' Reference:
