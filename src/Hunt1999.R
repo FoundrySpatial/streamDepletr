@@ -6,7 +6,7 @@ Hunt1999 <- function(d, S, Tr, t, lmda){
   #' 
   #' Inputs:
   #'  d  = distance from well to stream [L]
-  #'  S  = aquifer storage coefficient (storativity) [-]
+  #'  S  = aquifer storage coefficient [-] (specific yield for unconfined storativity for confined)
   #'  Tr = aquifer transmissivity [L2/T]
   #'  t  = time since pumping started [T]
   #'  lmda = streambed conductance term, lambda [L/T]
@@ -38,7 +38,8 @@ Hunt1999 <- function(d, S, Tr, t, lmda){
   # Eq. 20
   Qf <- (erfc(sqrt((S*d*d)/(4*Tr*t))) - 
            exp((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr))*
-           erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t))))
+           erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)))
+         )
   return(Qf)
 }
 
