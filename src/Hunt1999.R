@@ -1,4 +1,4 @@
-Hunt1999 <- function(d, S, Tr, t, lmda){
+Hunt1999 <- function(d, S, Tr, t, lmda, lmda_max){
   ## Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
   #'
   #' Reference:
@@ -11,6 +11,12 @@ Hunt1999 <- function(d, S, Tr, t, lmda){
   #'  t  = time since pumping started [T]
   #'  lmda = streambed conductance term, lambda [L/T]
   #'    See script: Hunt1999_lmda to estimate this based on aquifer and well properties
+  #'  lmda_max = maximum allowed value of lmda; if lmda>lmda_max, lmda will be set = lmda_max
+  #'    This is necessary because in some settings lmda can get super high leading to erfc and exp terms
+  #'    with exponents outside R's ability to solve them. Huggins et al. (2018) JAWRA set lmda_max=1, 
+  #'    but it is not clear what units they are using and this has a significant impact on the results
+  #'    for trying to reproduce Rathfelder (2016) Fig. 61.
+  #'    lmda (and lmda_max) are important over short timescales but don't have a big impact on the asymptote.
   #'  
   #' Output:
   #'   Qf = streamflow depletion as fraction of pumping rate [-]
@@ -35,7 +41,10 @@ Hunt1999 <- function(d, S, Tr, t, lmda){
   # load package needed for erfc
   require(pracma)
   
-  # Eq. 20
+  # make sure lmda is not > lmda_max
+  lmda <- min(c(lmda, lmda_max))
+  
+  # solve for Qf
   Qf <- (erfc(sqrt((S*d*d)/(4*Tr*t))) - 
            exp((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr))*
            erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)))

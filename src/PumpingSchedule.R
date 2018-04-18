@@ -37,12 +37,15 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
   } else if (method=="Hunt"){
     # extract lmda
     lmda <- list(...)$lmda
+    lmda_max <- list(...)$lmda_max
     
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), lmda=lmda) -
-                    Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), lmda=lmda))
+        rates[i]*(Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), 
+                           lmda=lmda, lmda_max=lmda_max) -
+                    Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
+                             lmda=lmda, lmda_max=lmda_max))
     }
     
   }
@@ -72,7 +75,7 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 # for (d in c(5, 50, 200)){
 #   df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method="Glover", d=d, S=S, Tr=Tr)
 #   df$d <- d
-#   
+# 
 #   if (start.flag){
 #     df.all <- df
 #     start.flag <- F
@@ -101,19 +104,20 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 # str_cond <- 3
 # str_thick <- 1
 # lmda <- str_width*str_cond/str_thick
+# lmda_max <- 6  # this is my estimate to make it line up with results in Rathfelder (1961)
 # 
 # df <- data.frame(t=times)
-# df$Qf <- Hunt1999(d=d, S=S, Tr=Tr, t=times, lmda=lmda)
 # start.flag <- T
 # for (method in c("Glover", "Hunt")){
 #   if (method=="Glover"){
 #     df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr)
 #   } else if (method=="Hunt"){
-#     df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, lmda=lmda)
+#     df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, 
+#                             lmda=lmda, lmda_max=lmda_max)
 #   }
-#   
+# 
 #   df$method <- method
-#   
+# 
 #   if (start.flag){
 #     df.all <- df
 #     start.flag <- F
@@ -123,4 +127,5 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 # }
 # 
 # ggplot(df.all, aes(x=t, y=Q, color=method)) +
-#   geom_line()
+#   geom_line() +
+#   scale_y_continuous(limits=c(0,100))
