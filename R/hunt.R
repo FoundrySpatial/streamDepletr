@@ -1,4 +1,4 @@
-Hunt1999 <- function(d, S, Tr, t, lmda, lmda_max){
+hunt <- function(d, S, Tr, t, lmda, lmda_max){
   ## Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
   #'
   #' Reference:
@@ -79,7 +79,7 @@ Hunt1999 <- function(d, S, Tr, t, lmda, lmda_max){
 #   # make data frame with Qf
 #   df <- data.frame(x=x,
 #                    z=z.in,
-#                    Qf=Hunt1999(d=d, S=S, Tr=Tr, t=t, lmda=lmda))
+#                    Qf=hunt(d=d, S=S, Tr=Tr, t=t, lmda=lmda))
 # 
 #   # add to data frame with all z
 #   if (exists("df.all")){

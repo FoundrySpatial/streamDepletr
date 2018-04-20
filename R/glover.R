@@ -1,4 +1,4 @@
-GloverBalmer1954 <- function(d, S, Tr, t){
+glover <- function(d, S, Tr, t){
   ## Glover and Balmer (1954) analytical model for streamflow depletion with fully-penetrating stream.
   #'
   #' Reference:
@@ -37,6 +37,6 @@ GloverBalmer1954 <- function(d, S, Tr, t){
 }
 
 # ## Example script to reproduce Table 1 from Glover & Balmer (1954)
-# GloverBalmer1954(d=1000,  S=0.2, Tr=0.1, t=157770000)  # well 1
-# GloverBalmer1954(d=5000,  S=0.2, Tr=0.1, t=157770000)  # well 2
-# GloverBalmer1954(d=10000, S=0.2, Tr=0.1, t=157770000)  # well 3
+# glover(d=1000,  S=0.2, Tr=0.1, t=157770000)  # well 1
+# glover(d=5000,  S=0.2, Tr=0.1, t=157770000)  # well 2
+# glover(d=10000, S=0.2, Tr=0.1, t=157770000)  # well 3

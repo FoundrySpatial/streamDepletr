@@ -1,4 +1,4 @@
-Hantush1965 <- function(d, S, Tr, t, Kf.sb, B.sb){
+hantush <- function(d, S, Tr, t, Kf.sb, B.sb){
   ## Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.
   #'
   #' Reference:
@@ -64,7 +64,7 @@ Hantush1965 <- function(d, S, Tr, t, Kf.sb, B.sb){
 # 
 # # solve analytical solution
 # df.all <- data.frame(x = x,
-#                      Qf = Hantush1965(d=d, S=S, Tr=Tr, t=t, Kf.sb=Kf.sb, B.sb=B.sb))
+#                      Qf = hantush(d=d, S=S, Tr=Tr, t=t, Kf.sb=Kf.sb, B.sb=B.sb))
 # 
 # ## some NaNs appear towards the upper end here- not sure what's happening
 # 

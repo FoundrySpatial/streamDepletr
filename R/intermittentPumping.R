@@ -1,21 +1,23 @@
-PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, Tr, ...){
-  ## Calculates streamflow depletion using Jenkins (1968) superposition technique
+intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, Tr, ...){
+  #' intermittentPumping
+  #'
+  #' Calculate streamflow depletion for an intermittent pumping schedule using the Jenkins (1968) superposition technique.
+  #' @param t vector of times you want output for [T]
+  #' @param starts vector of times to start pumping [T] (must be same length as stops and rates)
+  #' @param stops vector of times pumping stops [T] (must be same length as starts and rates)
+  #' @param rates vector of pumping rates [L3/T] (must be same length as starts and stops)
+  #' @param method analytical solution to use (options= 'glover', 'hunt'). Defaults to 'glover'.
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @param ... any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)
+  #' @examples
+  #' intermittentPumping(t=seq(0,60,10), starts=0, stops=30, rates=100, method="glover", d=100, S=0.1, Tr=100)
   #'
   #' Reference: 
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
   #' 
-  #' Inputs:
-  #'  times = vector of times you want output for [T]
-  #'  starts = vector of times to start pumping [T] (must be same length as stops and rates)
-  #'  stops = vector of times pumping stops [T] (must be same length as starts and rates)
-  #'  rates = vector of pumping rates [L3/T] (must be same length as starts and stops)
-  #'  method = analytical solution to use (options= 'Glover', 'Hunt')
-  #'  d  = distance from well to stream [L]
-  #'  S  = aquifer storage coefficient [-] (specific yield for unconfined storativity for confined)
-  #'  Tr = aquifer transmissivity [L2/T]
-  #'   ... = any other inputs required for your depletion function of choice; for example, Hunt1999 needs 'lmda' (streambed conductance)
-  #'  
   #' Output:
   #'   Q = streamflow depletion [L3/T]
   #'          Note that this is NOT Qf (depletion fraction) because depletion fraction
@@ -25,16 +27,16 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
   Q.all <- matrix(NaN, nrow=length(times), ncol=length(starts))
   
   # select analytical model and calculate depletion
-  if (method=="Glover"){
+  if (method=="glover"){
     
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(GloverBalmer1954(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0)) -
-                    GloverBalmer1954(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0)))
+        rates[i]*(glover(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0)) -
+                    glover(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0)))
     }
     
-  } else if (method=="Hunt"){
+  } else if (method=="hunt"){
     # extract lmda
     lmda <- list(...)$lmda
     lmda_max <- list(...)$lmda_max
@@ -42,9 +44,9 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), 
+        rates[i]*(hunt(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), 
                            lmda=lmda, lmda_max=lmda_max) -
-                    Hunt1999(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
+                    hunt(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
                              lmda=lmda, lmda_max=lmda_max))
     }
     
@@ -57,9 +59,9 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 
 # ## examples
 # require(ggplot2)
-# source("src/Hunt1999.R")
-# source("src/GloverBalmer1954.R")
-# source("src/HelperFunctions.R")
+# source("R/hunt.R")
+# source("R/glover.R")
+# source("R/HelperFunctions.R")
 # 
 # ## Rathfelder (2016) Figure 40
 # times <- seq(0,100)
@@ -73,7 +75,7 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 # df <- data.frame(t=times)
 # start.flag <- T
 # for (d in c(5, 50, 200)){
-#   df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method="Glover", d=d, S=S, Tr=Tr)
+#   df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method="glover", d=d, S=S, Tr=Tr)
 #   df$d <- d
 # 
 #   if (start.flag){
@@ -108,11 +110,11 @@ PumpingSchedule <- function(times, starts, stops, rates, method="Glover", d, S, 
 # 
 # df <- data.frame(t=times)
 # start.flag <- T
-# for (method in c("Glover", "Hunt")){
-#   if (method=="Glover"){
-#     df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr)
+# for (method in c("glover", "hunt")){
+#   if (method=="glover"){
+#     df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr)
 #   } else if (method=="Hunt"){
-#     df$Q <- PumpingSchedule(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, 
+#     df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, 
 #                             lmda=lmda, lmda_max=lmda_max)
 #   }
 # 
