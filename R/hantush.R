@@ -1,16 +1,15 @@
-hantush <- function(d, S, Tr, t, Kf.sb, B.sb){
-  ## Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.
-  #'
+hantush <- function(t, d, S, Kh, b, Kriv, briv){
+  #' Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.
+  #' @param t times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Kh aquifer horizontal hydraulic conductivity [L/T]
+  #' @param b aquifer saturated thickness [L]
+  #' @param Kriv streambed semipervious layer hydraulic conductivity [L/T]
+  #' @param briv streambed semipervious layer thickness [L]
+  #' 
   #' Reference:
   #' Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
-  #'
-  #' Inputs:
-  #'  d  = distance from well to stream [L]
-  #'  S  = aquifer storage coefficient (storativity) [-]
-  #'  Tr = aquifer transmissivity [L2/T]
-  #'  t  = time since pumping started [T]
-  #'  Kf.sb = ratio of (aquifer hydraulic conductivity) / (streambed hydraulic conductivity) [-]
-  #'  B.sb  = thickness of streambed semipervious layer [L]
   #'  
   #' Output:
   #'   Qf = streamflow depletion as fraction of pumping rate [-]
@@ -35,13 +34,53 @@ hantush <- function(d, S, Tr, t, Kf.sb, B.sb){
   # load package needed for erfc
   require(pracma)
   
-  L <- Kf.sb*B.sb
-  Qf <- erfc(sqrt(S*d*d/(4*Tr*t))) - 
+  # streambed leakance
+  L <- (Kh/Kriv)*briv
+  
+  # transmissivity
+  Tr <- Kh*b
+  
+  # calculate streamflow depletoin
+  Qf <- erfc(sqrt(S*d*d/(4*Tr*t))) -
     exp(((Tr*t)/(S*L*L))+(d/L))*
     erfc((sqrt((Tr*t)/(S*L*L))+sqrt((S*d*d)/(4*Tr*t))))
+  
+  # if solver is NOT stable: print a warning, adjust L term upwards, and re-solve
+  if (sum(!is.finite(Qf)) != 0){
+    warning("Unstable combination of input parameters; revising leakance upwards to ensure solution. Perhaps lower Kriv, increase briv, or increase Kh")
+  } 
+  
+  while (sum(!is.finite(Qf)) != 0){
+    L <- L*1.01
+    Qf <- erfc(sqrt(S*d*d/(4*Tr*t))) - 
+      exp(((Tr*t)/(S*L*L))+(d/L))*
+      erfc((sqrt((Tr*t)/(S*L*L))+sqrt((S*d*d)/(4*Tr*t))))
+  }
+  
   return(Qf)
 }
 
+# ## Example: Rathfelder (2016) Figure 42
+# require(ggplot2)
+# t    <- seq(1,720) # [d]
+# Kh   <- 10         # [m/d]
+# S    <- 0.25
+# d    <- 30         # [m]
+# briv <- 1          # [m]
+# b    <- 20         # [m]
+# 
+# hantush(t=89*86400, d=d, S=S, Kh=Kh/86400, b=b, Kriv=1/86400, briv=briv)
+# 
+# df <- data.frame(times=numeric(0), Qf=numeric(0), Kriv=numeric(0))
+# for (Kriv in c(1, 0.1, 0.01)){
+#   df <- rbind(df, 
+#               data.frame(times = t,
+#                          Qf = hantush(t=t, d=d, S=S, Kh=Kh, b=b, Kriv=Kriv, briv=briv),
+#                          Kriv = Kriv))
+# }
+# 
+# ggplot(df, aes(x=times, y=Qf, color=factor(Kriv))) + geom_line()
+#
 # ## Example script to reproduce Figure 4 from Hunt (1999)
 # lseq <- function(from=1, to=100000, length.out=6) {
 #   # logarithmic spaced sequence
@@ -55,18 +94,18 @@ hantush <- function(d, S, Tr, t, Kf.sb, B.sb){
 # # set constant t, S, Tr, B.sb
 # t <- 1
 # S <- 1
-# Tr <- 1
-# B.sb <- 1
+# Kh <- 1
+# b <- 1
+# briv <- 1
+# Tr <- Kh*b
 # 
 # # calculate d and K.sb based on x-axis
 # d <- sqrt((4*Tr*t)/(x*S))
-# Kf.sb <- d/2
+# Kriv <- Kh/(d/2)
 # 
 # # solve analytical solution
 # df.all <- data.frame(x = x,
-#                      Qf = hantush(d=d, S=S, Tr=Tr, t=t, Kf.sb=Kf.sb, B.sb=B.sb))
-# 
-# ## some NaNs appear towards the upper end here- not sure what's happening
+#                      Qf = hantush(t=t, d=d, S=S, Kh=Kh, b=b, Kriv=Kriv, briv=briv))
 # 
 # # make plot
 # require(ggplot2)

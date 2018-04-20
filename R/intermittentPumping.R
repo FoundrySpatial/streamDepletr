@@ -2,7 +2,7 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
   #' intermittentPumping
   #'
   #' Calculate streamflow depletion for an intermittent pumping schedule using the Jenkins (1968) superposition technique.
-  #' @param t vector of times you want output for [T]
+  #' @param t numeric or numeric vector of times you want output for [T]
   #' @param starts vector of times to start pumping [T] (must be same length as stops and rates)
   #' @param stops vector of times pumping stops [T] (must be same length as starts and rates)
   #' @param rates vector of pumping rates [L3/T] (must be same length as starts and stops)

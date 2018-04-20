@@ -1,14 +1,19 @@
-glover <- function(d, S, Tr, t){
-  ## Glover and Balmer (1954) analytical model for streamflow depletion with fully-penetrating stream.
+glover <- function(t, d, S, Tr){
   #'
+  #'Glover and Balmer (1954) analytical model for streamflow depletion with fully-penetrating stream.
+  #' @param t numeric or numeric vector of times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @examples
+  #' glover(t=157770000, d=1000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 1
+  #' glover(t=157770000, d=5000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 2
+  #' glover(t=157770000, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
+  #' 
+  #' 
   #' Reference:
-  #' Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River. Eos, Transactions American Geophysical Union 35(3): 468-70. doi:10.1029/TR035i003p00468.
-  #'   
-  #' Inputs:
-  #'  d  = distance from well to stream [L]
-  #'  S  = aquifer storage coefficient [-] (specific yield for unconfined storativity for confined)
-  #'  Tr = aquifer transmissivity [L2/T]
-  #'  t  = time since pumping started [T]
+  #' Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River. 
+  #' Eos, Transactions American Geophysical Union 35(3): 468-70. doi:10.1029/TR035i003p00468.
   #'  
   #' Output:
   #'   Qf = streamflow depletion as fraction of pumping rate [-]
