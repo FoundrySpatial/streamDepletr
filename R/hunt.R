@@ -1,22 +1,16 @@
-hunt <- function(d, S, Tr, t, lmda, lmda_max){
-  ## Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
-  #'
-  #' Reference:
-  #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
+hunt <- function(t, d, S, Tr, lmda){
+  #' Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
+  #' @param t times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @param lmda streambed conductance term, lambda [L/T]
   #' 
-  #' Inputs:
-  #'  d  = distance from well to stream [L]
-  #'  S  = aquifer storage coefficient [-] (specific yield for unconfined storativity for confined)
-  #'  Tr = aquifer transmissivity [L2/T]
-  #'  t  = time since pumping started [T]
-  #'  lmda = streambed conductance term, lambda [L/T]
-  #'    See script: Hunt1999_lmda to estimate this based on aquifer and well properties
-  #'  lmda_max = maximum allowed value of lmda; if lmda>lmda_max, lmda will be set = lmda_max
-  #'    This is necessary because in some settings lmda can get super high leading to erfc and exp terms
-  #'    with exponents outside R's ability to solve them. Huggins et al. (2018) JAWRA set lmda_max=1, 
-  #'    but it is not clear what units they are using and this has a significant impact on the results
-  #'    for trying to reproduce Rathfelder (2016) Fig. 61.
-  #'    lmda (and lmda_max) are important over short timescales but don't have a big impact on the asymptote.
+  #' Reference:
+  #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 
+  #' Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
+  #' 
+  #' See script: Hunt1999_lmda to estimate lmda based on aquifer and well properties
   #'  
   #' Output:
   #'   Qf = streamflow depletion as fraction of pumping rate [-]
@@ -24,7 +18,7 @@ hunt <- function(d, S, Tr, t, lmda, lmda_max){
   #' If you have the pumping rate of the well [Qw; L3/T] you can
   #' calculate the rate of streamflow depletion [Qs; L3/T] as Qs=Qf*Qw
   #'   
-  #' Assumptions (from Reeves et al., 1999):
+  #' Assumptions (from Reeves et al., 2009):
   #'  -Horizontal flow >> vertical flow (Dupuit assumptions hold)
   #'  -Homogeneous, isotropic aquifer
   #'  -Aquifer is confined, or if unconfined change in head is small relative to total thickness (constant Tr)
@@ -41,14 +35,23 @@ hunt <- function(d, S, Tr, t, lmda, lmda_max){
   # load package needed for erfc
   require(pracma)
   
-  # make sure lmda is not > lmda_max
-  lmda <- min(c(lmda, lmda_max))
-  
   # solve for Qf
   Qf <- (erfc(sqrt((S*d*d)/(4*Tr*t))) - 
            exp((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr))*
-           erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)))
-         )
+           erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t))))
+  
+  # if solver is NOT stable: print a warning, adjust lmda downwards, and re-solve
+  if (sum(!is.finite(Qf)) != 0){
+    warning("Unstable combination of input parameters; revising lmda downwards to ensure solution.")
+  } 
+  
+  while (sum(!is.finite(Qf)) != 0){
+    lmda <- lmda*0.99
+    Qf <- (erfc(sqrt((S*d*d)/(4*Tr*t))) - 
+             exp((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr))*
+             erfc(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t))))
+  }
+  
   return(Qf)
 }
 
@@ -79,7 +82,7 @@ hunt <- function(d, S, Tr, t, lmda, lmda_max){
 #   # make data frame with Qf
 #   df <- data.frame(x=x,
 #                    z=z.in,
-#                    Qf=hunt(d=d, S=S, Tr=Tr, t=t, lmda=lmda))
+#                    Qf=hunt(t=t, d=d, S=S, Tr=Tr, lmda=lmda))
 # 
 #   # add to data frame with all z
 #   if (exists("df.all")){

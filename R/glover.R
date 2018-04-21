@@ -1,7 +1,7 @@
 glover <- function(t, d, S, Tr){
   #'
   #'Glover and Balmer (1954) analytical model for streamflow depletion with fully-penetrating stream.
-  #' @param t numeric or numeric vector of times you want output for [T]
+  #' @param t times you want output for [T]
   #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]

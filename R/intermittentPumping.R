@@ -2,7 +2,7 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
   #' intermittentPumping
   #'
   #' Calculate streamflow depletion for an intermittent pumping schedule using the Jenkins (1968) superposition technique.
-  #' @param t numeric or numeric vector of times you want output for [T]
+  #' @param t times you want output for [T]
   #' @param starts vector of times to start pumping [T] (must be same length as stops and rates)
   #' @param stops vector of times pumping stops [T] (must be same length as starts and rates)
   #' @param rates vector of pumping rates [L3/T] (must be same length as starts and stops)
@@ -32,22 +32,21 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(glover(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0)) -
-                    glover(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0)))
+        rates[i]*(glover(t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), d=d,  S=S, Tr=Tr) -
+                    glover(t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), d=d,  S=S, Tr=Tr))
     }
     
   } else if (method=="hunt"){
     # extract lmda
     lmda <- list(...)$lmda
-    lmda_max <- list(...)$lmda_max
-    
+
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(hunt(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), 
-                           lmda=lmda, lmda_max=lmda_max) -
-                    hunt(d=d,  S=S, Tr=Tr, t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
-                             lmda=lmda, lmda_max=lmda_max))
+        rates[i]*(hunt(t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0),
+                       d=d,  S=S, Tr=Tr, lmda=lmda) -
+                    hunt(t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
+                         d=d, S=S, Tr=Tr, lmda=lmda))
     }
     
   }
@@ -75,7 +74,7 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
 # df <- data.frame(t=times)
 # start.flag <- T
 # for (d in c(5, 50, 200)){
-#   df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method="glover", d=d, S=S, Tr=Tr)
+#   df$Q <- intermittentPumping(t=times, starts=starts, stops=stops, rates=rates, method="glover", d=d, S=S, Tr=Tr)
 #   df$d <- d
 # 
 #   if (start.flag){
@@ -106,16 +105,14 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
 # str_cond <- 3
 # str_thick <- 1
 # lmda <- str_width*str_cond/str_thick
-# lmda_max <- 6  # this is my estimate to make it line up with results in Rathfelder (1961)
 # 
 # df <- data.frame(t=times)
 # start.flag <- T
 # for (method in c("glover", "hunt")){
 #   if (method=="glover"){
-#     df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr)
-#   } else if (method=="Hunt"){
-#     df$Q <- intermittentPumping(times=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, 
-#                             lmda=lmda, lmda_max=lmda_max)
+#     df$Q <- intermittentPumping(t=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr)
+#   } else if (method=="hunt"){
+#     df$Q <- intermittentPumping(t=times, starts=starts, stops=stops, rates=rates, method=method, d=d, S=S, Tr=Tr, lmda=lmda)
 #   }
 # 
 #   df$method <- method

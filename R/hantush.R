@@ -47,7 +47,7 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv){
   
   # if solver is NOT stable: print a warning, adjust L term upwards, and re-solve
   if (sum(!is.finite(Qf)) != 0){
-    warning("Unstable combination of input parameters; revising leakance upwards to ensure solution. Perhaps lower Kriv, increase briv, or increase Kh")
+    warning("Unstable combination of input parameters; adjusting leakance upwards to ensure solution. Perhaps lower Kriv, increase briv, or increase Kh")
   } 
   
   while (sum(!is.finite(Qf)) != 0){
