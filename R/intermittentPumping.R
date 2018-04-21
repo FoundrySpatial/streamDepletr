@@ -90,7 +90,6 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
 #   geom_line()
 # 
 # ## Rathfelder (2016) Figure 61
-# #### NOT working for Hunt (1999) solution
 # # inputs are in Rathfelder (2016) Table 8
 # times <- seq(0,730)
 # starts <- c(0,366)

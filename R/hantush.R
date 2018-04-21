@@ -1,4 +1,4 @@
-hantush <- function(t, d, S, Kh, b, Kriv, briv){
+hantush <- function(t, d, S, Kh, b, Kriv, briv, prec=80){
   #' Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.
   #' @param t times you want output for [T]
   #' @param d distance from well to stream [L]
@@ -7,10 +7,13 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv){
   #' @param b aquifer saturated thickness [L]
   #' @param Kriv streambed semipervious layer hydraulic conductivity [L/T]
   #' @param briv streambed semipervious layer thickness [L]
+  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
   #' 
   #' Reference:
   #' Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
   #'  
+  #' As the leakance term (b*Kh/Kriv) approaches 0 (thin streambed, high Kriv) this is equivalent to glover method
+  #'
   #' Output:
   #'   Qf = streamflow depletion as fraction of pumping rate [-]
   #'   
@@ -32,7 +35,7 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv){
   #' Example run code is at bottom of this .R file (below function)
   
   # load package needed for erfc
-  require(pracma)
+  require(Rmpfr)
   
   # streambed leakance
   L <- (Kh/Kriv)*briv
@@ -40,22 +43,15 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv){
   # transmissivity
   Tr <- Kh*b
   
+  # erfc and exp terms can get really huge; use the mpfr package to deal with them
+  term1 <- mpfr(sqrt(S*d*d/(4*Tr*t)), prec)
+  term2 <- mpfr((((Tr*t)/(S*L*L))+(d/L)), prec)
+  term3 <- mpfr((sqrt((Tr*t)/(S*L*L))+sqrt((S*d*d)/(4*Tr*t))), prec)
+  
   # calculate streamflow depletoin
-  Qf <- erfc(sqrt(S*d*d/(4*Tr*t))) -
-    exp(((Tr*t)/(S*L*L))+(d/L))*
-    erfc((sqrt((Tr*t)/(S*L*L))+sqrt((S*d*d)/(4*Tr*t))))
-  
-  # if solver is NOT stable: print a warning, adjust L term upwards, and re-solve
-  if (sum(!is.finite(Qf)) != 0){
-    warning("Unstable combination of input parameters; adjusting leakance upwards to ensure solution. Perhaps lower Kriv, increase briv, or increase Kh")
-  } 
-  
-  while (sum(!is.finite(Qf)) != 0){
-    L <- L*1.01
-    Qf <- erfc(sqrt(S*d*d/(4*Tr*t))) - 
-      exp(((Tr*t)/(S*L*L))+(d/L))*
-      erfc((sqrt((Tr*t)/(S*L*L))+sqrt((S*d*d)/(4*Tr*t))))
-  }
+  Qf <- as.numeric(
+    erfc(term1) - exp(term2)*erfc(term3)
+  )
   
   return(Qf)
 }
@@ -73,7 +69,7 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv){
 # 
 # df <- data.frame(times=numeric(0), Qf=numeric(0), Kriv=numeric(0))
 # for (Kriv in c(1, 0.1, 0.01)){
-#   df <- rbind(df, 
+#   df <- rbind(df,
 #               data.frame(times = t,
 #                          Qf = hantush(t=t, d=d, S=S, Kh=Kh, b=b, Kriv=Kriv, briv=briv),
 #                          Kriv = Kriv))

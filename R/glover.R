@@ -35,7 +35,7 @@ glover <- function(t, d, S, Tr){
   #' Example run code is at bottom of this .R file (below function)
 
   # load package needed for erfc
-  require(pracma)
+  require(Rmpfr)
   
   Qf <- erfc(sqrt(S*d*d/(4*Tr*t)))
   return(Qf)
