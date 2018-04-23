@@ -70,7 +70,9 @@ ui <- fluidPage(
     mainPanel(
       
       # Output: Plot of Qf vs time ----
-      plotOutput(outputId = "depletion")
+      plotOutput(outputId = "depletion",
+                 click = "plot_click"),
+      verbatimTextOutput("info")
       
     )
   )
@@ -81,15 +83,24 @@ server <- function(input, output) {
   
   # Reactive expression to create data frame and calculate Qf ----
   df <- reactive({
-    df <- data.frame(times=seq(input$tStart,input$tEnd), 
-                     Qf = glover(t=seq(input$tStart,input$tEnd), d=input$distToStream, S=input$S, input$Tr))
+    data.frame(times=seq(input$tStart,input$tEnd), 
+               Qf = glover(t=seq(input$tStart,input$tEnd), d=input$distToStream, S=input$S, input$Tr))
   })
   
+  # Reactive expression to figure out where click was ----
+  df.click <- reactive({
+    if (is.null(input$plot_click)) return(df()[5,])
+    nearPoints(df(), input$plot_click, threshold=20, maxpoints=1)
+  })
+
   # Make a plot ----
   
   output$depletion <- renderPlot({
     ggplot(df(), aes(times, Qf)) + 
       geom_line() + 
+      annotate("segment", x=-Inf, xend=df.click()$times, y=df.click()$Qf, yend=df.click()$Qf, color="red") +
+      annotate("segment", x=df.click()$times, xend=df.click()$times, y=-Inf, yend=df.click()$Qf, color="red") +
+      geom_point(data=df.click(), aes(times, Qf), color="red", size=2) +
       scale_x_continuous(name="Time",
                          expand=c(0,0)) +
       scale_y_continuous(name="Capture Fraction", 
@@ -98,6 +109,15 @@ server <- function(input, output) {
                          expand=c(0,0),
                          labels = scales::percent) + 
       theme_bw()
+  })
+  
+  output$info <- renderPrint({
+    # With ggplot2, no need to tell it what the x and y variables are.
+    # threshold: set max distance, in pixels
+    # maxpoints: maximum number of rows to return
+    # addDist: add column with distance, in pixels
+    nearPoints(df(), input$plot_click, threshold = 10, maxpoints = 1,
+               addDist = TRUE)
   })
   
 }
