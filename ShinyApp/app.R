@@ -5,10 +5,13 @@
 require(shiny)
 require(ggplot2)
 require(Rmpfr)
+require(magrittr)
 
 # source functions
 source(file.path("..", "R", "hunt.R"))
+source(file.path("..", "R", "hantush.R"))
 source(file.path("..", "R", "glover.R"))
+source(file.path("..", "R", "streambed_conductance.R"))
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
@@ -40,12 +43,19 @@ ui <- fluidPage(
                    label = "Distance to Stream [m]:",
                    value = 100),
       
-      # Input: Slider for transmissivity ----
-      sliderInput(inputId = "Tr",
-                  label = "Transmissivity [m/d]:",
-                  min = 5,
-                  max = 500,
-                  value = 100),
+      # Input: Slider for Kh ----
+      sliderInput(inputId = "Kh",
+                  label = "Horizontal Hydraulic Conductivity (Kh) [m/d]:",
+                  min = 0.1,
+                  max = 10,
+                  value = 1),
+      
+      # Input: Slider for Kh ----
+      sliderInput(inputId = "b",
+                  label = "Aquifer Saturated Thickness [m]:",
+                  min = 1,
+                  max = 100,
+                  value = 10),
       
       # Input: Slider for storage coefficienc ----
       sliderInput(inputId = "S",
@@ -63,7 +73,6 @@ ui <- fluidPage(
       numericInput("tEnd", 
                    h3("End Time"), 
                    value = 100)
-      
     ),
     
     # Main panel for displaying outputs ----
@@ -83,8 +92,32 @@ server <- function(input, output) {
   
   # Reactive expression to create data frame and calculate Qf ----
   df <- reactive({
-    data.frame(times=seq(input$tStart,input$tEnd), 
-               Qf = glover(t=seq(input$tStart,input$tEnd), d=input$distToStream, S=input$S, input$Tr))
+    rbind(
+      data.frame(times=seq(input$tStart,input$tEnd), 
+                 Qf = glover(t = seq(input$tStart,input$tEnd), 
+                             d = input$distToStream, 
+                             S = input$S, 
+                             Tr= input$Kh*input$b),
+                 method = "glover"), 
+      data.frame(times=seq(input$tStart,input$tEnd), 
+                 Qf = hunt(t = seq(input$tStart,input$tEnd), 
+                           d = input$distToStream, 
+                           S = input$S, 
+                           Tr= input$Kh*input$b, 
+                           lmda = streambed_conductance(w=10, Kriv=1, briv=1)),
+                 method = "hunt"), 
+      data.frame(times=seq(input$tStart,input$tEnd), 
+                 Qf = hantush(t = seq(input$tStart,input$tEnd), 
+                              d = input$distToStream, 
+                              S = input$S,
+                              Kh= input$Kh, 
+                              b = input$b, 
+                              Kriv = 1, 
+                              briv = 1),
+                 method = "hantush")
+    ) #%>% 
+      #subset(method %in% input$checkMethod)
+    
   })
   
   # Reactive expression to figure out where click was ----
@@ -92,11 +125,11 @@ server <- function(input, output) {
     if (is.null(input$plot_click)) return(df()[5,])
     nearPoints(df(), input$plot_click, threshold=20, maxpoints=1)
   })
-
+  
   # Make a plot ----
   
   output$depletion <- renderPlot({
-    ggplot(df(), aes(times, Qf)) + 
+    ggplot(subset(df(), method %in% input$checkMethod), aes(x=times, y=Qf, color=method)) +
       geom_line() + 
       annotate("segment", x=-Inf, xend=df.click()$times, y=df.click()$Qf, yend=df.click()$Qf, color="red") +
       annotate("segment", x=df.click()$times, xend=df.click()$times, y=-Inf, yend=df.click()$Qf, color="red") +
@@ -108,7 +141,11 @@ server <- function(input, output) {
                          breaks=seq(0,1,0.25),
                          expand=c(0,0),
                          labels = scales::percent) + 
-      theme_bw()
+      scale_color_manual(name="Method", values=c("glover"="black", "hantush"="green", "hunt"="red"),
+                         labels=c("glover"="Glover & Balmer", "hantush"="Hantush", "hunt"="Hunt"), drop=F) +
+      theme_bw() +
+      theme(legend.position=c(1,0),
+            legend.justification=c(1,0))
   })
   
   output$info <- renderPrint({
