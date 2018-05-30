@@ -1,2 +1,7 @@
-# StreamflowDepletion
-Repository for R scripts of different streamflow depletion models
+# streamDepletr
+An R package with tools for assessing the impacts of groundwater pumping on wells.
+
+**Tools are in 3 general categories:**
+- Analytical streamflow depletion models
+- Depletion apportionment equations
+- Baseflow separation functions (currently these are in a different repository - still deciding whether they should be part of this package or not)
