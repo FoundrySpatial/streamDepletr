@@ -115,14 +115,13 @@ server <- function(input, output) {
                               Kriv = 1, 
                               briv = 1),
                  method = "hantush")
-    ) #%>% 
-      #subset(method %in% input$checkMethod)
+    )
     
   })
   
   # Reactive expression to figure out where click was ----
   df.click <- reactive({
-    if (is.null(input$plot_click)) return(df()[5,])
+    if (is.null(input$plot_click)) return()
     nearPoints(df(), input$plot_click, threshold=20, maxpoints=1)
   })
   

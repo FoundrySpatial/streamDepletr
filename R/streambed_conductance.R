@@ -10,7 +10,8 @@ streambed_conductance <- function(w, Kriv, briv){
   #'          as 10% of the horizontal hydraulic conductivity (Kh*0.1; L/T)
   #'  briv  = thickness of riverbed semipervious layer [L]
   #'          Reeves et al. (2009) estimate this as the vertical distance from
-  #'          the streambed to the top of the well screen [L].
+  #'          the streambed to the top of the well screen, or the length of the
+  #'          well screen, whichever is greater [L].
   #'  
   #' Output:
   #'  lmda = streambed conductance term, lambda [L/T]
