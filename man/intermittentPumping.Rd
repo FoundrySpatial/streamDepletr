@@ -2,7 +2,7 @@
 % Please edit documentation in R/intermittentPumping.R
 \name{intermittentPumping}
 \alias{intermittentPumping}
-\title{intermittentPumping}
+\title{Streamflow depletion for an intermittent pumping schedule using superposition.}
 \usage{
 intermittentPumping(t, starts, stops, rates, method = "glover", d, S, Tr, ...)
 }
@@ -25,18 +25,18 @@ intermittentPumping(t, starts, stops, rates, method = "glover", d, S, Tr, ...)
 
 \item{...}{any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)}
 }
+\value{
+\code{Qs}, streamflow depletion [L3/T]. Unlike the streamflow depletion models this calls 
+(e.g. \code{hunt}, \code{glover}) this is not fractional depletion \code{Qf} because there can
+be different pumping rates at different times.
+}
 \description{
-Calculate streamflow depletion for an intermittent pumping schedule using the Jenkins (1968) superposition technique.
+Streamflow depletion for an intermittent pumping schedule using superposition.
 }
 \examples{
 intermittentPumping(t=seq(0,60,10), starts=0, stops=30, rates=100, method="glover", d=100, S=0.1, Tr=100)
-
-Reference: 
+}
+\references{
 Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
 by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
-
-Output:
-  Q = streamflow depletion [L3/T]
-         Note that this is NOT Qf (depletion fraction) because depletion fraction
-         would not work if there were different pumping rates at different times
 }

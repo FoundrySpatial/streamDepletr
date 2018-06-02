@@ -1,48 +1,41 @@
 glover <- function(t, d, S, Tr){
+  #' Streamflow depletion with fully-penetrating stream and no streambed.
   #'
-  #'Glover and Balmer (1954) analytical model for streamflow depletion with fully-penetrating stream.
+  #' Described in Glover & Balmer (1954) based on work by Theis (1941).
+  #' 
+  #' Assumptions:
+  #' \itemize{
+  #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
+  #'   \item Homogeneous, isotropic aquifer
+  #'   \item Constant \code{Tr}: Aquifer is confined, or if unconfined change in head is small relative to aquifer thickness
+  #'   \item Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
+  #'   \item Constant stream stage
+  #'   \item No changes in recharge due to pumping
+  #'   \item No streambank storage
+  #'   \item Constant pumping rate
+  #'   \item Aquifer extends to infinity
+  #'   \item Stream fully penetrates through aquifer (see \link{hunt} or \link{hantush} for partially penetrating stream)
+  #'   \item No streambed resistance to flow (see \link{hunt} or \link{hantush} for streambed resistance)
+  #' }
+  #'
   #' @param t times you want output for [T]
   #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
-  #' @return A numeric or vector containing streamflow depletion as a fraction of pumping rate.
-  #' @examples
-  #' glover(t=157770000, d=1000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 1
-  #' glover(t=157770000, d=5000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 2
-  #' glover(t=157770000, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
-  #' 
-  #' 
-  #' Reference:
+  #' @return \code{Qf}, numeric or vector of streamflow depletion as fraction of pumping rate [-]. 
+  #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
+  #' @references
   #' Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River. 
   #' Eos, Transactions American Geophysical Union 35(3): 468-70. doi:10.1029/TR035i003p00468.
-  #'  
-  #' Output:
-  #'   Qf = streamflow depletion as fraction of pumping rate [-]
-  #'   
-  #' If you have the pumping rate of the well [Qw; L3/T] you can
-  #' calculate the rate of streamflow depletion [Qs; L3/T] as Qs=Qf*Qw
   #' 
-  #' Assumptions (from Hunt, 1999):
-  #'  -Horizontal flow >> vertical flow (Dupuit assumptions hold)
-  #'  -Homogeneous, isotropic aquifer
-  #'  -Aquifer is confined, or if unconfined change in head is small relative to total thickness (constant Tr)
-  #'  -Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
-  #'  -Pumping does not change the stage of the stream  
-  #'  -Recharge to the system is unchanged by pumping
-  #'  -No streambank storage
-  #'  -Pumping rate is constant
-  #'  -Aquifer extends to infinity
-  #'  
-  #' Example run code is at bottom of this .R file (below function)
-
-  # load package needed for erfc
-  require(Rmpfr)
+  #' Theis, CV (1941). The Effect of a Well on the Flow of a Nearby Stream. 
+  #' Eos, Transactions American Geophysical Union 22(3): 734-38. https://doi.org/10.1029/TR022i003p00734.
+  #' 
+  #' @examples
+  #' glover(t=1.5777e8, d=1000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 1
+  #' glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 2
+  #' glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
   
-  Qf <- erfc(sqrt(S*d*d/(4*Tr*t)))
+  Qf <- Rmpfr::erfc(sqrt(S*d*d/(4*Tr*t)))
   return(Qf)
 }
-
-# ## Example script to reproduce Table 1 from Glover & Balmer (1954)
-# glover(d=1000,  S=0.2, Tr=0.1, t=157770000)  # well 1
-# glover(d=5000,  S=0.2, Tr=0.1, t=157770000)  # well 2
-# glover(d=10000, S=0.2, Tr=0.1, t=157770000)  # well 3

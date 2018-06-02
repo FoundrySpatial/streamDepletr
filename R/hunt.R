@@ -1,39 +1,31 @@
 hunt <- function(t, d, S, Tr, lmda, prec=80){
-  #' Hunt (1999) analytical model for streamflow depletion with a partially-penetrating stream.
+  #'Streamflow depletion in partially penetrating stream with semipervious streambed. 
+  #'
+  #' Described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \code{glover}.
+  #' Assumptions:
+  #' \itemize{
+  #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
+  #'   \item Homogeneous, isotropic aquifer
+  #'   \item Constant \code{Tr}: Aquifer is confined, or if unconfined change in head is small relative to aquifer thickness
+  #'   \item Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
+  #'   \item Constant stream stage
+  #'   \item No changes in recharge due to pumping
+  #'   \item No streambank storage
+  #'   \item Constant pumping rate
+  #'   \item Aquifer extends to infinity
+  #' }
+  #'  
   #' @param t times you want output for [T]
   #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
-  #' @param lmda streambed conductance term, lambda [L/T]
-  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
-  #' 
-  #' Reference:
+  #' @param lmda streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.
+  #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
+  #' @return \code{Qf}, numeric or vector of streamflow depletion as fraction of pumping rate [-]. 
+  #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
+  #' @references
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 
   #' Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
-  #' 
-  #' As the lmda term gets very high, this is equivalent to the glover method.
-  #' 
-  #' See script: Hunt1999_lmda to estimate lmda based on aquifer and well properties
-  #'  
-  #' Output:
-  #'   Qf = streamflow depletion as fraction of pumping rate [-]
-  #'   
-  #' If you have the pumping rate of the well [Qw; L3/T] you can
-  #' calculate the rate of streamflow depletion [Qs; L3/T] as Qs=Qf*Qw
-  #'   
-  #' Assumptions (from Reeves et al., 2009):
-  #'  -Horizontal flow >> vertical flow (Dupuit assumptions hold)
-  #'  -Homogeneous, isotropic aquifer
-  #'  -Aquifer is confined, or if unconfined change in head is small relative to total thickness (constant Tr)
-  #'  -Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
-  #'  -Pumping does not change the stage of the stream  
-  #'  -Recharge to the system is unchanged by pumping
-  #'  -Streambed may offer resistance to groundwater flow
-  #'  -No streambank storage
-  #'  -Pumping rate is constant
-  #'  -Aquifer extends to infinity
-  #'  
-  #' Example run code is at bottom of this .R file (below function)
   
   # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
   term1 <- Rmpfr::mpfr(sqrt((S*d*d)/(4*Tr*t)), prec)
@@ -41,7 +33,7 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   term3 <- Rmpfr::mpfr(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)), prec)
   
   Qf <- as.numeric(
-    erfc(term1) - exp(term2)*erfc(term3)
+    Rmpfr::erfc(term1) - exp(term2)*erfc(term3)
     )
   
   return(Qf)

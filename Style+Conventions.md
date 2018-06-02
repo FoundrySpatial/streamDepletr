@@ -20,17 +20,18 @@ for function names.
 
 # Variables
 Use these variable names, which are consistent with the hydrogeological literature:
-- Qw   = well pumping rate [L3/T]
-- Qf   = capture fraction, [-] (=streamflow reduction as a proportion of pumping rate)
-- d    = distance from well to stream [L]
-- S    = aquifer storage coefficient [-] (specific yield for unconfined, storativity for confined)
-- Kh   = aquifer horizontal hydraulic conductivity [L/T]
-- Kv   = aquifer vertical hydraulic conductivity [L/T]
-- b    = aquifer saturated thickness [L]
-- Tr   = aquifer transmissivity [L2/T] (=Kh x b)
-- t    = time since pumping started [T]
-- Kriv = riverbed hydraulic conductivity [L/T]
-- briv = thickness of riverbed semipervious layer [L]
-- w    = stream width [L]
-- beff = effective transmissivity [L] (Reeves et al., 2009, use distance from bottom of stream to top of well screen)
-- lmda = streambed conductance [L/T]
+- `Qw`   = well pumping rate [L3/T], = `Qf/Qs`
+- `Qf`   = capture fraction, [-], = `Qw/Qs`
+- `Qs`   = streamflow depletion, [L3/T], = `Qw*Qf`
+- `d`    = distance from well to stream [L]
+- `S`    = aquifer storage coefficient [-] (specific yield for unconfined aquifer, storativity for confined aquifer)
+- `Kh`   = aquifer horizontal hydraulic conductivity [L/T]
+- `Kv`   = aquifer vertical hydraulic conductivity [L/T]
+- `b`    = aquifer saturated thickness [L]
+- `Tr`   = aquifer transmissivity [L2/T], = `Kh*b`
+- `t`    = time since pumping started [T]
+- `Kriv` = riverbed hydraulic conductivity [L/T]
+- `briv` = thickness of riverbed semipervious layer [L]
+- `w`    = stream width [L]
+- `beff` = effective transmissivity [L]. Reeves et al. (2009) use the distance from bottom of stream to top of well screen
+- `lmda` = streambed conductance [L/T]

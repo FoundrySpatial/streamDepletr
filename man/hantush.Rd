@@ -2,7 +2,7 @@
 % Please edit documentation in R/hantush.R
 \name{hantush}
 \alias{hantush}
-\title{Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.}
+\title{Streamflow depletion in partially penetrating stream with semipervious streambed.}
 \usage{
 hantush(t, d, S, Kh, b, Kriv, briv, prec = 80)
 }
@@ -21,33 +21,29 @@ hantush(t, d, S, Kh, b, Kriv, briv, prec = 80)
 
 \item{briv}{streambed semipervious layer thickness [L]}
 
-\item{prec}{precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
-
-Reference:
-Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
- 
-As the leakance term (b*Kh/Kriv) approaches 0 (thin streambed, high Kriv) this is equivalent to glover method
-
-Output:
-  Qf = streamflow depletion as fraction of pumping rate [-]
-  
-If you have the pumping rate of the well [Qw; L3/T] you can
-calculate the rate of streamflow depletion [Qs; L3/T] as Qs=Qf*Qw
-  
-Assumptions (from Reeves et al., 2009):
- -Horizontal flow >> vertical flow (Dupuit assumptions hold)
- -Homogeneous, isotropic aquifer
- -Aquifer is confined, or if unconfined change in head is small relative to total thickness (constant Tr)
- -Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
- -Pumping does not change the stage of the stream  
- -Recharge to the system is unchanged by pumping
- -Streambed may offer resistance to groundwater flow
- -No streambank storage
- -Pumping rate is constant
- -Aquifer extends to infinity
- 
-Example run code is at bottom of this .R file (below function)}
+\item{prec}{precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.}
+}
+\value{
+\code{Qf}, numeric or vector of streamflow depletion as fraction of pumping rate [-]. 
+If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
 }
 \description{
-Hantush (1965) analytical model for streamflow depletion with partially penetrating stream with semipervious streambed.
+Described in Hantush (1965). As the leakance term \code{(b*Kh/Kriv)} approaches 0 this is equivalent to \code{glover}.
+}
+\details{
+Assumptions:
+\itemize{
+  \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
+  \item Homogeneous, isotropic aquifer
+  \item Constant \code{Tr}: Aquifer is confined, or if unconfined change in head is small relative to aquifer thickness
+  \item Stream is straight, infinitely long, and remains in hydraulic connection to aquifer
+  \item Constant stream stage
+  \item No changes in recharge due to pumping
+  \item No streambank storage
+  \item Constant pumping rate
+  \item Aquifer extends to infinity
+}
+}
+\references{
+Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
 }

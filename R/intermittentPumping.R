@@ -1,7 +1,6 @@
 intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, Tr, ...){
-  #' intermittentPumping
-  #'
-  #' Calculate streamflow depletion for an intermittent pumping schedule using the Jenkins (1968) superposition technique.
+  #' Streamflow depletion for an intermittent pumping schedule using superposition.
+  #' 
   #' @param t times you want output for [T]
   #' @param starts vector of times to start pumping [T] (must be same length as stops and rates)
   #' @param stops vector of times pumping stops [T] (must be same length as starts and rates)
@@ -11,17 +10,14 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param ... any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)
+  #' @return \code{Qs}, streamflow depletion [L3/T]. Unlike the streamflow depletion models this calls 
+  #' (e.g. \code{hunt}, \code{glover}) this is not fractional depletion \code{Qf} because there can
+  #' be different pumping rates at different times.
   #' @examples
   #' intermittentPumping(t=seq(0,60,10), starts=0, stops=30, rates=100, method="glover", d=100, S=0.1, Tr=100)
-  #'
-  #' Reference: 
+  #' @references
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
-  #' 
-  #' Output:
-  #'   Q = streamflow depletion [L3/T]
-  #'          Note that this is NOT Qf (depletion fraction) because depletion fraction
-  #'          would not work if there were different pumping rates at different times
   
   # make a matrix for computations: 1 column per start/stop/rate combo
   Q.all <- matrix(NaN, nrow=length(times), ncol=length(starts))
@@ -32,8 +28,8 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(glover(t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0), d=d,  S=S, Tr=Tr) -
-                    glover(t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), d=d,  S=S, Tr=Tr))
+        rates[i]*(glover(t=sapply(times, FUN=subtract_bounded, y=starts[i], lower.bound=0), d=d,  S=S, Tr=Tr) -
+                    glover(t=sapply(times, FUN=subtract_bounded, y=stops[i], lower.bound=0), d=d,  S=S, Tr=Tr))
     }
     
   } else if (method=="hunt"){
@@ -43,9 +39,9 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(hunt(t=sapply(times, FUN=subtract.bounded, y=starts[i], lower.bound=0),
+        rates[i]*(hunt(t=sapply(times, FUN=subtract_bounded, y=starts[i], lower_bound=0),
                        d=d,  S=S, Tr=Tr, lmda=lmda) -
-                    hunt(t=sapply(times, FUN=subtract.bounded, y=stops[i], lower.bound=0), 
+                    hunt(t=sapply(times, FUN=subtract_bounded, y=stops[i], lower_bound=0), 
                          d=d, S=S, Tr=Tr, lmda=lmda))
     }
     
