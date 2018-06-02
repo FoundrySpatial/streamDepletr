@@ -1,0 +1,14 @@
+Package: streamDepletr
+Title: Tools to Estimate Streamflow Depletion due to Groundwater Pumping
+Version: 0.0.1
+Authors@R: person("Sam", "Zipper", email = "samuelczipper@gmail.com", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-8735-5757"))
+Description: This package is intended to aggregate various tools that can be used to estimate
+  streamflow depletion due to groundwater pumping.
+Depends: R (>= 3.4.4)
+License: GNU Affero General Public License Version 3 | file LICENSE
+Imports: 
+  Rmpfr (>= 0.7-0)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1

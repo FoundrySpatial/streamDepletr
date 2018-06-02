@@ -4,6 +4,7 @@
 - https://support.rstudio.com/hc/en-us/articles/200486488-Developing-Packages-with-RStudio
 - https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 - https://github.com/ThinkR-open/prepare-for-cran
+- http://www.masalmon.eu/2017/12/11/goodrpackages/
 
 # Style
 Goal: common style among all functions within the package. 

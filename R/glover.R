@@ -5,6 +5,7 @@ glover <- function(t, d, S, Tr){
   #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
+  #' @return A numeric or vector containing streamflow depletion as a fraction of pumping rate.
   #' @examples
   #' glover(t=157770000, d=1000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 1
   #' glover(t=157770000, d=5000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 2

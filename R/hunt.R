@@ -5,7 +5,7 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param lmda streambed conductance term, lambda [L/T]
-  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
+  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
   #' 
   #' Reference:
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 
@@ -35,13 +35,10 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   #'  
   #' Example run code is at bottom of this .R file (below function)
   
-  # load package needed for erfc
-  require(Rmpfr)
-  
-  # erfc and exp terms can get really huge; use the mpfr package to deal with them
-  term1 <- mpfr(sqrt((S*d*d)/(4*Tr*t)), prec)
-  term2 <- mpfr(((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr)), prec)
-  term3 <- mpfr(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)), prec)
+  # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
+  term1 <- Rmpfr::mpfr(sqrt((S*d*d)/(4*Tr*t)), prec)
+  term2 <- Rmpfr::mpfr(((lmda*lmda*t)/(4*S*Tr) + (lmda*d)/(2*Tr)), prec)
+  term3 <- Rmpfr::mpfr(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)), prec)
   
   Qf <- as.numeric(
     erfc(term1) - exp(term2)*erfc(term3)
