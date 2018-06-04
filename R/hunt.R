@@ -34,7 +34,7 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   term3 <- Rmpfr::mpfr(sqrt((lmda*lmda*t)/(4*S*Tr))+sqrt((S*d*d)/(4*Tr*t)), prec)
   
   Qf <- as.numeric(
-    Rmpfr::erfc(term1) - exp(term2)*erfc(term3)
+    Rmpfr::erfc(term1) - exp(term2)*Rmpfr::erfc(term3)
     )
   
   return(Qf)
