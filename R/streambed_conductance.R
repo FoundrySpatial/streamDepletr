@@ -11,6 +11,7 @@ streambed_conductance <- function(w, Kriv, briv){
   #'          the streambed to the top of the well screen, or the length of the
   #'          well screen, whichever is greater [L].
   #' @return `lmda`` streambed conductance term, lambda [L/T]
+  #' @export
   
   lmda <- w*Kriv/briv
   return(lmda)

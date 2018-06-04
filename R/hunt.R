@@ -26,6 +26,7 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   #' @references
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 
   #' Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
+  #' @export
   
   # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
   term1 <- Rmpfr::mpfr(sqrt((S*d*d)/(4*Tr*t)), prec)

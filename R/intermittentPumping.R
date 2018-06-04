@@ -18,6 +18,7 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
   #' @references
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
+  #' @export
   
   # make a matrix for computations: 1 column per start/stop/rate combo
   Q.all <- matrix(NaN, nrow=length(times), ncol=length(starts))
