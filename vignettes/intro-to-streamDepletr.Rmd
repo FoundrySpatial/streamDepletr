@@ -1,0 +1,33 @@
+---
+title: "Introduction to streamDepletr"
+author: "Samuel C. Zipper"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to streamDepletr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Modeling streamflow depletion
+
+Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping^[Barlow et al. (2018). Capture versus Capture Zones: Clarifying Terminology Related to Sources of Water to Wells. *Groundwater*. doi: [10.1111/gwat.12661](http://dx.doi.org/10.1111/gwat.12661)], cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. `streamDepltr` is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
+
+However, anyone using analytical models should be aware that they have many more assumptions than numerical models, including:
+- Homogeneous and isotropic aquifer.
+- Constant transmissivity - aquifer is either confined, or unconfined with negligible head change due to pumping.
+- Constant stream stage - head in stream does not lower or dry up due to pumping.
+- Recharge does not change due to pumping.
+- Negligible vertical groundwater flow, AKA the [Dupuit-Forchheimer assumption](https://en.wikipedia.org/wiki/Dupuit%E2%80%93Forchheimer_assumption) holds.
+- No streambank storage.
+- Streams are linear and infinite in extent
+- Aquifers are infinite in extent
+
+These assumptions notwithstanding, analytical streamflow depletion models are useful tools for estimating groundwater pumping impacts on streamflow, in particular in settings where the time, data, or resources do not exist to create numerical models. If you are interested in numerical models, I recommend you check out the excellent [FloPy package for Python](https://github.com/modflowpy/flopy).

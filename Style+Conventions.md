@@ -1,11 +1,15 @@
 ## Package Style and Conventions
 
 # Useful notes on creating an R package
-- https://support.rstudio.com/hc/en-us/articles/200486488-Developing-Packages-with-RStudio
+- http://r-pkgs.had.co.nz/description.html
+- http://r-pkgs.had.co.nz/vignettes.html
 - https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 - https://github.com/ThinkR-open/prepare-for-cran
 - http://www.masalmon.eu/2017/12/11/goodrpackages/
-- http://r-pkgs.had.co.nz/vignettes.html
+
+- To add a dependency: `devtools::use_package("packageName")`
+- To generate documentation: `devtools::document()`
+- To install package: `devtools::install("../streamDepletr")`
 
 # Style
 Goal: common style among all functions within the package. 
