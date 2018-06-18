@@ -5,8 +5,8 @@ apportion_wedge <- function(angle_total, angle_well){
   #'  
   #' @param angle_total angle [radians] between the two streams.
   #' @param angle_well angle [radians] from the first (lower boundary) stream and the well.
-  #' @return \code{frac_depletion} numeric of length two with the proportion of steady-state 
-  #' streamflow depletion the first (lower) and second (upper) streams.
+  #' @return A numeric of length two with the proportion of steady-state 
+  #' capture fraction from the first (lower) and second (upper) streams.
   #' @references
   #' Yeh, HD, YC Chang, VA Zlotnik (2008). Stream depletion rate and volume from groundwater pumping in 
   #' wedge-shaped aquifers. Journal of Hydrology 349(3): 501-511. doi:10.1029/2018WR022707.

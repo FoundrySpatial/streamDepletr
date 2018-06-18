@@ -10,8 +10,8 @@ intermittentPumping <- function(t, starts, stops, rates, method="glover", d, S, 
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param ... any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)
-  #' @return \code{Qs}, streamflow depletion [L3/T]. Unlike the streamflow depletion models this calls 
-  #' (e.g. \code{hunt}, \code{glover}) this is not fractional depletion \code{Qf} because there can
+  #' @return A numeric of \code{Qs}, streamflow depletion rate [L3/T]. Unlike the streamflow depletion models 
+  #' (e.g. \link{glover}, \link{hunt}) this is not fractional depletion (\code{Qf}) because there can
   #' be different pumping rates at different times.
   #' @examples
   #' intermittentPumping(t=seq(0,60,10), starts=0, stops=30, rates=100, method="glover", d=100, S=0.1, Tr=100)

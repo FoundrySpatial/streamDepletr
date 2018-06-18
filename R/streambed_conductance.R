@@ -10,7 +10,12 @@ streambed_conductance <- function(w, Kriv, briv){
   #'          Reeves et al. (2009) estimate this as the vertical distance from
   #'          the streambed to the top of the well screen, or the length of the
   #'          well screen, whichever is greater [L].
-  #' @return `lmda`` streambed conductance term, lambda [L/T]
+  #' @return A numeric of \code{lmda}, the streambed conductance term [L/T]
+  #' @references
+  #' Reeves, HW, DA Hamilton, PW Seelbach, and AJ Asher (2009). Ground-Water-Withdrawal Component of the 
+  #' Michigan Water-Withdrawal Screening Tool. USGS Scientific Investigations Report, Reston VA. 
+  #' https://pubs.usgs.gov/sir/2009/5003/.
+
   #' @export
   
   lmda <- w*Kriv/briv

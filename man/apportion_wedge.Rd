@@ -12,8 +12,8 @@ apportion_wedge(angle_total, angle_well)
 \item{angle_well}{angle [radians] from the first (lower boundary) stream and the well.}
 }
 \value{
-\code{frac_depletion} numeric of length two with the proportion of steady-state 
-streamflow depletion the first (lower) and second (upper) streams.
+A numeric of length two with the proportion of steady-state 
+capture fraction from the first (lower) and second (upper) streams.
 }
 \description{
 Streams are two linear tributaries that meet at the origin. From Yeh et al. (2008), Eq. 18 & 19.

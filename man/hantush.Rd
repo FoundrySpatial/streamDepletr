@@ -24,7 +24,7 @@ hantush(t, d, S, Kh, b, Kriv, briv, prec = 80)
 \item{prec}{precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.}
 }
 \value{
-\code{Qf}, numeric or vector of streamflow depletion as fraction of pumping rate [-]. 
+A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-]. 
 If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
 }
 \description{

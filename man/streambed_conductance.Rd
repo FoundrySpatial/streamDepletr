@@ -20,8 +20,13 @@ the streambed to the top of the well screen, or the length of the
 well screen, whichever is greater [L].}
 }
 \value{
-`lmda`` streambed conductance term, lambda [L/T]
+A numeric of \code{lmda}, the streambed conductance term [L/T]
 }
 \description{
 Estimate streambed conductance.
+}
+\references{
+Reeves, HW, DA Hamilton, PW Seelbach, and AJ Asher (2009). Ground-Water-Withdrawal Component of the 
+Michigan Water-Withdrawal Screening Tool. USGS Scientific Investigations Report, Reston VA. 
+https://pubs.usgs.gov/sir/2009/5003/.
 }

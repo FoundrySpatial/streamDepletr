@@ -26,8 +26,8 @@ intermittentPumping(t, starts, stops, rates, method = "glover", d, S, Tr, ...)
 \item{...}{any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)}
 }
 \value{
-\code{Qs}, streamflow depletion [L3/T]. Unlike the streamflow depletion models this calls 
-(e.g. \code{hunt}, \code{glover}) this is not fractional depletion \code{Qf} because there can
+A numeric of \code{Qs}, streamflow depletion rate [L3/T]. Unlike the streamflow depletion models 
+(e.g. \link{glover}, \link{hunt}) this is not fractional depletion (\code{Qf}) because there can
 be different pumping rates at different times.
 }
 \description{

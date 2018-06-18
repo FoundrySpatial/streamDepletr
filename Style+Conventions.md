@@ -25,9 +25,10 @@ for function names.
 
 # Variables
 Use these variable names, which are consistent with the hydrogeological literature:
-- `Qw`   = well pumping rate [L3/T], = `Qf/Qs`
-- `Qf`   = capture fraction, [-], = `Qw/Qs`
-- `Qs`   = streamflow depletion, [L3/T], = `Qw*Qf`
+- `Qw`   = well pumping rate [L3/T] = `Qf/Qs`
+- `Qf`   = capture fraction [-] = `Qw/Qs`
+- `Qs`   = streamflow depletion [L3/T], = `Qw*Qf`
+- `Qa`   = ambient groundwater inflow rate per unit length of stream [L2/T]
 - `d`    = distance from well to stream [L]
 - `S`    = aquifer storage coefficient [-] (specific yield for unconfined aquifer, storativity for confined aquifer)
 - `Kh`   = aquifer horizontal hydraulic conductivity [L/T]

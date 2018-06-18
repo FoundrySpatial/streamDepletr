@@ -10,9 +10,11 @@ apportion_web <- function(reach_dist, w){
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach}; 
   #' if there is onle one dist per reach, results will be the same as the \link{apportion_inverse} method.
   #' @param w weighting factor; 1 for inverse distance, 2 for inverse distance squared.
-  #' @return two column data frame: 
-  #' - \code{reach}: the grouping variable input in \code{reach_dist}
-  #' - \code{frac_depletion}: the proportion of streamflow depletion from the well occurring in that reach.
+  #' @return A data frame with two columns: 
+  #' \describe{
+  #'   \item{reach}{the grouping variable input in \code{reach_dist}}
+  #'   \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
+  #' }
   #' @references
   #' Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts 
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research. 

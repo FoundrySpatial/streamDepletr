@@ -10,9 +10,12 @@ apportion_inverse <- function(reach_dist, w){
   #' the well of interest. There can be more than one \code{dist} per \code{reach}; the function
   #' will automatically find the minimum.
   #' @param w inverse distance weighting factor; 1 for inverse distance, 2 for inverse distance squared.
-  #' @return two column data frame: 
-  #' - \code{reach}: the grouping variable input in \code{reach_dist}
-  #' - \code{frac_depletion}: the proportion of streamflow depletion from the well occurring in that reach.
+  #' @return A data frame with two columns: 
+  #' \describe{
+  #'   \item{reach}{the grouping variable input in \code{reach_dist}}
+  #'   \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
+  #' }
+  #' @importFrom magrittr %>%
   #' @references
   #' Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts 
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research. 
@@ -29,6 +32,6 @@ apportion_inverse <- function(reach_dist, w){
     dplyr::group_by(reach) %>% 
     dplyr::summarize(dist.min = min(dist)) %>% 
     transform(frac_depletion = (1/dist.min^w)/sum((1/dist.min^w))) %>% 
-    select(reach, frac_depletion)
+    dplyr::select(reach, frac_depletion)
   
 }

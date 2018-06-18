@@ -21,7 +21,7 @@ hunt <- function(t, d, S, Tr, lmda, prec=80){
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param lmda streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.
   #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
-  #' @return \code{Qf}, numeric or vector of streamflow depletion as fraction of pumping rate [-]. 
+  #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-]. 
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
   #' @references
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 

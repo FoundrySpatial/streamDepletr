@@ -15,9 +15,11 @@ if there is onle one dist per reach, results will be the same as the \link{appor
 \item{w}{weighting factor; 1 for inverse distance, 2 for inverse distance squared.}
 }
 \value{
-two column data frame: 
-- \code{reach}: the grouping variable input in \code{reach_dist}
-- \code{frac_depletion}: the proportion of streamflow depletion from the well occurring in that reach.
+A data frame with two columns: 
+\describe{
+  \item{reach}{the grouping variable input in \code{reach_dist}}
+  \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
+}
 }
 \description{
 Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
