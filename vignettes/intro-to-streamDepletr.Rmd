@@ -18,16 +18,78 @@ knitr::opts_chunk$set(
 
 ## Modeling streamflow depletion
 
-Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping^[Barlow et al. (2018). Capture versus Capture Zones: Clarifying Terminology Related to Sources of Water to Wells. *Groundwater*. doi: [10.1111/gwat.12661](http://dx.doi.org/10.1111/gwat.12661)], cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. `streamDepltr` is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
+Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping^[Barlow et al. (2018). Capture versus Capture Zones: Clarifying Terminology Related to Sources of Water to Wells. *Groundwater*. doi: [10.1111/gwat.12661](http://dx.doi.org/10.1111/gwat.12661)], cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. streamDepltr is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
 
 However, anyone using analytical models should be aware that they have many more assumptions than numerical models, including:
-- Homogeneous and isotropic aquifer.
-- Constant transmissivity - aquifer is either confined, or unconfined with negligible head change due to pumping.
-- Constant stream stage - head in stream does not lower or dry up due to pumping.
-- Recharge does not change due to pumping.
-- Negligible vertical groundwater flow, AKA the [Dupuit-Forchheimer assumption](https://en.wikipedia.org/wiki/Dupuit%E2%80%93Forchheimer_assumption) holds.
-- No streambank storage.
-- Streams are linear and infinite in extent
-- Aquifers are infinite in extent
+* Homogeneous and isotropic aquifer.
+* Constant transmissivity - aquifer is either confined, or unconfined with negligible head change due to pumping.
+* Constant stream stage - head in stream does not lower or dry up due to pumping.
+* Recharge does not change due to pumping.
+* Negligible vertical groundwater flow, AKA the [Dupuit-Forchheimer assumption](https://en.wikipedia.org/wiki/Dupuit%E2%80%93Forchheimer_assumption) holds.
+* No streambank storage.
+* Streams are linear and infinite in extent
+* Aquifers are infinite in extent
 
 These assumptions notwithstanding, analytical streamflow depletion models are useful tools for estimating groundwater pumping impacts on streamflow, in particular in settings where the time, data, or resources do not exist to create numerical models. If you are interested in numerical models, I recommend you check out the excellent [FloPy package for Python](https://github.com/modflowpy/flopy).
+
+## Estimating capture fraction
+streamDepletr has a variety of streamflow depletion models; two of the most commonly used are `glover` (Glover & Balmer, 1954) and `hunt` (Hunt, 1999). They differ in the the representation of the stream:
+`r knitr::include_graphics('Comparison_Glover+Hunt.png', dpi=300)`
+`glover` is simpler and assumes a stream that fully penetrates the aquifer and no streambed resistance to flow. In contrast, `hunt` assumes the stream partially penetrates the aquifer and has a partially clogging streambed.
+
+To see how these compare, let's consider a well 150 m from a stream in a 30 m thick, unconfined aquifer with a specific yield of 0.1 and a hydraulic conductivity of 1e-5 meters/second. For the `hunt` model we also need some information about the stream; we'll say it's width is 5 m, riverbed is 10% as conductive as the aquifer, and riverbed thickness is 1 m.
+
+```{r fig.width=6, fig.height=4}
+require(streamDepletr)
+
+# define parameters common to both
+times  <- seq(1,100) # time [days]
+K <- 1e-5*86400      # hydraulic conductivity [m/d]
+b <- 30              # aquifer thickness [m]
+trans <- 50*K        # transmissivity [m2/d]
+d <- 150             # well to stream distance [m]
+Sy <- 0.1            # specific yield [-]
+
+# for hunt, we need to estimate streambed conductance
+str_cond <- streambed_conductance(w=5, Kriv=0.1*K, briv=1)
+
+# calculate capture fraction
+Qf_glover <- glover(t=times, d=d, S=Sy, Tr=trans)
+Qf_hunt <- hunt(t=times, d=d, S=Sy, Tr=trans, lmda=str_cond)
+
+# plot results
+plot(times, Qf_glover,
+     type="n",
+     xlab="Time since start of pumping [days]",
+     ylab="Capture Fraction [-]",
+     ylim=c(0,1))
+lines(times, Qf_glover)
+lines(times, Qf_hunt, col="red")
+legend(0.05, 0.95, c("Glover", "Hunt"), col=c("black", "red"), lty=1, title="Model")
+```
+
+At the end of the 100 day period, the streambed conductance term of the `hunt` methods leads to ~50% lower predictions than the `glover` method:
+```{r}
+Qf_glover[length(times)]
+Qf_hunt[length(times)]
+```
+
+## Converting capture fraction to streamflow depletion
+To convert capture fraction, `Qf`, to volumetric streamflow depletion, `Qs`, we simply multiply `Qf` by the pumping rate, `Qw`.
+```{r fig.width=6, fig.height=4}
+# calculate volumetric depletion
+Qw <- 75  # [m3/d]
+Qs_glover <- Qf_glover*Qw
+Qs_hunt <- Qf_hunt*Qw
+
+# plot results
+plot(times, Qs_glover,
+     type="n",
+     xlab="Time since start of pumping [days]",
+     ylab="Streamflow Depletion [m3/d]",
+     ylim=c(0,Qw))
+lines(times, Qs_glover)
+lines(times, Qs_hunt, col="red")
+legend(0.05, Qw*0.95, c("Glover", "Hunt"), col=c("black", "red"), lty=1, title="Model")
+```
+```
