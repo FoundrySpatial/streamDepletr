@@ -3,6 +3,7 @@
 export(apportion_inverse)
 export(apportion_web)
 export(apportion_wedge)
+export(depletion_max_distance)
 export(glover)
 export(hantush)
 export(hunt)

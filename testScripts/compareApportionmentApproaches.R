@@ -1,6 +1,10 @@
 ## compareApportionmentApproaches.R
 #' This script does some comparisons between different apportionment approaches.
 
+#require(ggplot2)
+#require(streamDepletr)
+#require(dplyr)
+
 # Comparison: Wedge vs Inverse Squared ------------------------------------
 
 # for a constant total angle, compare depletion in stream 0 for different angle_well and dr values
@@ -8,7 +12,7 @@ angle_total_deg <- 90
 angle_total <- angle_total_deg*pi/180
 
 start_flag <- T
-for (dr in seq(100, 500, 100)){
+for (dr in c(100)){
   for (ang in seq(1,(angle_total_deg-1))){
     # convert degrees to radians
     angle_well <- ang*pi/180
@@ -44,11 +48,9 @@ for (dr in seq(100, 500, 100)){
 }
 
 # looks like dr doesn't matter for either method:
-subset(df, angle==20)
+subset(df, angle==45)
 
 # plot
-require(ggplot2)
-
 df %>% 
   subset(dr==100) %>% 
   ggplot(aes(x=wedge, y=inverse, color=angle, shape=factor(weight))) +
@@ -63,3 +65,59 @@ df %>%
   theme(legend.position=c(1,0),
         legend.justification=c(1,0))
   
+
+# Compare: Wedge, Inverse, Web --------------------------------------------
+
+euclid_dist <- function(x1, y1, x2, y2){
+  # find distance from (x1,y1) to (x2,y2)
+  ((x1-x2)^2 + (y1-y2)^2)^0.5
+}
+
+df <- data.frame(reach = rep(c("A", "B"), each=5),
+                 dist = c(euclid_dist(4,2,1,0),
+                          euclid_dist(4,2,2,0),
+                          euclid_dist(4,2,3,0),
+                          euclid_dist(4,2,4,0),
+                          euclid_dist(4,2,5,0),
+                          euclid_dist(4,2,0,1),
+                          euclid_dist(4,2,0,2),
+                          euclid_dist(4,2,0,3),
+                          euclid_dist(4,2,0,4),
+                          euclid_dist(4,2,0,5)))
+
+apportion_wedge(90, 26.6)
+apportion_inverse(df, 1)
+apportion_inverse(df, 2)
+apportion_web(df, 1)
+apportion_web(df, 2)
+
+apportion_inverse(df, 1.225)
+apportion_web(df, 1.5)
+
+
+
+df <- data.frame(reach = rep(c("A", "B"), each=9),
+                 dist = c(euclid_dist(4,2,1,0),
+                          euclid_dist(4,2,1.5,0),
+                          euclid_dist(4,2,2,0),
+                          euclid_dist(4,2,2.5,0),
+                          euclid_dist(4,2,3,0),
+                          euclid_dist(4,2,3.5,0),
+                          euclid_dist(4,2,4,0),
+                          euclid_dist(4,2,4.5,0),
+                          euclid_dist(4,2,5,0),
+                          euclid_dist(4,2,0,1),
+                          euclid_dist(4,2,0,1.5),
+                          euclid_dist(4,2,0,2),
+                          euclid_dist(4,2,0,2.5),
+                          euclid_dist(4,2,0,3),
+                          euclid_dist(4,2,0,3.5),
+                          euclid_dist(4,2,0,4),
+                          euclid_dist(4,2,0,4.5),
+                          euclid_dist(4,2,0,5)))
+
+apportion_wedge(90, 26.6)
+apportion_inverse(df, 1)
+apportion_inverse(df, 2)
+apportion_web(df, 1)
+apportion_web(df, 2)
