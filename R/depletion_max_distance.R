@@ -2,7 +2,7 @@ depletion_max_distance <- function(Qf_thres=0.01, d_interval=100, d_min=NULL, d_
   #' Calculate maximum distance at which streamflow depletion will exceed a user-selected threshold.
   #' 
   #' Note that this only considers a single stream - depletion apportionment does not occur.  #' 
-  #' @param Qf_thres streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1%).
+  #' @param Qf_thres streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1\%).
   #' @param d_interval interval to use for testing; this defines the spatial resolution at which output will be returned [L]
   #' @param d_min minimum search distance [L]. If `Qf` < `Qf_thres` at `d_min`, function will return `d_min`. 
   #' If `d_min`=NULL (default), `d_min` will be set to `d_interval'`
@@ -46,7 +46,7 @@ depletion_max_distance <- function(Qf_thres=0.01, d_interval=100, d_min=NULL, d_
       
       # check if max distance reached
       if (d_test > d_max){
-        warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", d_test - d_interval))
+        warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", (d_test - d_interval)))
         return(NaN)
       }
     }
@@ -61,8 +61,7 @@ depletion_max_distance <- function(Qf_thres=0.01, d_interval=100, d_min=NULL, d_
       
       # check if Qf < Qf_thres
       if (Qf < Qf_thres){
-        warning((d_test - d_interval))  # since you exceeded the threshold, return the previous d_test
-        return(NaN)
+        return((d_test - d_interval))  # since you exceeded the threshold, return the previous d_test
       }
       
       # increase test distance
@@ -70,7 +69,7 @@ depletion_max_distance <- function(Qf_thres=0.01, d_interval=100, d_min=NULL, d_
       
       # check if max distance reached
       if (d_test > d_max){
-        warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", d_test - d_interval))
+        warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", (d_test - d_interval)))
         return(NaN)
       }
     }

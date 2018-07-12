@@ -8,7 +8,7 @@ depletion_max_distance(Qf_thres = 0.01, d_interval = 100, d_min = NULL,
   d_max = 5000, method = "glover", t, S, Tr, ...)
 }
 \arguments{
-\item{Qf_thres}{streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1%).}
+\item{Qf_thres}{streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1\%).}
 
 \item{d_interval}{interval to use for testing; this defines the spatial resolution at which output will be returned [L]}
 

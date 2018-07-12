@@ -6,9 +6,9 @@ apportion_web <- function(reach_dist, w){
   #' real stream network. These geometric functions are described in Zipper et al (2018).
   #'  
   #' @param reach_dist data frame with two columns: \code{reach}, which is a grouping variable with
-  #' the name of each stream reach, and \code{dist} which is the distance of that stream reach to
+  #' the name of each stream reach, and \code{dist} which is the distance of a point on that stream reach to
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach}; 
-  #' if there is onle one dist per reach, results will be the same as the \link{apportion_inverse} method.
+  #' if there is only one dist per reach, results will be the same as the \link{apportion_inverse} method.
   #' @param w weighting factor; 1 for inverse distance, 2 for inverse distance squared.
   #' @return A data frame with two columns: 
   #' \describe{
@@ -31,6 +31,6 @@ apportion_web <- function(reach_dist, w){
     transform(frac_depletion_pt = (1/dist^w)/sum((1/dist^w))) %>% 
     dplyr::group_by(reach) %>% 
     dplyr::summarize(frac_depletion = sum(frac_depletion_pt)) %>% 
-    select(reach, frac_depletion)
+    dplyr::select(reach, frac_depletion)
   
 }

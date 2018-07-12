@@ -21,7 +21,7 @@ intermittent_pumping <- function(t, starts, stops, rates, method="glover", d, S,
   #' @export
   
   # make a matrix for computations: 1 column per start/stop/rate combo
-  Q.all <- matrix(NaN, nrow=length(times), ncol=length(starts))
+  Q.all <- matrix(NaN, nrow=length(t), ncol=length(starts))
   
   # select analytical model and calculate depletion
   if (method=="glover"){
@@ -29,8 +29,8 @@ intermittent_pumping <- function(t, starts, stops, rates, method="glover", d, S,
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(glover(t=sapply(times, FUN=subtract_bounded, y=starts[i], lower.bound=0), d=d,  S=S, Tr=Tr) -
-                    glover(t=sapply(times, FUN=subtract_bounded, y=stops[i], lower.bound=0), d=d,  S=S, Tr=Tr))
+        rates[i]*(glover(t=sapply(t, FUN=subtract_bounded, y=starts[i], lower_bound=0), d=d,  S=S, Tr=Tr) -
+                    glover(t=sapply(t, FUN=subtract_bounded, y=stops[i], lower_bound=0), d=d,  S=S, Tr=Tr))
     }
     
   } else if (method=="hunt"){
@@ -40,9 +40,9 @@ intermittent_pumping <- function(t, starts, stops, rates, method="glover", d, S,
     for (i in 1:length(starts)){
       # loop through start/stop/rate sets
       Q.all[,i] <- 
-        rates[i]*(hunt(t=sapply(times, FUN=subtract_bounded, y=starts[i], lower_bound=0),
+        rates[i]*(hunt(t=sapply(t, FUN=subtract_bounded, y=starts[i], lower_bound=0),
                        d=d,  S=S, Tr=Tr, lmda=lmda) -
-                    hunt(t=sapply(times, FUN=subtract_bounded, y=stops[i], lower_bound=0), 
+                    hunt(t=sapply(t, FUN=subtract_bounded, y=stops[i], lower_bound=0), 
                          d=d, S=S, Tr=Tr, lmda=lmda))
     }
     
