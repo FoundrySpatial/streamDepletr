@@ -11,8 +11,6 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_sp
   #' @param stream_pt_spacing distance between points used for sampling each stream reach. The actual distance
   #' between points will be close to this (but not necessarily exact) due to sampling rounding error. The finer
   #' spacing you use, the more accurate your results will be but the function will run slower and use more memory.
-  #' @param lat_lon logical indicating whether output data frame should include latitude and longitude of 
-  #' each point along the stream
   #' @param buffer_width width of buffer around stream used to match points with polylines
   #' @param nseed seed for random number generator (this is used to convert stream polylines to points)
   #' @return A data frame with four columns: 

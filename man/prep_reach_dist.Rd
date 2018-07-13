@@ -23,9 +23,6 @@ spacing you use, the more accurate your results will be but the function will ru
 \item{buffer_width}{width of buffer around stream used to match points with polylines}
 
 \item{nseed}{seed for random number generator (this is used to convert stream polylines to points)}
-
-\item{lat_lon}{logical indicating whether output data frame should include latitude and longitude of 
-each point along the stream}
 }
 \value{
 A data frame with four columns: 

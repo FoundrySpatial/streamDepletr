@@ -6,10 +6,11 @@
 #'    (ii) SIXMILE CREEK @ COUNTY TRNK HGHWY M NR WAUNAKEE,WI (05427910), data avaiable 2012-07-26 - present
 
 ## required packages
-require(sf)
+require(rgdal)
 require(ggplot2)
 require(magrittr)
 require(waterData)
+require(broom)
 require(dplyr)
 require(devtools)
 require(gridExtra)
@@ -17,13 +18,13 @@ require(gridExtra)
 ## Prep stream network shapefile
 # load data, which was downloaded from the National Map Viewer (https://viewer.nationalmap.gov/advanced-viewer/)
 # on 2018-07-13 for HUC07090002, trimmed to only Sixmile Creek, and reprojected to EPSG:26916
-stream_sf <- 
-  sf::st_read(dsn = "PrepPackageData", 
+stream_lines <- 
+  rgdal::readOGR(dsn = "PrepPackageData", 
               layer = "NHDPlusV21_Flowline_SixmileCreek",
               stringsAsFactors=F) %>% 
   # only keep useful columns
-  subset(select=c("REACHCODE")) %>% 
-  magrittr::set_colnames(c("reach", "geometry"))
+  subset(select=c("REACHCODE"))
+colnames(stream_lines@data) <- "reach"
 
 # which reaches are part of Dorn Creek?
 # this was determine by manually inspecting the stream network in QGIS
@@ -40,12 +41,8 @@ reaches_dorn <-
     "07090002007672")
 
 # make a column with stream name
-stream_sf$stream <- "Sixmile Creek"
-stream_sf$stream[stream_sf$reach %in% reaches_dorn] <- "Dorn Creek"
-
-# take a look
-ggplot2::ggplot(stream_sf) +
-  geom_sf(aes(color=stream), crs="+init=epsg:26916")
+stream_lines@data$stream <- "Sixmile Creek"
+stream_lines@data$stream[stream_lines@data$reach %in% reaches_dorn] <- "Dorn Creek"
 
 ## download streamflow data
 df_dorn <- 
@@ -68,33 +65,37 @@ df_sixmile <-
 discharge_df <- rbind(df_sixmile, df_dorn)
 
 # get lat/lon of gauging stations and reproject to EPSG:26916
-sf_info <- 
-  waterData::siteInfo(c("05427930", "05427910")) %>% 
-  sf::st_as_sf(coords = c("lng", "lat"),  crs = 4326, agr = "constant") %>% 
-  sf::st_transform("+init=epsg:26916")
+df_info  <- waterData::siteInfo(c("05427930", "05427910"))
+xy <- df_info[,c("lng", "lat")]
+  
+spdf_info <- 
+  sp::SpatialPointsDataFrame(coords = xy, data = df_info,
+                             proj4string = CRS("+init=epsg:4326")) %>% 
+  sp::spTransform(CRS("+init=epsg:26916")) %>% 
+  subset(select=c("staid", "staname")) %>% 
+  as.data.frame()
 
 ## save data for use in package
-devtools::use_data(stream_sf, discharge_df, overwrite=T)
+devtools::use_data(stream_lines, discharge_df, overwrite=T)
 
 ## make plots
 # map
+stream_df <- tidy(stream_lines)
 p.map <- 
   ggplot2::ggplot() +
-  geom_sf(data=stream_sf, aes(color=stream)) +
-  geom_sf(data=sf_info) +
-  coord_sf(datum=sf::st_crs(stream_sf)) +
-  annotate("text", x=sf::st_coordinates(sf_info)[1, "X"], y=sf::st_coordinates(sf_info)[1, "Y"]-400, label=sf_info$staid[1], size=3) +
-  annotate("text", x=sf::st_coordinates(sf_info)[2, "X"]+1200, y=sf::st_coordinates(sf_info)[2, "Y"], label=sf_info$staid[2], size=3) +
+  geom_path(data=stream_df, aes(x=long, y=lat, group=group), color="blue") +
+  geom_point(data=spdf_info, aes(x=lng, y=lat)) +
+  annotate("text", x=spdf_info$lng[1], y=spdf_info$lat[1]-400, label=spdf_info$staid[1], size=3) +
+  annotate("text", x=spdf_info$lng[2]+1400, y=spdf_info$lat[2], label=spdf_info$staid[2], size=3) +
   annotate("point", x=295500, y=4783200, color="red") +
   annotate("text", x=293900, y=4783200, label="Proposed well", color="red", size=3) +
   scale_x_continuous(name="UTM 16N Easting [m]") +
   scale_y_continuous(name="UTM 16N Northing [m]") +
-  scale_color_discrete(name=NULL) +
   labs(title="Sixmile Creek Watershed", subtitle="North of Lake Mendota, WI") +
   theme_bw() +
-  theme(panel.grid=element_line(colour="transparent"),
-        axis.text.y=element_text(angle = 90, hjust = 0.5),
-        legend.position="bottom")
+  theme_bw() +
+  theme(panel.grid=element_blank(),
+        axis.text.y=element_text(angle = 90, hjust = 0.5))
 
 # discharge
 p.Q <- 
@@ -103,8 +104,8 @@ p.Q <-
   scale_y_log10(name="Discharge [cubic meters/day]") +
   scale_x_date(name="Date", expand=c(0,0)) +
   facet_wrap(~stream, ncol=1, 
-             labeller=as_labeller(c("Dorn Creek"=paste0(sf_info$staid[1], ", Dorn Creek"),
-                                    "Sixmile Creek"=paste0(sf_info$staid[2], ", Sixmile Creek")))) +
+             labeller=as_labeller(c("Dorn Creek"=paste0(spdf_info$staid[1], ", Dorn Creek"),
+                                    "Sixmile Creek"=paste0(spdf_info$staid[2], ", Sixmile Creek")))) +
   theme_bw() +
   theme(panel.grid=element_blank(),
         axis.text.y=element_text(angle = 90, hjust = 0.5),

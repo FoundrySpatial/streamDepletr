@@ -103,7 +103,7 @@ Finally, the web and web squared methods (`apportion_web`) use the same inverse 
 To illustrate how these depletion apportionment equations work, let's consider the case of a hypothetical proposed high-capacity well in Wisconsin's Sixmile Creek Watershed of Wisconsin. This watershed contains two US Geological Survey streamflow gauging stations, one on Sixmile Creek and one on Dorn Creek (a tributary). These gauging stations are both just upstream of the junction between Sixmile and Dorn creeks, providing us an opportunity to investigate how this proposed well would affect each of the two streams. Here is a map showing the scenario, as well as two water years of streamflow data from each gauging station:
 `r knitr::include_graphics('Sixmile_Map+Discharge.png', dpi=300)`
 
-The stream network and discharge data are included in the package (`stream_shp` and `discharge_df`, respectively). First, let's we'll define some of the properties of the well and the aquifer:
+The stream network and discharge data are included in the package (`stream_lines` and `discharge_df`, respectively). First, let's we'll define some of the properties of the well and the aquifer:
 ```{r}
 # well properties
 Qw <- 500  # well pumping rate [m3/d]
@@ -121,7 +121,7 @@ Sy <- 0.05           # specific yield [-]
 
 Now, we'll create our `reach_dist_lat_lon` data frame, which will be used to determine the distance between the well and a series of equally spaced points on each stream reach:
 ```{r}
-rdll <- prep_reach_dist(wel_lon=wel_lon, wel_lat=wel_lat, stream_shp=stream_shp, reach_id="reach", stream_pt_spacing=1)
+rdll <- prep_reach_dist(wel_lon=wel_lon, wel_lat=wel_lat, stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
 head(rdll)
 ```
 
@@ -130,7 +130,7 @@ Let's first figure out what would happen if we ignored depletion apportionment, 
 # figure out which stream is closest
 closest_reach <- rdll[which.min(rdll$dist), "reach"]  # identify closest stream reach
 closest_dist  <- rdll[which.min(rdll$dist), "dist"]   # distance to closest point on closest reach
-closest_stream <- stream_shp@data$stream[stream_shp@data$reach==closest_reach]  # figure out if closest reach is on Dorn or Sixmile Creek
+closest_stream <- stream_lines@data$stream[stream_lines@data$reach==closest_reach]  # figure out if closest reach is on Dorn or Sixmile Creek
 closest_discharge <- subset(discharge_df, stream==closest_stream)
 
 # since time inputs for the streamflow depletion models are numeric (not dates), we need to figure out when the start and stop date are relative to the start of our period of interest
