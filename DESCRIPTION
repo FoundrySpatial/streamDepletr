@@ -27,5 +27,8 @@ Suggests: knitr,
     sp,
     raster,
     deldir,
-    rgeos
+    rgeos,
+    ggplot2,
+    reshape2,
+    sf
 VignetteBuilder: knitr

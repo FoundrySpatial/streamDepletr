@@ -1,13 +1,13 @@
 #' Stream network for Sixmile Creek Watershed, WI.
 #'
-#' @format A SpatialLinesDataFrame with 49 rows and 2 variables:
+#' @format A simple LINESTRING feature collection with 49 features and 2 fields:
 #' \describe{
 #'   \item{reach}{identifier code for each stream reach}
 #'   \item{stream}{name of stream for each stream reach (Sixmile Creek or Dorn Creek)}
 #'   ...
 #' }
 #' @source \url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_CONUS_Seamless_Geodatabase_05.7z}
-"stream_shp"
+"stream_sf"
 
 #' Streamflow for Sixmile Creek and Dorn Creek.
 #' 
