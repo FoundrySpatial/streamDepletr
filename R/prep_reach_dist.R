@@ -24,6 +24,7 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_sp
   #' }
   #' This data frame can be plugged directly into \link{apportion_inverse}, \link{apportion_polygon} (if \code{latlon=T}), 
   #' or \link{apportion_web}
+  #' @export
   
   # only a couple functions need a bunch of spatial packages, so they are 
   # Suggests rather than Imports. Check to make sure they are loaded here.
@@ -41,14 +42,14 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_sp
   
   # figure out what stream reach each point corresponds to
   stream_shp_buffer <- raster::buffer(stream_shp, buffer_width, dissolve=F)
-  int <- intersect(stream_shp_pts, stream_shp_buffer)
+  int <- raster::intersect(stream_shp_pts, stream_shp_buffer)
   stream_df_pts <- 
     as.data.frame(stream_shp_pts) %>% 
     cbind(int@data[,reach_id]) %>% 
     magrittr::set_colnames(c("lon", "lat", "reach"))
   
   # calculate euclidean distance to well
-  stream_df_pts$dist <- sqrt((stream_df_pts$lon-wel_lon)^2 + (stream_df_pts$lat-wel_lon)^2)
+  stream_df_pts$dist <- sqrt((stream_df_pts$lon-wel_lon)^2 + (stream_df_pts$lat-wel_lat)^2)
   
   # put columns in order and return
   return(stream_df_pts[,c("reach", "dist", "lat", "lon")])

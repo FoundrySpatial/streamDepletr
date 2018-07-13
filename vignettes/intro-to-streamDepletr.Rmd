@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+require(magrittr)
+require(reshape2)
+require(ggplot2)
+require(streamDepletr)
 ```
 
 ## Modeling streamflow depletion
@@ -40,9 +44,7 @@ streamDepletr has a variety of streamflow depletion models; two of the most comm
 To see how these compare, let's consider a well 150 m from a stream in a 30 m thick, unconfined aquifer with a specific yield of 0.1 and a hydraulic conductivity of 1e-5 meters/second. For the `hunt` model we also need some information about the stream; we'll say it's width is 5 m, riverbed is 10% as conductive as the aquifer, and riverbed thickness is 1 m.
 
 ```{r fig.width=6, fig.height=4}
-require(streamDepletr)
-
-# define parameters common to both
+# define parameters common to both models
 times  <- seq(1,100) # time [days]
 K <- 1e-5*86400      # hydraulic conductivity [m/d]
 b <- 30              # aquifer thickness [m]
@@ -54,42 +56,109 @@ Sy <- 0.1            # specific yield [-]
 str_cond <- streambed_conductance(w=5, Kriv=0.1*K, briv=1)
 
 # calculate capture fraction
-Qf_glover <- glover(t=times, d=d, S=Sy, Tr=trans)
-Qf_hunt <- hunt(t=times, d=d, S=Sy, Tr=trans, lmda=str_cond)
+df_depletion <-
+  data.frame(times = times,
+             Qf_glover = glover(t=times, d=d, S=Sy, Tr=trans),
+             Qf_hunt = hunt(t=times, d=d, S=Sy, Tr=trans, lmda=str_cond))
 
 # plot results
-plot(times, Qf_glover,
-     type="n",
-     xlab="Time since start of pumping [days]",
-     ylab="Capture Fraction [-]",
-     ylim=c(0,1))
-lines(times, Qf_glover)
-lines(times, Qf_hunt, col="red")
-legend(0.05, 0.95, c("Glover", "Hunt"), col=c("black", "red"), lty=1, title="Model")
+df_depletion %>% 
+  reshape2::melt(id="times", value.name="Qf", variable.name="model") %>% 
+  ggplot2::ggplot(aes(x=times, y=Qf, color=model)) +
+    geom_line() +
+    scale_y_continuous(limits=c(0,1))
 ```
 
 At the end of the 100 day period, the streambed conductance term of the `hunt` methods leads to ~50% lower predictions than the `glover` method:
 ```{r}
-Qf_glover[length(times)]
-Qf_hunt[length(times)]
+df_depletion[dim(df_depletion)[1], ]
 ```
 
 ## Converting capture fraction to streamflow depletion
 To convert capture fraction, `Qf`, to volumetric streamflow depletion, `Qs`, we simply multiply `Qf` by the pumping rate, `Qw`.
 ```{r fig.width=6, fig.height=4}
-# calculate volumetric depletion
+# define pumping rate
 Qw <- 75  # [m3/d]
-Qs_glover <- Qf_glover*Qw
-Qs_hunt <- Qf_hunt*Qw
+
+# calculate volumetric depletion
+df_depletion$Qs_glover <- df_depletion$Qf_glover*Qw
+df_depletion$Qs_hunt <- df_depletion$Qf_hunt*Qw
 
 # plot results
-plot(times, Qs_glover,
-     type="n",
-     xlab="Time since start of pumping [days]",
-     ylab="Streamflow Depletion [m3/d]",
-     ylim=c(0,Qw))
-lines(times, Qs_glover)
-lines(times, Qs_hunt, col="red")
-legend(0.05, Qw*0.95, c("Glover", "Hunt"), col=c("black", "red"), lty=1, title="Model")
+df_depletion %>% 
+  dplyr::select(c("times", "Qs_glover", "Qs_hunt")) %>% 
+  reshape2::melt(id="times", value.name="Qs", variable.name="model") %>% 
+  ggplot2::ggplot(aes(x=times, y=Qs, color=model)) +
+    geom_line()
 ```
+
+## Working with real stream networks
+As you probably noticed, neither the `glover` nor the `hunt` models are particularly realistic. Both consider only one linear stream with a perpendicular aquifer of infinite extent. The real world, of course, is made up of many nonlinear streams. For use in real stream networks, we have also included several depletion apportionment equations which distribute the streamflow depletion calculated using the analytical models to different reaches within a stream network. These depletion apportionment equations are described in Zipper et al. (2018)^[Zipper et al. (2018). Groundwater Pumping Impacts on Real Stream Networks: Testing the Performance of Simple Management Tools. *Water Resources Research*. doi: [10.1029/2018WR022707](http://dx.doi.org/10.1029/2018WR022707)] and shown here (modified from Zipper et al., Figure 1):
+`r knitr::include_graphics('Comparison_DepletionApportionment.png', dpi=300)`
+
+The Thiessen polygon method (`apportion_polygon`) uses the point on each stream reach closest to the well of interest to create Thiessen (or Voronoi) polygons including and ignoring the well, and weights streamflow depletion based on the area of overlap between the polygon associated with each stream reach and the polygon associated with the well. 
+The inverse distance and inverse distance squared methods (`apportion_inverse`) also use the point on each stream closest to the well of interest, but weight depletion based on the distance between the well and each stream reach ; relative to the linear method, the squared method gives more weight to the closer stream reaches. 
+Finally, the web and web squared methods (`apportion_web`) use the same inverse distance approach but divide each stream reach into a series of evenly spaced points to explicitly include stream geometry, instead of only using the closest point on each reach.
+
+To illustrate how these depletion apportionment equations work, let's consider the case of a hypothetical proposed high-capacity well in Wisconsin's Sixmile Creek Watershed of Wisconsin. This watershed contains two US Geological Survey streamflow gauging stations, one on Sixmile Creek and one on Dorn Creek (a tributary). These gauging stations are both just upstream of the junction between Sixmile and Dorn creeks, providing us an opportunity to investigate how this proposed well would affect each of the two streams. Here is a map showing the scenario, as well as two water years of streamflow data from each gauging station:
+`r knitr::include_graphics('Sixmile_Map+Discharge.png', dpi=300)`
+
+The stream network and discharge data are included in the package (`stream_shp` and `discharge_df`, respectively). First, let's we'll define some of the properties of the well and the aquifer:
+```{r}
+# well properties
+Qw <- 500  # well pumping rate [m3/d]
+wel_lon <- 295500  # easting of well [m]
+wel_lat <- 4783200 # northing of well [m]
+date_pump_start <- as.Date("2014-03-01")  # pumping start date
+date_pump_stop  <- as.Date("2015-03-01")  # pumping stop date
+
+# aquifer properties
+K <- 1e-5*86400      # hydraulic conductivity [m/d]
+b <- 200             # aquifer thickness [m]
+trans <- 50*K        # transmissivity [m2/d]
+Sy <- 0.05           # specific yield [-]
+```
+
+Now, we'll create our `reach_dist_lat_lon` data frame, which will be used to determine the distance between the well and a series of equally spaced points on each stream reach:
+```{r}
+rdll <- prep_reach_dist(wel_lon=wel_lon, wel_lat=wel_lat, stream_shp=stream_shp, reach_id="reach", stream_pt_spacing=1)
+head(rdll)
+```
+
+Let's first figure out what would happen if we ignored depletion apportionment, and assumed all groundwater pumping depleted the closest stream reach to the well:
+```{r fig.width=6, fig.height=4}
+# figure out which stream is closest
+closest_reach <- rdll[which.min(rdll$dist), "reach"]  # identify closest stream reach
+closest_dist  <- rdll[which.min(rdll$dist), "dist"]   # distance to closest point on closest reach
+closest_stream <- stream_shp@data$stream[stream_shp@data$reach==closest_reach]  # figure out if closest reach is on Dorn or Sixmile Creek
+closest_discharge <- subset(discharge_df, stream==closest_stream)
+
+# since time inputs for the streamflow depletion models are numeric (not dates), we need to figure out when the start and stop date are relative to the start of our period of interest
+t_pump_start <- as.numeric(date_pump_start - min(closest_discharge$date))
+t_pump_stop  <- as.numeric(date_pump_stop  - min(closest_discharge$date))
+times <- as.numeric(closest_discharge$date - min(closest_discharge$date))
+
+# calculate depletion - since the pumping starts and stops during our period of interest, we will use the intermittent_pumping function even though it is only one pumping cycle
+Qs <- intermittent_pumping(t=times, starts=t_pump_start, stops=t_pump_stop, rates=Qw,
+                           method="glover", d=closest_dist, S=Sy, Tr=trans)
+
+# plot capture fraction through time - the shaded interval indicates when pumping is occurring
+data.frame(date = closest_discharge$date, Qs = Qs) %>% 
+  ggplot2::ggplot(aes(x=date, y=Qs)) +
+    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
+    geom_line() +
+    scale_y_continuous(name="Qs, Streamflow Depletion [m3/d]")
+```
+
+If we assume that there are no changes to surface water-groundwater exchange elsewhere in the network, we can estimate the streamflow at the gauging station as the discharge in the no-pumping scenario minus the streamflow depletion.
+```{r fig.width=6, fig.height=4}
+# calculate streamflow 
+closest_discharge$Q_pumped <- closest_discharge$Q_m3d - Qs 
+
+closest_discharge %>% 
+  reshape2::melt(id=c("date", "stream"), value.name="discharge_m3d") %>% 
+  ggplot2::ggplot(aes(x=date, y=discharge_m3d, color=variable)) +
+    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
+    geom_line() +
+    scale_y_log10()
 ```
