@@ -26,7 +26,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   #' 
   #' @export
   
-  # this is the only function that needs some packages, so they are 
+  # only a couple functions need a bunch of spatial packages, so they are 
   # Suggests rather than Imports. Check to make sure they are loaded here.
   if (!requireNamespace(c("dismo", "sp", "raster", "deldir", "rgeos"), quietly = TRUE)) {
     stop("Several spatial packages (\"dismo\", \"sp\", \"raster\", \"deldir\", \"rgeos\") are needed for this function to work. Please install them.",
