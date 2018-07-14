@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^R/compareApportionmentApproaches\.R$
+cran-comments.md
+^\.travis\.yml$
