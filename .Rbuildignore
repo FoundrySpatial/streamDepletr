@@ -3,3 +3,9 @@
 ^R/compareApportionmentApproaches\.R$
 cran-comments.md
 ^\.travis\.yml$
+^cran-comments\.md$
+^Style+Conventions\.md$
+^StyleAndConventions\.md$
+^PrepPackageData$
+^testScripts$
+^ShinyApp$

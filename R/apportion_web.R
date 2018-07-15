@@ -26,7 +26,10 @@ apportion_web <- function(reach_dist, w){
   #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist=c(100, 150, 900, 300, 200))
   #' apportion_web(reach_dist, w=1)
   #' @export
-
+  
+  # set NULLs to avoid no visible binding note on R CMD check
+  #reach <- dist <- frac_depletion_pt <- NULL
+  
   reach_dist %>% 
     transform(frac_depletion_pt = (1/dist^w)/sum((1/dist^w))) %>% 
     dplyr::group_by(reach) %>% 

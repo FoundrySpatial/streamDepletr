@@ -28,10 +28,14 @@ apportion_inverse <- function(reach_dist, w){
   #' apportion_inverse(reach_dist, w=1)
   #' @export
 
+  # set NULLs to avoid no visible binding note on R CMD check
+  #reach <- dist <- dist_min <- frac_depletion <- NULL
+  
+  # actual function
   reach_dist %>% 
     dplyr::group_by(reach) %>% 
-    dplyr::summarize(dist.min = min(dist)) %>% 
-    transform(frac_depletion = (1/dist.min^w)/sum((1/dist.min^w))) %>% 
+    dplyr::summarize(dist_min = min(dist)) %>% 
+    transform(frac_depletion = (1/dist_min^w)/sum((1/dist_min^w))) %>% 
     dplyr::select(reach, frac_depletion)
   
 }

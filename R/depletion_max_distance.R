@@ -9,7 +9,6 @@ depletion_max_distance <- function(Qf_thres=0.01, d_interval=100, d_min=NULL, d_
   #' @param d_max maximum search distance [L]. If `Qf` > `Qf_thres` at `d_max`, function will return `NaN`
   #' @param t time you want output for [T]
   #' @param method analytical solution to use (options= 'glover', 'hunt'). Defaults to 'glover'.
-  #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param ... any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)

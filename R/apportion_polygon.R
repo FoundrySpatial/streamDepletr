@@ -13,6 +13,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   #' @param wel_lat latitude of well
   #' @param max_dist the maximum distance of a stream to be depleted
   #' @param crs object of class CRS with projection info of latitude and longitude input
+  #' @importFrom magrittr %>%
   #' @return A data frame with two columns: 
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}
@@ -25,6 +26,9 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   #' @examples
   #' 
   #' @export
+  
+  # set NULLs to avoid no visible binding note on R CMD check
+  #reach <- dist <- NULL
   
   # only a couple functions need a bunch of spatial packages, so they are 
   # Suggests rather than Imports. Check to make sure they are loaded here.
@@ -42,9 +46,9 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   # get closest point on each stream reach to the well
   reach_closest <- 
     reach_dist_lon_lat %>%
-    group_by(reach) %>% 
-    summarize(dist_closest=min(dist)) %>% 
-    left_join(., reach_dist_lon_lat, by=c("reach"="reach", "dist_closest"="dist"))
+    dplyr::group_by(reach) %>% 
+    dplyr::summarize(dist_closest=min(dist)) %>% 
+    dplyr::left_join(reach_dist_lon_lat, by=c("reach"="reach", "dist_closest"="dist"))
   reach_closest <- reach_closest[!duplicated(reach_closest$reach), ]
   
   # make spatial polygons data frame

@@ -26,8 +26,6 @@ If `d_min`=NULL (default), `d_min` will be set to `d_interval'`}
 \item{Tr}{aquifer transmissivity [L2/T]}
 
 \item{...}{any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)}
-
-\item{d}{distance from well to stream [L]}
 }
 \value{
 A numeric of the distance at which streamflow depletion fraction (\code{Qf}) drops below the threshold at time `t`.
