@@ -1,10 +1,12 @@
-time_to_induced_infiltration <- function(d, S, Tr, Qa, Qw){
+induce_infiltration_time <- function(d, S, Tr, Qa, Qw){
   #' Calculate critical time at which stream transitions from gaining to losing.
   #'
   #' This is the time at which induced infiltration due to groundwater pumping begins,
-  #' based on the \link{glover} model of streamflow depletion.Derived in Chen (2003) Eq. 4.
+  #' based on the \link{glover} model of streamflow depletion. Derived in Chen (2003) Eq. 4.
+  #' 
   #' Assumptions:
   #' \itemize{
+  #'   \item Groundwater flow is perpendicular to stream
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
   #'   \item Homogeneous, isotropic aquifer
   #'   \item Constant \code{Tr}: Aquifer is confined, or if unconfined change in head is small relative to aquifer thickness
@@ -30,7 +32,7 @@ time_to_induced_infiltration <- function(d, S, Tr, Qa, Qw){
   #' @examples
   #' # recreate Figure 2 in Chen (2003)
   #' Qa <- c(0.0001, 0.0003, 0.0005, 0.0008, 0.001)
-  #' tc <- time_to_induced_infiltration(d=575, S=0.2, Tr=100*15, Qa=Qa, Qw=2727)
+  #' tc <- induce_infiltration_time(d=575, S=0.2, Tr=100*15, Qa=Qa, Qw=2727)
   #' plot(x=(pi*Qa*100*15*575/2727), y=tc, log="y")
   #' @export
   
