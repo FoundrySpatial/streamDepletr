@@ -48,7 +48,7 @@ To see how these compare, let's consider a well 150 m from a stream in a 30 m th
 times  <- seq(1,100) # time [days]
 K <- 1e-5*86400      # hydraulic conductivity [m/d]
 b <- 30              # aquifer thickness [m]
-trans <- 50*K        # transmissivity [m2/d]
+trans <- b*K         # transmissivity [m2/d]
 d <- 150             # well to stream distance [m]
 Sy <- 0.1            # specific yield [-]
 
@@ -128,9 +128,9 @@ head(rdll)
 Let's first figure out what would happen if we ignored depletion apportionment, and assumed all groundwater pumping depleted the closest stream reach to the well:
 ```{r fig.width=6, fig.height=4}
 # figure out which stream is closest
-closest_reach <- rdll[which.min(rdll$dist), "reach"]  # identify closest stream reach
-closest_dist  <- rdll[which.min(rdll$dist), "dist"]   # distance to closest point on closest reach
-closest_stream <- stream_lines@data$stream[stream_lines@data$reach==closest_reach]  # figure out if closest reach is on Dorn or Sixmile Creek
+closest_reach <- rdll[which.min(rdll$dist), "reach"]
+closest_dist  <- rdll[which.min(rdll$dist), "dist"]
+closest_stream <- stream_lines@data$stream[stream_lines@data$reach==closest_reach]
 closest_discharge <- subset(discharge_df, stream==closest_stream)
 
 # since time inputs for the streamflow depletion models are numeric (not dates), we need to figure out when the start and stop date are relative to the start of our period of interest

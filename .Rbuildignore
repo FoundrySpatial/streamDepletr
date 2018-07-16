@@ -9,3 +9,5 @@ cran-comments.md
 ^PrepPackageData$
 ^testScripts$
 ^ShinyApp$
+^README\.Rmd$
+^README-.*\.png$
