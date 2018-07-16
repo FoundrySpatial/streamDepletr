@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![Travis-CI Build Status](https://travis-ci.org/szipper/streamDepletr.svg?branch=master)](https://travis-ci.org/szipper/streamDepletr)
 
 streamDepletr is an R package with functions for assessing the impacts of groundwater pumping on wells. There are two primary categories of functions:
+
 - Analytical streamflow depletion models, which estimate the change in groundwater inputs to a stream resulting from pumping (`hunt`, `glover`, `hantush`, `intermittent_pumping`)
 - Depletion apportionment equations, which distribute streamflow depletion estimating using the analytical models to different reaches within a stream network (`apportion_inverse`, `apportion_web`, `apportion_polygon`, `apportion_wedge`)
 
@@ -45,3 +46,6 @@ Qf <- glover(t  = seq(1,100),     # timesteps to evaluate
 # plot
 plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletion Fraction")
 ```
+
+For more examples, please check out the package vignette:
+`browseVignettes("streamDepletr")`

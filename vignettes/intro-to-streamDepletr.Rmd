@@ -25,14 +25,15 @@ require(streamDepletr)
 Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping^[Barlow et al. (2018). Capture versus Capture Zones: Clarifying Terminology Related to Sources of Water to Wells. *Groundwater*. doi: [10.1111/gwat.12661](http://dx.doi.org/10.1111/gwat.12661)], cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. streamDepltr is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
 
 However, anyone using analytical models should be aware that they have many more assumptions than numerical models, including:
-* Homogeneous and isotropic aquifer.
-* Constant transmissivity - aquifer is either confined, or unconfined with negligible head change due to pumping.
-* Constant stream stage - head in stream does not lower or dry up due to pumping.
-* Recharge does not change due to pumping.
-* Negligible vertical groundwater flow, AKA the [Dupuit-Forchheimer assumption](https://en.wikipedia.org/wiki/Dupuit%E2%80%93Forchheimer_assumption) holds.
-* No streambank storage.
-* Streams are linear and infinite in extent
-* Aquifers are infinite in extent
+
+- Homogeneous and isotropic aquifer.
+- Constant transmissivity - aquifer is either confined, or unconfined with negligible head change due to pumping.
+- Constant stream stage - head in stream does not lower or dry up due to pumping.
+- Recharge does not change due to pumping.
+- Negligible vertical groundwater flow, AKA the [Dupuit-Forchheimer assumption](https://en.wikipedia.org/wiki/Dupuit%E2%80%93Forchheimer_assumption) holds.
+- No streambank storage.
+- Streams are linear and infinite in extent
+- Aquifers are infinite in extent
 
 These assumptions notwithstanding, analytical streamflow depletion models are useful tools for estimating groundwater pumping impacts on streamflow, in particular in settings where the time, data, or resources do not exist to create numerical models. If you are interested in numerical models, I recommend you check out the excellent [FloPy package for Python](https://github.com/modflowpy/flopy).
 
@@ -103,10 +104,10 @@ Finally, the web and web squared methods (`apportion_web`) use the same inverse 
 To illustrate how these depletion apportionment equations work, let's consider the case of a hypothetical proposed high-capacity well in Wisconsin's Sixmile Creek Watershed of Wisconsin. This watershed contains two US Geological Survey streamflow gauging stations, one on Sixmile Creek and one on Dorn Creek (a tributary). These gauging stations are both just upstream of the junction between Sixmile and Dorn creeks, providing us an opportunity to investigate how this proposed well would affect each of the two streams. Here is a map showing the scenario, as well as two water years of streamflow data from each gauging station:
 `r knitr::include_graphics('Sixmile_Map+Discharge.png', dpi=300)`
 
-The stream network and discharge data are included in the package (`stream_lines` and `discharge_df`, respectively). First, let's we'll define some of the properties of the well and the aquifer:
+The stream network and discharge data are included in the package (`stream_lines` and `discharge_df`, respectively). First, let's define the properties of the well and the aquifer:
 ```{r}
 # well properties
-Qw <- 500  # well pumping rate [m3/d]
+Qw <- 1000  # well pumping rate [m3/d]
 wel_lon <- 295500  # easting of well [m]
 wel_lat <- 4783200 # northing of well [m]
 date_pump_start <- as.Date("2014-03-01")  # pumping start date
@@ -121,7 +122,8 @@ Sy <- 0.05           # specific yield [-]
 
 Now, we'll create our `reach_dist_lat_lon` data frame, which will be used to determine the distance between the well and a series of equally spaced points on each stream reach:
 ```{r}
-rdll <- prep_reach_dist(wel_lon=wel_lon, wel_lat=wel_lat, stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
+rdll <- prep_reach_dist(wel_lon=wel_lon, wel_lat=wel_lat, 
+                        stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
 head(rdll)
 ```
 
@@ -133,19 +135,22 @@ closest_dist  <- rdll[which.min(rdll$dist), "dist"]
 closest_stream <- stream_lines@data$stream[stream_lines@data$reach==closest_reach]
 closest_discharge <- subset(discharge_df, stream==closest_stream)
 
-# since time inputs for the streamflow depletion models are numeric (not dates), we need to figure out when the start and stop date are relative to the start of our period of interest
+# since time inputs for the streamflow depletion models are numeric (not dates), 
+# we need to figure out the start and stop date in days since the start of our period of interest
 t_pump_start <- as.numeric(date_pump_start - min(closest_discharge$date))
 t_pump_stop  <- as.numeric(date_pump_stop  - min(closest_discharge$date))
 times <- as.numeric(closest_discharge$date - min(closest_discharge$date))
 
-# calculate depletion - since the pumping starts and stops during our period of interest, we will use the intermittent_pumping function even though it is only one pumping cycle
+# calculate depletion - since the pumping starts and stops during our period of interest, 
+#  we will use the intermittent_pumping function even though it is only one pumping cycle
 Qs <- intermittent_pumping(t=times, starts=t_pump_start, stops=t_pump_stop, rates=Qw,
                            method="glover", d=closest_dist, S=Sy, Tr=trans)
 
 # plot capture fraction through time - the shaded interval indicates when pumping is occurring
 data.frame(date = closest_discharge$date, Qs = Qs) %>% 
   ggplot2::ggplot(aes(x=date, y=Qs)) +
-    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
+    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, 
+             ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
     geom_line() +
     scale_y_continuous(name="Qs, Streamflow Depletion [m3/d]")
 ```
@@ -158,7 +163,8 @@ closest_discharge$Q_pumped <- closest_discharge$Q_m3d - Qs
 closest_discharge %>% 
   reshape2::melt(id=c("date", "stream"), value.name="discharge_m3d") %>% 
   ggplot2::ggplot(aes(x=date, y=discharge_m3d, color=variable)) +
-    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
+    annotate("rect", xmin=date_pump_start, xmax=date_pump_stop, 
+             ymin=-Inf, ymax=Inf, fill="red", alpha=0.5) +
     geom_line() +
     scale_y_log10()
 ```

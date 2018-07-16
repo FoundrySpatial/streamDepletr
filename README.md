@@ -9,13 +9,15 @@ Status](https://travis-ci.org/szipper/streamDepletr.svg?branch=master)](https://
 
 streamDepletr is an R package with functions for assessing the impacts
 of groundwater pumping on wells. There are two primary categories of
-functions: - Analytical streamflow depletion models, which estimate the
-change in groundwater inputs to a stream resulting from pumping (`hunt`,
-`glover`, `hantush`, `intermittent_pumping`) - Depletion apportionment
-equations, which distribute streamflow depletion estimating using the
-analytical models to different reaches within a stream network
-(`apportion_inverse`, `apportion_web`, `apportion_polygon`,
-`apportion_wedge`)
+functions:
+
+  - Analytical streamflow depletion models, which estimate the change in
+    groundwater inputs to a stream resulting from pumping (`hunt`,
+    `glover`, `hantush`, `intermittent_pumping`)
+  - Depletion apportionment equations, which distribute streamflow
+    depletion estimating using the analytical models to different
+    reaches within a stream network (`apportion_inverse`,
+    `apportion_web`, `apportion_polygon`, `apportion_wedge`)
 
 ## Installation
 
@@ -46,3 +48,6 @@ plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletio
 ```
 
 ![](README-SamplePlot-1.png)<!-- -->
+
+For more examples, please check out the vignette:
+`browseVignettes("streamDepletr")`
