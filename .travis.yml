@@ -7,3 +7,7 @@ addons:
   apt:
     packages:
       - libmpfr-dev
+      - libudunits2-dev
+      - libproj-dev
+      - libgeos-dev
+      - libgdal-dev
