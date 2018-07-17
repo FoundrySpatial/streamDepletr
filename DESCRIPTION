@@ -29,5 +29,7 @@ Suggests: knitr,
     deldir,
     rgeos,
     ggplot2,
-    reshape2
+    reshape2,
+    sf,
+    scales
 VignetteBuilder: knitr

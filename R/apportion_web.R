@@ -21,10 +21,11 @@ apportion_web <- function(reach_dist, w, max_dist) {
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
   #' doi:10.1029/2018WR022707.
   #' @examples
+  #' # these will be the same as apportion_inverse because there's only one dist per reach
   #' reach_dist <- data.frame(reach = seq(1,5),
   #'   dist = c(100, 150, 900, 300, 200))
-  #' apportion_web(reach_dist, w = 2, max_dist = 1000)  # same as apportion_inverse, since only one dist per reach
-  #' apportion_web(reach_dist, w = 2, max_dist = 500)   # same as apportion_inverse, since only one dist per reach
+  #' apportion_web(reach_dist, w = 2, max_dist = 1000)
+  #' apportion_web(reach_dist, w = 2, max_dist = 500)
   #'
   #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"),
   #'   dist = c(100, 150, 900, 300, 200))

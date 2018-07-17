@@ -22,11 +22,8 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
 
   # initial conditions
   Qf <- 1
-  if (is.null(d_min)) {
-    d_test <- d_interval
-  } else {
-    d_test <- d_min
-  }
+  if (is.null(d_min)) d_min <- d_interval
+  d_test <- d_min
 
   # select analytical model and calculate depletion
   if (method == "glover") {
@@ -37,7 +34,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {
-        if ((d_test - d_interval) == d_min) warning("Qf < Qf_thres at distance d_min")
+        if (d_test == d_min) warning("Qf < Qf_thres at distance d_min")
         return((d_test - d_interval)) # since you exceeded the threshold, return the previous d_test
       }
 
@@ -60,7 +57,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {
-        if ((d_test - d_interval) == d_min) warning("Qf < Qf_thres at distance d_min")
+        if (d_test == d_min) warning("Qf < Qf_thres at distance d_min")
         return((d_test - d_interval)) # since you exceeded the threshold, return the previous d_test
       }
 

@@ -29,10 +29,11 @@ functions are needed to distribute that depletion to various reaches within a
 real stream network. These geometric functions are described in Zipper et al (2018).
 }
 \examples{
+# these will be the same as apportion_inverse because there's only one dist per reach
 reach_dist <- data.frame(reach = seq(1,5),
   dist = c(100, 150, 900, 300, 200))
-apportion_web(reach_dist, w = 2, max_dist = 1000)  # same as apportion_inverse, since only one dist per reach
-apportion_web(reach_dist, w = 2, max_dist = 500)   # same as apportion_inverse, since only one dist per reach
+apportion_web(reach_dist, w = 2, max_dist = 1000)
+apportion_web(reach_dist, w = 2, max_dist = 500)
 
 reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"),
   dist = c(100, 150, 900, 300, 200))

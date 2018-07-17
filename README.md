@@ -25,7 +25,8 @@ You can install streamDepletr from GitHub with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("szipper/streamDepletr")
+devtools::install_github("szipper/streamDepletr",
+                         build_vignettes=T)
 ```
 
 ## Example
@@ -41,7 +42,7 @@ require(streamDepletr)
 Qf <- glover(t  = seq(1,100),     # timesteps to evaluate
              d  = 150,            # well to stream distance
              S  = 0.10,           # specific yield
-             Tr = 30*1e-5*86400)  # 50 m thick aquifer with hydraulic conductivity of 1e-5 m/s
+             Tr = 50*1e-5*86400)  # 50 m thick aquifer with hydraulic conductivity of 1e-5 m/s
 
 # plot
 plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletion Fraction")
@@ -49,5 +50,5 @@ plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletio
 
 ![](README-SamplePlot-1.png)<!-- -->
 
-For more examples, please check out the vignette:
+For more examples, please check out the package vignette:
 `browseVignettes("streamDepletr")`

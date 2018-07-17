@@ -11,7 +11,8 @@
 
 - To add a dependency: `devtools::use_package("packageName")`
 - To generate documentation: `devtools::document()`
-- To install package: `devtools::install("../streamDepletr")`
+- To build vignettes: `devtools::build_vignettes()`
+- To install package: `devtools::install("../streamDepletr", build_vignettes = T)`
 
 # Style
 Goal: common style among all functions within the package. 
