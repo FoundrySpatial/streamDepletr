@@ -11,9 +11,9 @@ apportion_wedge <- function(angle_total, angle_well) {
   #' Yeh, HD, YC Chang, VA Zlotnik (2008). Stream depletion rate and volume from groundwater pumping in
   #' wedge-shaped aquifers. Journal of Hydrology 349(3): 501-511. doi:10.1029/2018WR022707.
   #' @examples
-  #' apportion_wedge(angle_total=(50*pi/2), angle_well=(10*pi/2))
+  #' apportion_wedge(angle_total = (50*pi/2), angle_well = (10*pi/2))
   #'
-  #' apportion_wedge(angle_total=(50*pi/2), angle_well=(25*pi/2))
+  #' apportion_wedge(angle_total = (50*pi/2), angle_well = (25*pi/2))
   #' @export
 
   frac_depletion <- c((1 - (angle_well / angle_total)), angle_well / angle_total)

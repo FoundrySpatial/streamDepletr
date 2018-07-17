@@ -21,11 +21,11 @@ apportion_inverse <- function(reach_dist, w) {
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
   #' doi:10.1029/2018WR022707.
   #' @examples
-  #' reach_dist <- data.frame(reach = seq(1,5), dist=c(100, 150, 900, 300, 200))
-  #' apportion_inverse(reach_dist, w=2)
+  #' reach_dist <- data.frame(reach = seq(1,5), dist = c(100, 150, 900, 300, 200))
+  #' apportion_inverse(reach_dist, w = 2)
   #'
-  #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist=c(100, 150, 900, 300, 200))
-  #' apportion_inverse(reach_dist, w=1)
+  #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist = c(100, 150, 900, 300, 200))
+  #' apportion_inverse(reach_dist, w = 1)
   #' @export
 
   # actual function

@@ -23,9 +23,19 @@ hunt <- function(t, d, S, Tr, lmda, prec = 80) {
   #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
+  #' @importFrom magrittr %>%
   #' @references
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping.
   #' Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
+  #' @examples
+  #' hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = 864)    # ~equal to glover because lmda=Tr
+  #' hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = 0.864)  # less depletion due to lower lmda
+  #'
+  #' lmda <- streambed_conductance(w = 10, Kriv = 0.0864, briv = 1) # estimate lmda
+  #' hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = lmda)
+  #'
+  #' Qf <- hunt(t = seq(1, 1826), d = 1000, S = 0.2, Tr = 8640, lmda = 0.864)
+  #' plot(x = seq(1, 1826), y = Qf, type = "l")
   #' @export
 
   # erfc and exp terms can get really huge; use the Rmpfr package to deal with them

@@ -44,6 +44,12 @@ Assumptions:
   \item Aquifer extends to infinity
 }
 }
+\examples{
+hantush(t = 1826, d = 1000, S = 0.2, Kh = 86.4, b = 100, Kriv = 0.0864, briv = 1)
+
+Qf <- hantush(t = seq(1, 1826), d = 1000, S = 0.2, Kh = 86.4, b = 100, Kriv = 0.0864, briv = 1)
+plot(x = seq(1, 1826), y = Qf, type = "l")
+}
 \references{
 Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
 }

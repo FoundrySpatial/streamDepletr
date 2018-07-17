@@ -24,10 +24,10 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
   #' doi:10.1029/2018WR022707.
   #' @examples
-  #' rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
-  #'    stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
-  #' apportion_polygon(reach_dist_lon_lat=rdll, wel_lon=295500, wel_lat=4783200,
-  #'    max_dist=5000, crs=raster::crs(stream_lines))
+  #' rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
+  #'    stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+  #' apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
+  #'    max_dist = 5000, crs = raster::crs(stream_lines))
   #' @export
 
   # only a couple functions need a bunch of spatial packages, so they are

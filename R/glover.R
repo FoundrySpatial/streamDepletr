@@ -32,9 +32,9 @@ glover <- function(t, d, S, Tr) {
   #' Eos, Transactions American Geophysical Union 22(3): 734-38. https://doi.org/10.1029/TR022i003p00734.
   #'
   #' @examples
-  #' glover(t=1.5777e8, d=1000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 1
-  #' glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 2
-  #' glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
+  #' glover(t = 1.5777e8, d = 1000, S = 0.2, Tr = 0.1)   # Glover & Balmer (1954) Table 1, Well 1
+  #' glover(t = 1.5777e8, d = 5000, S = 0.2, Tr = 0.1)   # Glover & Balmer (1954) Table 1, Well 2
+  #' glover(t = 1.5777e8, d = 10000, S = 0.2, Tr = 0.1)  # Glover & Balmer (1954) Table 1, Well 3
   #' @export
 
   Qf <- Rmpfr::erfc(sqrt(S * d * d / (4 * Tr * t)))

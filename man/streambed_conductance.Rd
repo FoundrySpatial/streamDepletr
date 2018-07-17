@@ -25,6 +25,12 @@ A numeric of \code{lmda}, the streambed conductance term [L/T]
 \description{
 Estimate streambed conductance.
 }
+\examples{
+streambed_conductance(w = 10, Kriv = 0.0864, briv = 1)
+streambed_conductance(w = 5, Kriv = 0.0864, briv = 1)
+streambed_conductance(w = 10, Kriv = 0.864, briv = 1)
+streambed_conductance(w = 10, Kriv = 0.0864, briv = 0.1)
+}
 \references{
 Reeves, HW, DA Hamilton, PW Seelbach, and AJ Asher (2009). Ground-Water-Withdrawal Component of the
 Michigan Water-Withdrawal Screening Tool. USGS Scientific Investigations Report, Reston VA.

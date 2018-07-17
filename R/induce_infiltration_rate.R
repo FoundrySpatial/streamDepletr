@@ -27,9 +27,9 @@ induce_infiltration_rate <- function(d, Qa) {
   #' Wilson, JL (1993). Induced Infiltration in Aquifers with Ambient Flow. Water Resources Research
   #' 29(10): 3503-12. doi:10.1029/93WR01393.
   #' @examples
-  #' induce_infiltration_rate(d=100, Qa=10)
-  #' induce_infiltration_rate(d=100, Qa=50)
-  #' induce_infiltration_rate(d=500, Qa=50)
+  #' induce_infiltration_rate(d = 100, Qa = 10)
+  #' induce_infiltration_rate(d = 100, Qa = 50)
+  #' induce_infiltration_rate(d = 500, Qa = 50)
   #' @export
 
   Qc <- pi * d * Qa

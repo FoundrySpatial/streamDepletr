@@ -26,8 +26,14 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
+  #' @importFrom magrittr %>%
   #' @references
   #' Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
+  #' @examples
+  #' hantush(t = 1826, d = 1000, S = 0.2, Kh = 86.4, b = 100, Kriv = 0.0864, briv = 1)
+  #'
+  #' Qf <- hantush(t = seq(1, 1826), d = 1000, S = 0.2, Kh = 86.4, b = 100, Kriv = 0.0864, briv = 1)
+  #' plot(x = seq(1, 1826), y = Qf, type = "l")
   #' @export
 
   # streambed leakance

@@ -19,9 +19,9 @@ capture fraction from the first (lower) and second (upper) streams.
 Streams are two linear tributaries that meet at the origin. From Yeh et al. (2008), Eq. 18 & 19.
 }
 \examples{
-apportion_wedge(angle_total=(50*pi/2), angle_well=(10*pi/2))
+apportion_wedge(angle_total = (50*pi/2), angle_well = (10*pi/2))
 
-apportion_wedge(angle_total=(50*pi/2), angle_well=(25*pi/2))
+apportion_wedge(angle_total = (50*pi/2), angle_well = (25*pi/2))
 }
 \references{
 Yeh, HD, YC Chang, VA Zlotnik (2008). Stream depletion rate and volume from groundwater pumping in

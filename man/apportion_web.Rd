@@ -27,11 +27,13 @@ functions are needed to distribute that depletion to various reaches within a
 real stream network. These geometric functions are described in Zipper et al (2018).
 }
 \examples{
-reach_dist <- data.frame(reach = seq(1,5), dist=c(100, 150, 900, 300, 200))
-apportion_web(reach_dist, w=2)  # same as apportion_inverse, since there is only one dist per reach
+reach_dist <- data.frame(reach = seq(1,5),
+  dist = c(100, 150, 900, 300, 200))
+apportion_web(reach_dist, w = 2)  # same as apportion_inverse, since only one dist per reach
 
-reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist=c(100, 150, 900, 300, 200))
-apportion_web(reach_dist, w=1)
+reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"),
+  dist = c(100, 150, 900, 300, 200))
+apportion_web(reach_dist, w = 1)
 }
 \references{
 Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts

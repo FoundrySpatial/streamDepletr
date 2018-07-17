@@ -13,7 +13,7 @@ subtract_bounded <- function(x, y, lower_bound = -Inf, upper_bound = Inf) {
   #' @return (x-y), within the limits of lower_bound and upper_bound
   #' @examples
   #' subtract_bounded(10, 15)  # returns -5; default bounds are \code{-Inf, Inf}
-  #' subtract_bounded(10, 15, lower_bound=0)  # returns 0 due to lower_bound
+  #' subtract_bounded(10, 15, lower_bound = 0)  # returns 0 due to lower_bound
   #' @export
   min(max(c((x - y), lower_bound)), upper_bound)
 }

@@ -33,10 +33,10 @@ functions are needed to distribute that depletion to various reaches within a
 real stream network. These geometric functions are described in Zipper et al (2018).
 }
 \examples{
-rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
-   stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
-apportion_polygon(reach_dist_lon_lat=rdll, wel_lon=295500, wel_lat=4783200,
-   max_dist=5000, crs=raster::crs(stream_lines))
+rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
+   stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
+   max_dist = 5000, crs = raster::crs(stream_lines))
 }
 \references{
 Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts

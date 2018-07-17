@@ -34,8 +34,8 @@ A numeric of the distance at which streamflow depletion fraction (\code{Qf}) dro
 Note that this only considers a single stream - depletion apportionment does not occur.  #'
 }
 \examples{
-depletion_max_distance(method="glover", t=730, S=0.1, Tr=100)
-depletion_max_distance(Qf_thres=0.001, method="glover", t=730, S=0.1, Tr=100)
-depletion_max_distance(Qf_thres=0.001, method="hunt", t=730, S=0.1, Tr=100, lmda=0.01)
-depletion_max_distance(Qf_thres=0.001, method="hunt", t=7300, S=0.1, Tr=100, lmda=0.01)
+depletion_max_distance(method = "glover", t = 730, S = 0.1, Tr = 100)
+depletion_max_distance(Qf_thres = 0.001, method = "glover", t = 730, S = 0.1, Tr = 100)
+depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 730, S = 0.1, Tr = 100, lmda = 0.01)
+depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 7300, S = 0.1, Tr = 100, lmda = 0.01)
 }

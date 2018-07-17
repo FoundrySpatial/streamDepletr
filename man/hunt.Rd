@@ -39,9 +39,14 @@ Assumptions:
 }
 }
 \examples{
-glover(t=1.5777e8, d=1000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 1
-glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 2
-glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
+hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = 864)    # ~equal to glover because lmda=Tr
+hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = 0.864)  # less depletion due to lower lmda
+
+lmda <- streambed_conductance(w = 10, Kriv = 0.0864, briv = 1) # estimate lmda
+hunt(t = 1826, d = 1000, S = 0.2, Tr = 8640, lmda = lmda)
+
+Qf <- hunt(t = seq(1, 1826), d = 1000, S = 0.2, Tr = 8640, lmda = 0.864)
+plot(x = seq(1, 1826), y = Qf, type = "l")
 }
 \references{
 Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping.

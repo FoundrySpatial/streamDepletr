@@ -36,9 +36,9 @@ Assumptions:
 }
 }
 \examples{
-induce_infiltration_rate(d=100, Qa=10)
-induce_infiltration_rate(d=100, Qa=50)
-induce_infiltration_rate(d=500, Qa=50)
+induce_infiltration_rate(d = 100, Qa = 10)
+induce_infiltration_rate(d = 100, Qa = 50)
+induce_infiltration_rate(d = 500, Qa = 50)
 }
 \references{
 Wilson, JL (1993). Induced Infiltration in Aquifers with Ambient Flow. Water Resources Research

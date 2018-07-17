@@ -32,8 +32,8 @@ induce_infiltration_time <- function(d, S, Tr, Qa, Qw) {
   #' @examples
   #' # recreate Figure 2 in Chen (2003)
   #' Qa <- c(0.0001, 0.0003, 0.0005, 0.0008, 0.001)
-  #' tc <- induce_infiltration_time(d=575, S=0.2, Tr=100*15, Qa=Qa, Qw=2727)
-  #' plot(x=(pi*Qa*100*15*575/2727), y=tc, log="y")
+  #' tc <- induce_infiltration_time(d = 575, S = 0.2, Tr = 100*15, Qa = Qa, Qw = 2727)
+  #' plot(x = (pi * Qa * 100 * 15 * 575 / 2727), y = tc, log = "y")
   #' @export
 
   tc <- -d * d * S / (4 * Tr * log(pi * Qa * Tr * d / Qw))

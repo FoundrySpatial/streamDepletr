@@ -40,7 +40,7 @@ This function splits a polyline stream network up into a series of evenly spaced
 calculates the distance from each of those points to a well.
 }
 \examples{
-rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
-   stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
+rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
+   stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
 head(rdll)
 }

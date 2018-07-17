@@ -35,8 +35,8 @@ be different pumping rates at different times.
 Streamflow depletion for an intermittent pumping schedule using superposition.
 }
 \examples{
-intermittent_pumping(t=seq(0,60,10), starts=0, stops=30,
-  rates=100, method="glover", d=100, S=0.1, Tr=100)
+intermittent_pumping(t = seq(0,60,10), starts = 0, stops = 30,
+  rates = 100, method = "glover", d = 100, S = 0.1, Tr = 100)
 }
 \references{
 Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion

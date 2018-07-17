@@ -23,8 +23,8 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_sp
   #' This data frame can be plugged directly into \link{apportion_inverse}, \link{apportion_polygon} (if \code{latlon=T}),
   #' or \link{apportion_web}
   #' @examples
-  #' rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
-  #'    stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
+  #' rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
+  #'    stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
   #' head(rdll)
   #' @export
 

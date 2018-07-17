@@ -14,10 +14,10 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
   #' @param ... any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)
   #' @return A numeric of the distance at which streamflow depletion fraction (\code{Qf}) drops below the threshold at time `t`.
   #' @examples
-  #' depletion_max_distance(method="glover", t=730, S=0.1, Tr=100)
-  #' depletion_max_distance(Qf_thres=0.001, method="glover", t=730, S=0.1, Tr=100)
-  #' depletion_max_distance(Qf_thres=0.001, method="hunt", t=730, S=0.1, Tr=100, lmda=0.01)
-  #' depletion_max_distance(Qf_thres=0.001, method="hunt", t=7300, S=0.1, Tr=100, lmda=0.01)
+  #' depletion_max_distance(method = "glover", t = 730, S = 0.1, Tr = 100)
+  #' depletion_max_distance(Qf_thres = 0.001, method = "glover", t = 730, S = 0.1, Tr = 100)
+  #' depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 730, S = 0.1, Tr = 100, lmda = 0.01)
+  #' depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 7300, S = 0.1, Tr = 100, lmda = 0.01)
   #' @export
 
   # initial conditions
