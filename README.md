@@ -8,7 +8,7 @@
 Status](https://travis-ci.org/szipper/streamDepletr.svg?branch=master)](https://travis-ci.org/szipper/streamDepletr)
 
 streamDepletr is an R package with functions for assessing the impacts
-of groundwater pumping on wells. There are two primary categories of
+of groundwater pumping on streams. There are two primary categories of
 functions:
 
   - Analytical streamflow depletion models, which estimate the change in
@@ -21,18 +21,19 @@ functions:
 
 ## Installation
 
-You can install streamDepletr from GitHub with:
+You can install streamDepletr from GitHub
+with:
 
 ``` r
-# install.packages("devtools")
+# install.packages("devtools")  # uncomment if you don't alreayd have devtools
 devtools::install_github("szipper/streamDepletr",
                          build_vignettes=T)
 ```
 
 ## Example
 
-Calculating streamflow depletion as a fraction of the pumping rate
-(`Qf`) over the first 100 days of pumping:
+Calculate and plot streamflow depletion as a fraction of the pumping
+rate (`Qf`) over the 100 days of pumping:
 
 ``` r
 require(streamDepletr)
@@ -51,4 +52,5 @@ plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletio
 ![](README-SamplePlot-1.png)<!-- -->
 
 For more examples, please check out the package vignette:
+
 `browseVignettes("streamDepletr")`
