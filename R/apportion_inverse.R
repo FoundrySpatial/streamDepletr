@@ -33,7 +33,7 @@ apportion_inverse <- function(reach_dist, w, max_dist) {
 
   # actual function
   reach_dist %>%
-    subset(dist <= max_dist) %>% 
+    subset(dist <= max_dist) %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(dist_min = min(dist)) %>%
     transform(frac_depletion = (1 / dist_min^w) / sum((1 / dist_min^w))) %>%

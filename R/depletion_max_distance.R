@@ -4,9 +4,9 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
   #' Note that this only considers a single stream - depletion apportionment does not occur.  #'
   #' @param Qf_thres streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1\%).
   #' @param d_interval interval to use for testing; this defines the spatial resolution at which output will be returned [L]
-  #' @param d_min minimum search distance [L]. If `Qf` < `Qf_thres` at `d_min`, function will return `d_min`.
+  #' @param d_min minimum search distance [L]. If `Qf` < `Qf_thres` at `d_min`, function will return `d_min` and a warning.
   #' If `d_min`=NULL (default), `d_min` will be set to `d_interval'`
-  #' @param d_max maximum search distance [L]. If `Qf` > `Qf_thres` at `d_max`, function will return `NaN`
+  #' @param d_max maximum search distance [L]. If `Qf` > `Qf_thres` at `d_max`, function will return `d_max` and a warning.
   #' @param t time you want output for [T]
   #' @param method analytical solution to use (options= 'glover', 'hunt'). Defaults to 'glover'.
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
@@ -37,6 +37,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {
+        if ((d_test - d_interval) == d_min) warning("Qf < Qf_thres at distance d_min")
         return((d_test - d_interval)) # since you exceeded the threshold, return the previous d_test
       }
 
@@ -46,7 +47,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
       # check if max distance reached
       if (d_test > d_max) {
         warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", (d_test - d_interval)))
-        return(NaN)
+        return(d_max)
       }
     }
   } else if (method == "hunt") {
@@ -59,6 +60,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {
+        if ((d_test - d_interval) == d_min) warning("Qf < Qf_thres at distance d_min")
         return((d_test - d_interval)) # since you exceeded the threshold, return the previous d_test
       }
 
@@ -68,7 +70,7 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
       # check if max distance reached
       if (d_test > d_max) {
         warning(paste0("Maximum distance reached; Qf = ", round(Qf, 4), " @ d = ", (d_test - d_interval)))
-        return(NaN)
+        return(d_max)
       }
     }
   }

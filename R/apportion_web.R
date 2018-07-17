@@ -33,7 +33,7 @@ apportion_web <- function(reach_dist, w, max_dist) {
   #' @export
 
   reach_dist %>%
-    subset(dist <= max_dist) %>% 
+    subset(dist <= max_dist) %>%
     transform(frac_depletion_pt = (1 / dist^w) / sum((1 / dist^w))) %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(frac_depletion = sum(frac_depletion_pt)) %>%
