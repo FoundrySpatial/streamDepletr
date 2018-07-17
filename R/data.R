@@ -10,7 +10,7 @@
 "stream_lines"
 
 #' Streamflow for Sixmile Creek and Dorn Creek.
-#' 
+#'
 #' Daily discharge data for the 2014-2015 water years for the US Geological Survey
 #' gauging stations DORN (SPRING) CREEK AT CT HIGHWAY M NR WAUNAKEE,WI (station ID 05427930)
 #' and SIXMILE CREEK @ COUNTY TRNK HGHWY M NR WAUNAKEE,WI (station ID 05427910).

@@ -12,7 +12,7 @@ depletion_max_distance(Qf_thres = 0.01, d_interval = 100, d_min = NULL,
 
 \item{d_interval}{interval to use for testing; this defines the spatial resolution at which output will be returned [L]}
 
-\item{d_min}{minimum search distance [L]. If `Qf` < `Qf_thres` at `d_min`, function will return `d_min`. 
+\item{d_min}{minimum search distance [L]. If `Qf` < `Qf_thres` at `d_min`, function will return `d_min`.
 If `d_min`=NULL (default), `d_min` will be set to `d_interval'`}
 
 \item{d_max}{maximum search distance [L]. If `Qf` > `Qf_thres` at `d_max`, function will return `NaN`}

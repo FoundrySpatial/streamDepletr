@@ -9,8 +9,8 @@ streambed_conductance(w, Kriv, briv)
 \arguments{
 \item{w}{stream width [L]}
 
-\item{Kriv}{streambed semipervious layer hydraulic conductivity [L/T]. 
-Reeves et al. (2009) estimate this as the vertical hydraulic 
+\item{Kriv}{streambed semipervious layer hydraulic conductivity [L/T].
+Reeves et al. (2009) estimate this as the vertical hydraulic
 conductivity of the aquifer (\code{Kv}; L/T), which is itself often estimated
 as 10\% of the horizontal hydraulic conductivity (\code{Kh*0.1}; L/T)}
 
@@ -26,7 +26,7 @@ A numeric of \code{lmda}, the streambed conductance term [L/T]
 Estimate streambed conductance.
 }
 \references{
-Reeves, HW, DA Hamilton, PW Seelbach, and AJ Asher (2009). Ground-Water-Withdrawal Component of the 
-Michigan Water-Withdrawal Screening Tool. USGS Scientific Investigations Report, Reston VA. 
+Reeves, HW, DA Hamilton, PW Seelbach, and AJ Asher (2009). Ground-Water-Withdrawal Component of the
+Michigan Water-Withdrawal Screening Tool. USGS Scientific Investigations Report, Reston VA.
 https://pubs.usgs.gov/sir/2009/5003/.
 }

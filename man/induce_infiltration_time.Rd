@@ -48,6 +48,6 @@ tc <- induce_infiltration_time(d=575, S=0.2, Tr=100*15, Qa=Qa, Qw=2727)
 plot(x=(pi*Qa*100*15*575/2727), y=tc, log="y")
 }
 \references{
-Chen, X (2003). Analysis of Pumping-Induced Stream-Aquifer Interactions for Gaining Streams. 
+Chen, X (2003). Analysis of Pumping-Induced Stream-Aquifer Interactions for Gaining Streams.
 Journal of Hydrology 275(1): 1-11. doi:10.1016/S0022-1694(02)00320-7
 }

@@ -15,7 +15,7 @@ will automatically find the minimum.}
 \item{w}{inverse distance weighting factor; 1 for inverse distance, 2 for inverse distance squared.}
 }
 \value{
-A data frame with two columns: 
+A data frame with two columns:
 \describe{
   \item{reach}{the grouping variable input in \code{reach_dist}}
   \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
@@ -34,7 +34,7 @@ reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist=c(100, 150, 90
 apportion_inverse(reach_dist, w=1)
 }
 \references{
-Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts 
-on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research. 
+Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts
+on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
 doi:10.1029/2018WR022707.
 }

@@ -16,7 +16,7 @@ glover(t, d, S, Tr)
 \item{Tr}{aquifer transmissivity [L2/T]}
 }
 \value{
-A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-]. 
+A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
 If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
 }
 \description{
@@ -44,9 +44,9 @@ glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, W
 glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
 }
 \references{
-Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River. 
+Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River.
 Eos, Transactions American Geophysical Union 35(3): 468-70. doi:10.1029/TR035i003p00468.
 
-Theis, CV (1941). The Effect of a Well on the Flow of a Nearby Stream. 
+Theis, CV (1941). The Effect of a Well on the Flow of a Nearby Stream.
 Eos, Transactions American Geophysical Union 22(3): 734-38. https://doi.org/10.1029/TR022i003p00734.
 }

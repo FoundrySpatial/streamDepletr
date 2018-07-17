@@ -20,7 +20,7 @@ hunt(t, d, S, Tr, lmda, prec = 80)
 \item{prec}{precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.}
 }
 \value{
-A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-]. 
+A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
 If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
 }
 \description{
@@ -38,7 +38,12 @@ Assumptions:
   \item Aquifer extends to infinity
 }
 }
+\examples{
+glover(t=1.5777e8, d=1000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 1
+glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 2
+glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
+}
 \references{
-Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping. 
+Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping.
 Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
 }

@@ -9,7 +9,7 @@ apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, crs)
 \arguments{
 \item{reach_dist_lon_lat}{data frame with four columns: \code{reach}, which is a grouping variable with
 the name of each stream reach; \code{dist} which is the distance of a point on that stream reach to
-the well of interest; \code{lon} which is the longitude of that point on the stream; and 
+the well of interest; \code{lon} which is the longitude of that point on the stream; and
 \code{lat} which is the latitude of that point on the stream. There can (and likely will) be multiple rows per \code{reach}.}
 
 \item{wel_lon}{longitude of well}
@@ -21,7 +21,7 @@ the well of interest; \code{lon} which is the longitude of that point on the str
 \item{crs}{object of class CRS with projection info of latitude and longitude input}
 }
 \value{
-A data frame with two columns: 
+A data frame with two columns:
 \describe{
   \item{reach}{the grouping variable input in \code{reach_dist}}
   \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
@@ -33,13 +33,13 @@ functions are needed to distribute that depletion to various reaches within a
 real stream network. These geometric functions are described in Zipper et al (2018).
 }
 \examples{
-rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200, 
+rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
    stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
-apportion_polygon(reach_dist_lon_lat=rdll, wel_lon=295500, wel_lat=4783200, 
+apportion_polygon(reach_dist_lon_lat=rdll, wel_lon=295500, wel_lat=4783200,
    max_dist=5000, crs=raster::crs(stream_lines))
 }
 \references{
-Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts 
-on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research. 
+Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts
+on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
 doi:10.1029/2018WR022707.
 }

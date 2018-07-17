@@ -1,8 +1,8 @@
-glover <- function(t, d, S, Tr){
+glover <- function(t, d, S, Tr) {
   #' Streamflow depletion with fully-penetrating stream and no streambed.
   #'
   #' Described in Glover & Balmer (1954) based on work by Theis (1941).
-  #' 
+  #'
   #' Assumptions:
   #' \itemize{
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
@@ -22,21 +22,21 @@ glover <- function(t, d, S, Tr){
   #' @param d distance from well to stream [L]
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
-  #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-]. 
+  #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
   #' @references
-  #' Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River. 
+  #' Glover, RE, and GG Balmer (1954).River Depletion Resulting from Pumping a Well near a River.
   #' Eos, Transactions American Geophysical Union 35(3): 468-70. doi:10.1029/TR035i003p00468.
-  #' 
-  #' Theis, CV (1941). The Effect of a Well on the Flow of a Nearby Stream. 
+  #'
+  #' Theis, CV (1941). The Effect of a Well on the Flow of a Nearby Stream.
   #' Eos, Transactions American Geophysical Union 22(3): 734-38. https://doi.org/10.1029/TR022i003p00734.
-  #' 
+  #'
   #' @examples
   #' glover(t=1.5777e8, d=1000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 1
   #' glover(t=1.5777e8, d=5000,  S=0.2, Tr=0.1)   # Glover & Balmer (1954) Table 1, Well 2
   #' glover(t=1.5777e8, d=10000,  S=0.2, Tr=0.1)  # Glover & Balmer (1954) Table 1, Well 3
   #' @export
-  
-  Qf <- Rmpfr::erfc(sqrt(S*d*d/(4*Tr*t)))
+
+  Qf <- Rmpfr::erfc(sqrt(S * d * d / (4 * Tr * t)))
   return(Qf)
 }

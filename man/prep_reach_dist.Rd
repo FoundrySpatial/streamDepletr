@@ -25,22 +25,22 @@ spacing you use, the more accurate your results will be but the function will ru
 \item{nseed}{seed for random number generator (this is used to convert stream polylines to points)}
 }
 \value{
-A data frame with four columns: 
+A data frame with four columns:
 \describe{
   \item{reach}{a grouping variable with the name of each stream reach}
   \item{dist}{distance of a point on that stream reach to the well of interest}
   \item{lat}{latitude of that point}
   \item{lon}{longitude of that point}
 }
-This data frame can be plugged directly into \link{apportion_inverse}, \link{apportion_polygon} (if \code{latlon=T}), 
+This data frame can be plugged directly into \link{apportion_inverse}, \link{apportion_polygon} (if \code{latlon=T}),
 or \link{apportion_web}
 }
 \description{
-This function splits a polyline stream network up into a series of evenly spaced points and 
+This function splits a polyline stream network up into a series of evenly spaced points and
 calculates the distance from each of those points to a well.
 }
 \examples{
-rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200, 
+rdll <- prep_reach_dist(wel_lon=295500, wel_lat=4783200,
    stream_shp=stream_lines, reach_id="reach", stream_pt_spacing=1)
 head(rdll)
 }
