@@ -4,7 +4,7 @@
 \alias{apportion_inverse}
 \title{Distribute streamflow depletion within a stream network using inverse distance weighting.}
 \usage{
-apportion_inverse(reach_dist, w)
+apportion_inverse(reach_dist, w, max_dist)
 }
 \arguments{
 \item{reach_dist}{data frame with two columns: \code{reach}, which is a grouping variable with
@@ -13,6 +13,8 @@ the well of interest. There can be more than one \code{dist} per \code{reach}; t
 will automatically find the minimum.}
 
 \item{w}{inverse distance weighting factor; 1 for inverse distance, 2 for inverse distance squared.}
+
+\item{max_dist}{the maximum distance of a stream to be depleted}
 }
 \value{
 A data frame with two columns:
@@ -28,10 +30,12 @@ real stream network. These geometric functions are described in Zipper et al (20
 }
 \examples{
 reach_dist <- data.frame(reach = seq(1,5), dist = c(100, 150, 900, 300, 200))
-apportion_inverse(reach_dist, w = 2)
+apportion_inverse(reach_dist, w = 2, max_dist = 1000)
+apportion_inverse(reach_dist, w = 2, max_dist = 500)
 
 reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist = c(100, 150, 900, 300, 200))
-apportion_inverse(reach_dist, w = 1)
+apportion_inverse(reach_dist, w = 1, max_dist = 1000)
+apportion_inverse(reach_dist, w = 1, max_dist = 500)
 }
 \references{
 Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts

@@ -1,4 +1,4 @@
-apportion_web <- function(reach_dist, w) {
+apportion_web <- function(reach_dist, w, max_dist) {
   #' Distribute streamflow depletion within a stream network using web distance weighting.
   #'
   #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
@@ -10,6 +10,7 @@ apportion_web <- function(reach_dist, w) {
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach};
   #' if there is only one dist per reach, results will be the same as the \link{apportion_inverse} method.
   #' @param w weighting factor; 1 for inverse distance, 2 for inverse distance squared.
+  #' @param max_dist the maximum distance of a stream to be depleted
   #' @return A data frame with two columns:
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}
@@ -22,14 +23,17 @@ apportion_web <- function(reach_dist, w) {
   #' @examples
   #' reach_dist <- data.frame(reach = seq(1,5),
   #'   dist = c(100, 150, 900, 300, 200))
-  #' apportion_web(reach_dist, w = 2)  # same as apportion_inverse, since only one dist per reach
+  #' apportion_web(reach_dist, w = 2, max_dist = 1000)  # same as apportion_inverse, since only one dist per reach
+  #' apportion_web(reach_dist, w = 2, max_dist = 500)   # same as apportion_inverse, since only one dist per reach
   #'
   #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"),
   #'   dist = c(100, 150, 900, 300, 200))
-  #' apportion_web(reach_dist, w = 1)
+  #' apportion_web(reach_dist, w = 1, max_dist = 1000)
+  #' apportion_web(reach_dist, w = 1, max_dist = 500)
   #' @export
 
   reach_dist %>%
+    subset(dist <= max_dist) %>% 
     transform(frac_depletion_pt = (1 / dist^w) / sum((1 / dist^w))) %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(frac_depletion = sum(frac_depletion_pt)) %>%
