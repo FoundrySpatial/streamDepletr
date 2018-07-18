@@ -1,4 +1,4 @@
-apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, crs) {
+apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = Inf, crs) {
   #' Distribute streamflow depletion within a stream network using web distance Thiessen polygons.
   #'
   #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
@@ -11,7 +11,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, cr
   #' \code{lat} which is the latitude of that point on the stream. There can (and likely will) be multiple rows per \code{reach}.
   #' @param wel_lon longitude of well
   #' @param wel_lat latitude of well
-  #' @param max_dist the maximum distance of a stream to be depleted
+  #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
   #' @param crs object of class CRS with projection info of latitude and longitude input
   #' @importFrom magrittr %>%
   #' @return A data frame with two columns:

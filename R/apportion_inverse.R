@@ -1,4 +1,4 @@
-apportion_inverse <- function(reach_dist, w, max_dist) {
+apportion_inverse <- function(reach_dist, w, max_dist = Inf) {
   #' Distribute streamflow depletion within a stream network using inverse distance weighting.
   #'
   #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
@@ -10,7 +10,7 @@ apportion_inverse <- function(reach_dist, w, max_dist) {
   #' the well of interest. There can be more than one \code{dist} per \code{reach}; the function
   #' will automatically find the minimum.
   #' @param w inverse distance weighting factor; 1 for inverse distance, 2 for inverse distance squared.
-  #' @param max_dist the maximum distance of a stream to be depleted
+  #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
   #' @return A data frame with two columns:
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}
@@ -23,11 +23,11 @@ apportion_inverse <- function(reach_dist, w, max_dist) {
   #' doi:10.1029/2018WR022707.
   #' @examples
   #' reach_dist <- data.frame(reach = seq(1,5), dist = c(100, 150, 900, 300, 200))
-  #' apportion_inverse(reach_dist, w = 2, max_dist = 1000)
+  #' apportion_inverse(reach_dist, w = 2)
   #' apportion_inverse(reach_dist, w = 2, max_dist = 500)
   #'
   #' reach_dist <- data.frame(reach = c("A", "A", "A", "B", "B"), dist = c(100, 150, 900, 300, 200))
-  #' apportion_inverse(reach_dist, w = 1, max_dist = 1000)
+  #' apportion_inverse(reach_dist, w = 1)
   #' apportion_inverse(reach_dist, w = 1, max_dist = 500)
   #' @export
 

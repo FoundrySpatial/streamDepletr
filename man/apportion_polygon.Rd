@@ -4,7 +4,7 @@
 \alias{apportion_polygon}
 \title{Distribute streamflow depletion within a stream network using web distance Thiessen polygons.}
 \usage{
-apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, max_dist, crs)
+apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = Inf, crs)
 }
 \arguments{
 \item{reach_dist_lon_lat}{data frame with four columns: \code{reach}, which is a grouping variable with
@@ -16,7 +16,7 @@ the well of interest; \code{lon} which is the longitude of that point on the str
 
 \item{wel_lat}{latitude of well}
 
-\item{max_dist}{the maximum distance of a stream to be depleted}
+\item{max_dist}{the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.}
 
 \item{crs}{object of class CRS with projection info of latitude and longitude input}
 }
