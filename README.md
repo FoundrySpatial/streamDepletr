@@ -19,13 +19,17 @@ functions:
     reaches within a stream network (`apportion_inverse`,
     `apportion_web`, `apportion_polygon`, `apportion_wedge`)
 
+Combined, these functions will allow the user to estimate the impacts of
+an existing or proposed well (or group of wells) on individual stream
+reaches within a stream network.
+
 ## Installation
 
 You can install streamDepletr from GitHub
 with:
 
 ``` r
-# install.packages("devtools")  # uncomment if you don't alreayd have devtools
+# install.packages("devtools")  # uncomment if you don't already have devtools
 devtools::install_github("szipper/streamDepletr",
                          build_vignettes=T)
 ```
