@@ -39,12 +39,21 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
   }
 
   # extent of bounding box which is location of well +/- local area distance in all directions
-  wel_extent <- raster::extent(c(
-    wel_lon - max_dist,
-    wel_lon + max_dist,
-    wel_lat - max_dist,
-    wel_lat + max_dist
-  ))
+  if (max_dist == Inf) {
+    wel_extent <- raster::extent(c(
+      min(reach_dist_lon_lat$lon),
+      max(reach_dist_lon_lat$lon),
+      min(reach_dist_lon_lat$lat),
+      max(reach_dist_lon_lat$lat)
+    ))
+  } else {
+    wel_extent <- raster::extent(c(
+      wel_lon - max_dist,
+      wel_lon + max_dist,
+      wel_lat - max_dist,
+      wel_lat + max_dist
+    ))
+  }
 
   # get closest point on each stream reach to the well
   reach_closest <-
