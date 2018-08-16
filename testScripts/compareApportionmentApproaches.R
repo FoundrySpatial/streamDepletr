@@ -1,9 +1,9 @@
 ## compareApportionmentApproaches.R
 #' This script does some comparisons between different apportionment approaches.
 
-#require(ggplot2)
-#require(streamDepletr)
-#require(dplyr)
+require(ggplot2)
+require(streamDepletr)
+require(dplyr)
 
 # Comparison: Wedge vs Inverse Squared ------------------------------------
 
@@ -11,39 +11,40 @@
 angle_total_deg <- 90
 angle_total <- angle_total_deg*pi/180
 
+# weighting exponents to test
+w.test <- c(1, 1.25, 1.5, 2)
+
 start_flag <- T
 for (dr in c(100)){
-  for (ang in seq(1,(angle_total_deg-1))){
-    # convert degrees to radians
-    angle_well <- ang*pi/180
-    
-    # calculate distance to each stream reach from well
-    d0 <- dr*sin(angle_well)
-    d1 <- dr*sin(angle_total-angle_well)
-    
-    # calculate depletion fraction
-    w1 <- 1
-    w2 <- 2
-    frac_wedge <- apportion_wedge(angle_total, angle_well)
-    frac_inv1 <- apportion_inverse(data.frame(reach=c(0,1), 
-                                              dist=c(d0,d1)),
-                                   w=w1)[,"frac_depletion"]
-    frac_inv2 <- apportion_inverse(data.frame(reach=c(0,1), 
-                                              dist=c(d0,d1)),
-                                   w=w2)[,"frac_depletion"]
-    
-    df_ang <- data.frame(angle = ang,
-                         dr = dr,
-                         wedge = frac_wedge[1],
-                         inverse = c(frac_inv1[1], frac_inv2[1]),
-                         weight = c(w1, w2))
-    
-    if (start_flag){
-      df <- df_ang
-      start_flag <- F
-    } else {
-      df <- rbind(df, df_ang)
+  for (w in w.test){
+    for (ang in seq(1,(angle_total_deg-1))){
+      # convert degrees to radians
+      angle_well <- ang*pi/180
+      
+      # calculate distance to each stream reach from well
+      d0 <- dr*sin(angle_well)
+      d1 <- dr*sin(angle_total-angle_well)
+      
+      # calculate depletion fraction
+      frac_wedge <- apportion_wedge(angle_total, angle_well)
+      frac_inv <- apportion_inverse(data.frame(reach=c(0,1), 
+                                               dist=c(d0,d1)),
+                                    w=w)[,"frac_depletion"]
+      
+      df_ang <- data.frame(angle = ang,
+                           dr = dr,
+                           wedge = frac_wedge[1],
+                           inverse = frac_inv[1],
+                           weight = w)
+      
+      if (start_flag){
+        df <- df_ang
+        start_flag <- F
+      } else {
+        df <- rbind(df, df_ang)
+      }
     }
+    
   }
 }
 
@@ -64,7 +65,7 @@ df %>%
   scale_shape_discrete(name="Inverse Distance Weight") +
   theme(legend.position=c(1,0),
         legend.justification=c(1,0))
-  
+
 
 # Compare: Wedge, Inverse, Web --------------------------------------------
 
