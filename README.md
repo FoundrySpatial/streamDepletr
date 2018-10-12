@@ -29,6 +29,11 @@ You can install streamDepletr from GitHub
 with:
 
 ``` r
+# if you want to build the vignettes, there are several additional packages you'll need
+vig.packages<- c("Rmpfr", "dplyr", "magrittr", "knitr", "rmarkdown", "dismo", "sp", "raster", "deldir", "rgeos", "ggplot2", "reshape2", "sf", "scales")
+new.packages <- vig.packages[!(vig.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
 # install.packages("devtools")  # uncomment if you don't already have devtools
 devtools::install_github("szipper/streamDepletr",
                          build_vignettes=T)
