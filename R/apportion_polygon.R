@@ -57,10 +57,11 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
 
   # get closest point on each stream reach to the well
   reach_closest <-
-    reach_dist_lon_lat %>%
+    reach_dist_lon_lat[,c("reach", "dist", "lon", "lat")] %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(dist_closest = min(dist)) %>%
-    dplyr::left_join(reach_dist_lon_lat, by = c("reach" = "reach", "dist_closest" = "dist"))
+    dplyr::left_join(reach_dist_lon_lat[,c("reach", "dist", "lon", "lat")], 
+                     by = c("reach" = "reach", "dist_closest" = "dist"))
   reach_closest <- reach_closest[!duplicated(reach_closest$reach), ]
 
   # make spatial polygons data frame
