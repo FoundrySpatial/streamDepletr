@@ -4,21 +4,36 @@
 \alias{apportion_polygon}
 \title{Distribute streamflow depletion within a stream network using web distance Thiessen polygons.}
 \usage{
-apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = Inf, crs)
+apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dist = Inf,
+  min_frac = 0, reach_name = NULL, dist_name = NULL, lon_name = NULL,
+  lat_name = NULL)
 }
 \arguments{
 \item{reach_dist_lon_lat}{data frame with four columns: \code{reach}, which is a grouping variable with
 the name of each stream reach; \code{dist} which is the distance of a point on that stream reach to
 the well of interest; \code{lon} which is the longitude of that point on the stream; and
-\code{lat} which is the latitude of that point on the stream. There can (and likely will) be multiple rows per \code{reach}.}
+\code{lat} which is the latitude of that point on the stream. There can (and likely will) be multiple rows per \code{reach}.
+Columns can either be named exactly as defined here, or set using \code{reach_name}, \code{dist_name}, \code{lon_name}, and \code{lat_name}.}
 
 \item{wel_lon}{longitude of well}
 
 \item{wel_lat}{latitude of well}
 
+\item{crs}{object of class CRS with projection info of latitude and longitude input}
+
 \item{max_dist}{the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.}
 
-\item{crs}{object of class CRS with projection info of latitude and longitude input}
+\item{min_frac}{the minimum \code{frac_depletion} to be returned; defaults to \code{0}, which means all reaches will be considered.
+If \code{min_frac > 0} and some reaches have an estimated \code{frac_depletion < min_frac}, depletion in those reaches will be set to 0
+and that depletion will be reallocated based on the proportional depletion in the remaining reaches.}
+
+\item{reach_name}{The name of the column in \code{reach_dist} indicating your stream reach grouping variable. If set to \code{NULL} (default), it will assume that the column name is \code{reach}.}
+
+\item{dist_name}{The name of the column in \code{reach_dist} indicating your distance variable. If set to \code{NULL} (default), it will assume that the column name is \code{dist}.}
+
+\item{lon_name}{The name of the column in \code{reach_dist} indicating your longitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lon}.}
+
+\item{lat_name}{The name of the column in \code{reach_dist} indicating your latitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lat}.}
 }
 \value{
 A data frame with two columns:

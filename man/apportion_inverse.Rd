@@ -4,17 +4,27 @@
 \alias{apportion_inverse}
 \title{Distribute streamflow depletion within a stream network using inverse distance weighting.}
 \usage{
-apportion_inverse(reach_dist, w, max_dist = Inf)
+apportion_inverse(reach_dist, w, max_dist = Inf, min_frac = 0,
+  reach_name = NULL, dist_name = NULL)
 }
 \arguments{
 \item{reach_dist}{data frame with two columns: \code{reach}, which is a grouping variable with
 the name of each stream reach, and \code{dist} which is the distance of that stream reach to
 the well of interest. There can be more than one \code{dist} per \code{reach}; the function
-will automatically find the minimum.}
+will automatically find the minimum. Columns can either be named exactly as defined here, or
+set using \code{reach_name} and \code{dist_name}.}
 
 \item{w}{inverse distance weighting factor; 1 for inverse distance, 2 for inverse distance squared.}
 
 \item{max_dist}{the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.}
+
+\item{min_frac}{the minimum \code{frac_depletion} to be returned; defaults to \code{0}, which means all reaches will be considered.
+If \code{min_frac > 0} and some reaches have an estimated \code{frac_depletion < min_frac}, depletion in those reaches will be set to 0
+and that depletion will be reallocated based on the proportional depletion in the remaining reaches.}
+
+\item{reach_name}{The name of the column in \code{reach_dist} indicating your stream reach grouping variable. If set to \code{NULL} (default), it will assume that the column name is \code{reach}.}
+
+\item{dist_name}{The name of the column in \code{reach_dist} indicating your distance variable. If set to \code{NULL} (default), it will assume that the column name is \code{dist}.}
 }
 \value{
 A data frame with two columns:

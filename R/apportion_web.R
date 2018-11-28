@@ -1,4 +1,4 @@
-apportion_web <- function(reach_dist, w, max_dist = Inf) {
+apportion_web <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach_name = NULL, dist_name = NULL) {
   #' Distribute streamflow depletion within a stream network using web distance weighting.
   #'
   #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
@@ -9,8 +9,14 @@ apportion_web <- function(reach_dist, w, max_dist = Inf) {
   #' the name of each stream reach, and \code{dist} which is the distance of a point on that stream reach to
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach};
   #' if there is only one dist per reach, results will be the same as the \link{apportion_inverse} method.
+  #' Columns can either be named exactly as defined here, or set using \code{reach_name} and \code{dist_name}.
   #' @param w weighting factor; 1 for inverse distance, 2 for inverse distance squared.
   #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
+  #' @param min_frac the minimum \code{frac_depletion} to be returned; defaults to \code{0}, which means all reaches will be considered.
+  #' If \code{min_frac > 0} and some reaches have an estimated \code{frac_depletion < min_frac}, depletion in those reaches will be set to 0
+  #' and that depletion will be reallocated based on the proportional depletion in the remaining reaches.
+  #' @param reach_name The name of the column in \code{reach_dist} indicating your stream reach grouping variable. If set to \code{NULL} (default), it will assume that the column name is \code{reach}.
+  #' @param dist_name The name of the column in \code{reach_dist} indicating your distance variable. If set to \code{NULL} (default), it will assume that the column name is \code{dist}.
   #' @return A data frame with two columns:
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}
@@ -32,10 +38,26 @@ apportion_web <- function(reach_dist, w, max_dist = Inf) {
   #' apportion_web(reach_dist, w = 1, max_dist = 500)
   #' @export
 
-  reach_dist %>%
+  # set column names in data frame if necessary
+  if (!is.null(reach_name)) names(reach_dist)[names(reach_dist) == reach_name] <- "reach"
+  if (!is.null(dist_name)) names(reach_dist)[names(reach_dist) == dist_name] <- "dist"
+
+  # apportion
+  df_out <-
+    reach_dist %>%
     subset(dist <= max_dist) %>%
     transform(frac_depletion_pt = (1 / dist^w) / sum((1 / dist^w))) %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(frac_depletion = sum(frac_depletion_pt)) %>%
     dplyr::select(reach, frac_depletion)
+
+  # screen for depletion below min_frac
+  if (min(df_out$frac_depletion) < min_frac) {
+    depl_low <- sum(df_out$frac_depletion[df_out$frac_depletion < min_frac])
+    df_out <- subset(df_out, frac_depletion >= min_frac)
+    df_out$frac_depletion <- df_out$frac_depletion + depl_low * (df_out$frac_depletion / (1 - depl_low))
+    return(df_out)
+  } else {
+    return(df_out)
+  }
 }

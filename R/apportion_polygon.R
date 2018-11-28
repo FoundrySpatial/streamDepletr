@@ -1,4 +1,5 @@
-apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = Inf, crs) {
+apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dist = Inf, min_frac = 0,
+                              reach_name = NULL, dist_name = NULL, lon_name = NULL, lat_name = NULL) {
   #' Distribute streamflow depletion within a stream network using web distance Thiessen polygons.
   #'
   #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
@@ -9,10 +10,18 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
   #' the name of each stream reach; \code{dist} which is the distance of a point on that stream reach to
   #' the well of interest; \code{lon} which is the longitude of that point on the stream; and
   #' \code{lat} which is the latitude of that point on the stream. There can (and likely will) be multiple rows per \code{reach}.
+  #' Columns can either be named exactly as defined here, or set using \code{reach_name}, \code{dist_name}, \code{lon_name}, and \code{lat_name}.
   #' @param wel_lon longitude of well
   #' @param wel_lat latitude of well
-  #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
   #' @param crs object of class CRS with projection info of latitude and longitude input
+  #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
+  #' @param min_frac the minimum \code{frac_depletion} to be returned; defaults to \code{0}, which means all reaches will be considered.
+  #' If \code{min_frac > 0} and some reaches have an estimated \code{frac_depletion < min_frac}, depletion in those reaches will be set to 0
+  #' and that depletion will be reallocated based on the proportional depletion in the remaining reaches.
+  #' @param reach_name The name of the column in \code{reach_dist} indicating your stream reach grouping variable. If set to \code{NULL} (default), it will assume that the column name is \code{reach}.
+  #' @param dist_name The name of the column in \code{reach_dist} indicating your distance variable. If set to \code{NULL} (default), it will assume that the column name is \code{dist}.
+  #' @param lon_name The name of the column in \code{reach_dist} indicating your longitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lon}.
+  #' @param lat_name The name of the column in \code{reach_dist} indicating your latitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lat}.
   #' @importFrom magrittr %>%
   #' @return A data frame with two columns:
   #' \describe{
@@ -38,6 +47,12 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
     )
   }
 
+  # set column names in data frame if necessary
+  if (!is.null(reach_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == reach_name] <- "reach"
+  if (!is.null(dist_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == dist_name] <- "dist"
+  if (!is.null(lon_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == lon_name] <- "lon"
+  if (!is.null(lat_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == lat_name] <- "lat"
+
   # extent of bounding box which is location of well +/- local area distance in all directions
   if (max_dist == Inf) {
     wel_extent <- raster::extent(c(
@@ -57,11 +72,12 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
 
   # get closest point on each stream reach to the well
   reach_closest <-
-    reach_dist_lon_lat[,c("reach", "dist", "lon", "lat")] %>%
+    reach_dist_lon_lat[, c("reach", "dist", "lon", "lat")] %>%
     dplyr::group_by(reach) %>%
     dplyr::summarize(dist_closest = min(dist)) %>%
-    dplyr::left_join(reach_dist_lon_lat[,c("reach", "dist", "lon", "lat")], 
-                     by = c("reach" = "reach", "dist_closest" = "dist"))
+    dplyr::left_join(reach_dist_lon_lat[, c("reach", "dist", "lon", "lat")],
+      by = c("reach" = "reach", "dist_closest" = "dist")
+    )
   reach_closest <- reach_closest[!duplicated(reach_closest$reach), ]
 
   # make spatial polygons data frame
@@ -94,8 +110,19 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, max_dist = I
   overlap_polys <- suppressWarnings(raster::intersect(subset(well_polys, reach == -9999)[, c("well")], stream_polys))
   overlap_polys@data$area.m2 <- raster::area(overlap_polys)
 
-  data.frame(
-    reach = overlap_polys@data$reach,
-    frac_depletion = overlap_polys@data$area.m2 / sum(overlap_polys@data$area.m2)
-  )
+  df_out <-
+    data.frame(
+      reach = overlap_polys@data$reach,
+      frac_depletion = overlap_polys@data$area.m2 / sum(overlap_polys@data$area.m2)
+    )
+
+  # screen for depletion below min_frac
+  if (min(df_out$frac_depletion) < min_frac) {
+    depl_low <- sum(df_out$frac_depletion[df_out$frac_depletion < min_frac])
+    df_out <- subset(df_out, frac_depletion >= min_frac)
+    df_out$frac_depletion <- df_out$frac_depletion + depl_low * (df_out$frac_depletion / (1 - depl_low))
+    return(df_out)
+  } else {
+    return(df_out)
+  }
 }
