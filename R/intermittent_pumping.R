@@ -20,13 +20,6 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
   #' @export
-
-  # trim starts, stops, and rates based on when pumping actually occurs
-  i_keep <- which(starts < max(t) & stops > max(t))
-  if (length(i_keep)==0) stop("Pumping times not bounded by starts/stops vectors")
-  starts <- starts[1:i_keep]
-  stops <- stops[1:i_keep]
-  rates <- rates[1:i_keep]
   
   # make a matrix for computations: 1 column per start/stop/rate combo
   Q.all <- matrix(NaN, nrow = length(t), ncol = length(starts))
