@@ -19,6 +19,7 @@ streamDepletr is an R package with functions for assessing the impacts of ground
 
 - Analytical streamflow depletion models, which estimate the change in groundwater inputs to a stream resulting from pumping (`hunt`, `glover`, `hantush`, `intermittent_pumping`)
 - Depletion apportionment equations, which distribute streamflow depletion estimating using the analytical models to different reaches within a stream network (`apportion_inverse`, `apportion_web`, `apportion_polygon`, `apportion_wedge`)
+- Data preparation functions to prepare inputs for the analytical models and depletion apportionment equations (`depletion_max_distance`, `prep_reach_dist`, `streambed_conductance`)
 
 Combined, these functions will allow the user to estimate the impacts of an existing or proposed well (or group of wells) on individual stream reaches within a stream network.
 

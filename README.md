@@ -5,7 +5,7 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis-CI Build
-Status](https://travis-ci.org/samzipper/streamDepletr.svg?branch=master)](https://travis-ci.org/samzipper/streamDepletr)
+Status](https://travis-ci.org/szipper/streamDepletr.svg?branch=master)](https://travis-ci.org/szipper/streamDepletr)
 
 streamDepletr is an R package with functions for assessing the impacts
 of groundwater pumping on streams. There are two primary categories of
@@ -18,6 +18,10 @@ functions:
     depletion estimating using the analytical models to different
     reaches within a stream network (`apportion_inverse`,
     `apportion_web`, `apportion_polygon`, `apportion_wedge`)
+  - Data preparation functions to prepare inputs for the analytical
+    models and depletion apportionment equations
+    (`depletion_max_distance`, `prep_reach_dist`,
+    `streambed_conductance`)
 
 Combined, these functions will allow the user to estimate the impacts of
 an existing or proposed well (or group of wells) on individual stream
@@ -29,13 +33,8 @@ You can install streamDepletr from GitHub
 with:
 
 ``` r
-# if you want to build the vignettes, there are several additional packages you'll need
-vig.packages<- c("Rmpfr", "dplyr", "magrittr", "knitr", "rmarkdown", "dismo", "sp", "raster", "deldir", "rgeos", "ggplot2", "reshape2", "sf", "scales")
-new.packages <- vig.packages[!(vig.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
 # install.packages("devtools")  # uncomment if you don't already have devtools
-devtools::install_github("samzipper/streamDepletr",
+devtools::install_github("szipper/streamDepletr",
                          build_vignettes=T)
 ```
 

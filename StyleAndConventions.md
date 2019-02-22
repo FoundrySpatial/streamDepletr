@@ -17,7 +17,7 @@
 
 # Style
 Goal: common style among all functions within the package. 
-Solution: Use Hadley's guide http://r-pkgs.had.co.nz/style.html
+Solution: Use Hadley Wickham's guide http://r-pkgs.had.co.nz/style.html
 
 When calling a function from a different package, make sure to explicitly
 define the package (e.g. dplyr::summarize).
