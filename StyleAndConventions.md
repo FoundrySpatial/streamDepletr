@@ -10,7 +10,7 @@
 - http://www.masalmon.eu/2017/12/11/goodrpackages/
 
 - To add a dependency: `devtools::use_package("packageName")`
-- To style code: `Addins --> Style package`
+- To style code: `Tools --> Addins --> Style package --> styler`
 - To generate documentation: `devtools::document()`
 - To build vignettes: `devtools::build_vignettes()`
 - To install package: `devtools::install("../streamDepletr", build_vignettes = T)`

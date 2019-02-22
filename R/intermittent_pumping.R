@@ -14,46 +14,53 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
   #' (e.g. \link{glover}, \link{hunt}) this is not fractional depletion (\code{Qf}) because there can
   #' be different pumping rates at different times.
   #' @examples
-  #' intermittent_pumping(t = seq(0,60,10), starts = 0, stops = 30,
-  #'   rates = 100, method = "glover", d = 100, S = 0.1, Tr = 100)
+  #' Qs <- intermittent_pumping(t = seq(0, 1000, 5),
+  #'  starts = seq(0, 900, 10), stops = seq(9, 909, 10), rates = seq(1, 1000, length.out=91),
+  #'  method = "hunt", d = 100, S = 0.1, Tr = 100, lmda = 10)
   #' @references
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
   #' @export
-  
-  # make a matrix for computations: 1 column per start/stop/rate combo
-  Q.all <- matrix(0, nrow = length(t), ncol = length(starts))
+
+  # make matrices for computations: 1 column per start/stop/rate combo
+  starts.all <- base::matrix(starts, nrow = length(t), ncol = length(starts), byrow = T)
+  stops.all  <- base::matrix(stops, nrow = length(t), ncol = length(starts), byrow = T)
+  rates.all  <- base::matrix(rates, nrow = length(t), ncol = length(starts), byrow = T)
+  t.all <- base::matrix(t, nrow = length(t), ncol = length(starts))
+
+  # calculate time since each pumping interval starts/stops, bounded at 0
+  t.starts <- t.all - starts.all
+  t.starts[t.starts < 0] <- 0
+
+  t.stops <- t.all - stops.all
+  t.stops[t.stops < 0] <- 0
+
+  # vectorize for calculations
+  t.starts.vec <- c(t.starts)
+  t.stops.vec <- c(t.stops)
+  rates.all.vec <- c(rates.all)
+  Qs.all.vec <- rep(0, length(t.starts.vec))
 
   # select analytical model and calculate depletion
   if (method == "glover") {
-    for (i in 1:length(starts)) {
-      # loop through start/stop/rate sets
-      t.firstTerm <- sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0)
-      t.secondTerm <- sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0)
-      i.times <- which(t.firstTerm > 0)
-      
-      Q.all[, i] <-
-        rates[i] * 
-        (glover(t = t.firstTerm[i.times], d = d, S = S, Tr = Tr) -
-          glover(t = t.secondTerm[i.times], d = d, S = S, Tr = Tr))
-    }
+
+    # calculate depletion
+    Qs.all.vec[t.starts.vec > 0] <-
+      rates.all.vec[t.starts.vec > 0] *
+        (glover(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr) -
+          glover(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr))
   } else if (method == "hunt") {
     # extract lmda
     lmda <- list(...)$lmda
 
-    for (i in 1:length(starts)) {
-      # loop through start/stop/rate sets
-      t.firstTerm <- sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0)
-      t.secondTerm <- sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0)
-      i.times <- which(t.firstTerm > 0)
-      
-      Q.all[i.times, i] <-
-        rates[i] * 
-        (hunt(t = t.firstTerm[i.times], d = d, S = S, Tr = Tr, lmda = lmda) -
-          hunt(t = t.secondTerm[i.times], d = d, S = S, Tr = Tr, lmda = lmda))
-    }
+    # calculate depletion
+    Qs.all.vec[t.starts.vec > 0] <-
+      rates.all.vec[t.starts.vec > 0] *
+        (hunt(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda) -
+          hunt(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda))
   }
 
-  # take row sums for output
-  Q.out <- rowSums(Q.all)
+  # convert back to matrix and take rowsums
+  Qs.all <- matrix(Qs.all.vec, nrow = length(t), ncol = length(starts))
+  Q.out <- rowSums(Qs.all)
 }

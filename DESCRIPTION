@@ -8,10 +8,10 @@ Description: Implementation of analytical models for estimating streamflow
     resulting from groundwater pumping; and (2) depletion apportionment 
     equations, which distribute estimated streamflow depletion among multiple
     stream reaches within a stream network.
-Authors@R: person("Sam", "Zipper", email = "samuelczipper@gmail.com", role = c("aut", "cre"),
+Authors@R: person("Sam", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-8735-5757"))
-URL: https://github.com/szipper/streamDepletr
-BugReports: https://github.com/szipper/streamDepletr/issues   
+URL: https://github.com/samzipper/streamDepletr
+BugReports: https://github.com/samzipper/streamDepletr/issues   
 Depends: R (>= 3.5)
 License: AGPL-3 | file LICENSE
 Imports:
