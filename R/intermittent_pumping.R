@@ -22,15 +22,20 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
   #' @export
   
   # make a matrix for computations: 1 column per start/stop/rate combo
-  Q.all <- matrix(NaN, nrow = length(t), ncol = length(starts))
+  Q.all <- matrix(0, nrow = length(t), ncol = length(starts))
 
   # select analytical model and calculate depletion
   if (method == "glover") {
     for (i in 1:length(starts)) {
       # loop through start/stop/rate sets
+      t.firstTerm <- sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0)
+      t.secondTerm <- sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0)
+      i.times <- which(t.firstTerm > 0)
+      
       Q.all[, i] <-
-        rates[i] * (glover(t = sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0), d = d, S = S, Tr = Tr) -
-          glover(t = sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0), d = d, S = S, Tr = Tr))
+        rates[i] * 
+        (glover(t = t.firstTerm[i.times], d = d, S = S, Tr = Tr) -
+          glover(t = t.secondTerm[i.times], d = d, S = S, Tr = Tr))
     }
   } else if (method == "hunt") {
     # extract lmda
@@ -38,15 +43,14 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
 
     for (i in 1:length(starts)) {
       # loop through start/stop/rate sets
-      Q.all[, i] <-
-        rates[i] * (hunt(
-          t = sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0),
-          d = d, S = S, Tr = Tr, lmda = lmda
-        ) -
-          hunt(
-            t = sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0),
-            d = d, S = S, Tr = Tr, lmda = lmda
-          ))
+      t.firstTerm <- sapply(t, FUN = subtract_bounded, y = starts[i], lower_bound = 0)
+      t.secondTerm <- sapply(t, FUN = subtract_bounded, y = stops[i], lower_bound = 0)
+      i.times <- which(t.firstTerm > 0)
+      
+      Q.all[i.times, i] <-
+        rates[i] * 
+        (hunt(t = t.firstTerm[i.times], d = d, S = S, Tr = Tr, lmda = lmda) -
+          hunt(t = t.secondTerm[i.times], d = d, S = S, Tr = Tr, lmda = lmda))
     }
   }
 
