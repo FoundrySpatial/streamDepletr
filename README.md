@@ -5,7 +5,7 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis-CI Build
-Status](https://travis-ci.org/szipper/streamDepletr.svg?branch=master)](https://travis-ci.org/szipper/streamDepletr)
+Status](https://travis-ci.org/samzipper/streamDepletr.svg?branch=master)](https://travis-ci.org/samzipper/streamDepletr)
 
 streamDepletr is an R package with functions for assessing the impacts
 of groundwater pumping on streams. There are two primary categories of
@@ -62,3 +62,9 @@ plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletio
 For more examples, please check out the package vignette:
 
 `browseVignettes("streamDepletr")`
+
+## Package Development
+
+streamDepletr was developed by Foundry Spatial Ltd. and the University
+of Victoria with support from the National Sciences and Engineering
+Research Council of Canada.
