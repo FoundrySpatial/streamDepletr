@@ -24,8 +24,8 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
 
   # make matrices for computations: 1 column per start/stop/rate combo
   starts.all <- base::matrix(starts, nrow = length(t), ncol = length(starts), byrow = T)
-  stops.all  <- base::matrix(stops, nrow = length(t), ncol = length(starts), byrow = T)
-  rates.all  <- base::matrix(rates, nrow = length(t), ncol = length(starts), byrow = T)
+  stops.all <- base::matrix(stops, nrow = length(t), ncol = length(starts), byrow = T)
+  rates.all <- base::matrix(rates, nrow = length(t), ncol = length(starts), byrow = T)
   t.all <- base::matrix(t, nrow = length(t), ncol = length(starts))
 
   # calculate time since each pumping interval starts/stops, bounded at 0

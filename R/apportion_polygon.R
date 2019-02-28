@@ -56,10 +56,10 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dis
   # extent of bounding box which is location of well +/- local area distance in all directions
   if (max_dist == Inf) {
     wel_extent <- raster::extent(c(
-      min(reach_dist_lon_lat$lon),
-      max(reach_dist_lon_lat$lon),
-      min(reach_dist_lon_lat$lat),
-      max(reach_dist_lon_lat$lat)
+      min(c(reach_dist_lon_lat$lon, wel_lon)),
+      max(c(reach_dist_lon_lat$lon, wel_lon)),
+      min(c(reach_dist_lon_lat$lat, wel_lat)),
+      max(c(reach_dist_lon_lat$lat, wel_lat))
     ))
   } else {
     wel_extent <- raster::extent(c(
