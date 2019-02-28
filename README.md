@@ -34,7 +34,7 @@ with:
 
 ``` r
 # install.packages("devtools")  # uncomment if you don't already have devtools
-devtools::install_github("szipper/streamDepletr",
+devtools::install_github("samzipper/streamDepletr",
                          build_vignettes=T)
 ```
 
