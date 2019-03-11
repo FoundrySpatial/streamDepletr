@@ -53,10 +53,15 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
   } else if (method == "hunt") {
     # extract lmda
     lmda <- list(...)$lmda
+    if (exists("lmda_max", where = list(...))) {
+      lmda_max <- list(...)$lmda_max
+    } else {
+      lmda_max <- Inf
+    }
 
     while (Qf > Qf_thres) {
       # calculate depletion
-      Qf <- hunt(t = t, d = d_test, S = S, Tr = Tr, lmda = lmda)
+      Qf <- hunt(t = t, d = d_test, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max)
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {

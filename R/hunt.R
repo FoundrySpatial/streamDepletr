@@ -49,7 +49,7 @@ hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
 
   # check for issues
   errors <- which(!is.finite(term2))
-  if (length(errors) > 0) stop(paste0("Term 2 = Inf for ", length(errors), " calculation(s). Maybe lmda is too high? Try using lmda_max"))
+  if (length(errors) > 0) stop(paste0("Term 2 = Inf for ", length(errors), " calculation(s). Usually means lmda is too high or Tr is too low. Try using lmda_max?"))
 
   Qf <- as.numeric(term1 - term2 * term3)
 
