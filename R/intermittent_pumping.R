@@ -17,6 +17,10 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
   #' Qs <- intermittent_pumping(t = seq(0, 1000, 5),
   #'  starts = seq(0, 900, 10), stops = seq(9, 909, 10), rates = seq(1, 1000, length.out=91),
   #'  method = "hunt", d = 100, S = 0.1, Tr = 100, lmda = 10)
+  #'
+  #' Qs <- intermittent_pumping(t = seq(0, 1000, 5),
+  #'  starts = seq(0, 900, 10), stops = seq(9, 909, 10), rates = seq(1, 1000, length.out=91),
+  #'  method = "hunt", d = 100, S = 0.1, Tr = 100, lmda = 100000, lmda_max = 10)
   #' @references
   #' Jenkins, C.T. (1968). Techniques for Computing Rate and Volume of Stream Depletion
   #' by Wells. Ground Water 6(2): 37-46. doi:10.1111/j.1745-6584.1968.tb01641.x
@@ -52,12 +56,18 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
   } else if (method == "hunt") {
     # extract lmda
     lmda <- list(...)$lmda
+    if (exists("lmda_max", where = list(...))) {
+      lmda_max <- list(...)$lmda_max
+    } else {
+      lmda_max <- Inf
+    }
+
 
     # calculate depletion
     Qs.all.vec[t.starts.vec > 0] <-
       rates.all.vec[t.starts.vec > 0] *
-        (hunt(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda) -
-          hunt(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda))
+        (hunt(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max) -
+          hunt(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max))
   }
 
   # convert back to matrix and take rowsums

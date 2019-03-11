@@ -1,4 +1,4 @@
-hunt <- function(t, d, S, Tr, lmda, prec = 80) {
+hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
   #' Streamflow depletion in partially penetrating stream with semipervious streambed.
   #'
   #' Described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \code{glover}.
@@ -20,6 +20,7 @@ hunt <- function(t, d, S, Tr, lmda, prec = 80) {
   #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
   #' @param Tr aquifer transmissivity [L2/T]
   #' @param lmda streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.
+  #' @param lmda_max maximum allowed `lmda` [L/T]. If `lmda` is too high, exp and erfc calculations in Hunt solution are not computationally possible, so you may need to artifically reduce `lmda` using this term.
   #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
@@ -38,14 +39,19 @@ hunt <- function(t, d, S, Tr, lmda, prec = 80) {
   #' plot(x = seq(1, 1826), y = Qf, type = "l")
   #' @export
 
-  # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
-  term1 <- Rmpfr::mpfr(sqrt((S * d * d) / (4 * Tr * t)), prec)
-  term2 <- Rmpfr::mpfr(((lmda * lmda * t) / (4 * S * Tr) + (lmda * d) / (2 * Tr)), prec)
-  term3 <- Rmpfr::mpfr(sqrt((lmda * lmda * t) / (4 * S * Tr)) + sqrt((S * d * d) / (4 * Tr * t)), prec)
+  # reduce lmda if exceeds lmda_max
+  lmda[lmda > lmda_max] <- lmda_max
 
-  Qf <- as.numeric(
-    Rmpfr::erfc(term1) - exp(term2) * Rmpfr::erfc(term3)
-  )
+  # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
+  term1 <- Rmpfr::erfc(Rmpfr::mpfr(sqrt((S * d * d) / (4 * Tr * t)), prec))
+  term2 <- exp(Rmpfr::mpfr(((lmda * lmda * t) / (4 * S * Tr) + (lmda * d) / (2 * Tr)), prec))
+  term3 <- Rmpfr::erfc(Rmpfr::mpfr(sqrt((lmda * lmda * t) / (4 * S * Tr)) + sqrt((S * d * d) / (4 * Tr * t)), prec))
+
+  # check for issues
+  errors <- which(!is.finite(term2))
+  if (length(errors) > 0) stop(paste0("Term 2 = Inf for ", length(errors), " calculation(s). Maybe lmda is too high? Try using lmda_max"))
+
+  Qf <- as.numeric(term1 - term2 * term3)
 
   return(Qf)
 }

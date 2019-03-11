@@ -4,7 +4,7 @@
 \alias{hunt}
 \title{Streamflow depletion in partially penetrating stream with semipervious streambed.}
 \usage{
-hunt(t, d, S, Tr, lmda, prec = 80)
+hunt(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80)
 }
 \arguments{
 \item{t}{times you want output for [T]}
@@ -16,6 +16,8 @@ hunt(t, d, S, Tr, lmda, prec = 80)
 \item{Tr}{aquifer transmissivity [L2/T]}
 
 \item{lmda}{streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.}
+
+\item{lmda_max}{maximum allowed `lmda` [L/T]. If `lmda` is too high, exp and erfc calculations in Hunt solution are not computationally possible, so you may need to artifically reduce `lmda` using this term.}
 
 \item{prec}{precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.}
 }
