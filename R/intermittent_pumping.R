@@ -55,6 +55,7 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
           glover(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr))
   } else if (method == "hunt") {
     # extract lmda
+    if (!exists("lmda", where = list(...))) stop("Need to supply lmda value for Hunt model")
     lmda <- list(...)$lmda
     if (exists("lmda_max", where = list(...))) {
       lmda_max <- list(...)$lmda_max
