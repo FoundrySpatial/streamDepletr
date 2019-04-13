@@ -1,4 +1,4 @@
-#' Stream network for Sixmile Creek Watershed, WI.
+#' Stream network for Sixmile Creek Watershed, Wisconsin, USA.
 #'
 #' @format A SpatialLinesDataFrame with 49 rows and 2 variables:
 #' \describe{

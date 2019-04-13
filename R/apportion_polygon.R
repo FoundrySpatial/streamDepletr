@@ -2,10 +2,6 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dis
                               reach_name = NULL, dist_name = NULL, lon_name = NULL, lat_name = NULL) {
   #' Distribute streamflow depletion within a stream network using web distance Thiessen polygons.
   #'
-  #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
-  #' functions are needed to distribute that depletion to various reaches within a
-  #' real stream network. These geometric functions are described in Zipper et al (2018).
-  #'
   #' @param reach_dist_lon_lat data frame with four columns: \code{reach}, which is a grouping variable with
   #' the name of each stream reach; \code{dist} which is the distance of a point on that stream reach to
   #' the well of interest; \code{lon} which is the longitude of that point on the stream; and
@@ -23,6 +19,9 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dis
   #' @param lon_name The name of the column in \code{reach_dist} indicating your longitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lon}.
   #' @param lat_name The name of the column in \code{reach_dist} indicating your latitude variable. If set to \code{NULL} (default), it will assume that the column name is \code{lat}.
   #' @importFrom magrittr %>%
+  #' @details Since analytical models assume the presence of 1 (or sometimes 2) linear streams, the \code{apportion_*} functions
+  #' can be used to distribute that depletion to various reaches within a real stream network. These geometric functions are described
+  #' in Zipper et al (2018), which found that \code{apportion_web} a weighting factor (\code{w}) of 2 produced the best results.
   #' @return A data frame with two columns:
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}

@@ -3,7 +3,7 @@
 \docType{data}
 \name{stream_lines}
 \alias{stream_lines}
-\title{Stream network for Sixmile Creek Watershed, WI.}
+\title{Stream network for Sixmile Creek Watershed, Wisconsin, USA.}
 \format{A SpatialLinesDataFrame with 49 rows and 2 variables:
 \describe{
   \item{reach}{identifier code for each stream reach}
@@ -17,6 +17,6 @@
 stream_lines
 }
 \description{
-Stream network for Sixmile Creek Watershed, WI.
+Stream network for Sixmile Creek Watershed, Wisconsin, USA.
 }
 \keyword{datasets}

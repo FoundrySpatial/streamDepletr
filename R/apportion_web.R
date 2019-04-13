@@ -1,10 +1,6 @@
 apportion_web <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach_name = NULL, dist_name = NULL) {
   #' Distribute streamflow depletion within a stream network using web distance weighting.
   #'
-  #' Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
-  #' functions are needed to distribute that depletion to various reaches within a
-  #' real stream network. These geometric functions are described in Zipper et al (2018).
-  #'
   #' @param reach_dist data frame with two columns: \code{reach}, which is a grouping variable with
   #' the name of each stream reach, and \code{dist} which is the distance of a point on that stream reach to
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach};
@@ -17,6 +13,9 @@ apportion_web <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach_nam
   #' and that depletion will be reallocated based on the proportional depletion in the remaining reaches.
   #' @param reach_name The name of the column in \code{reach_dist} indicating your stream reach grouping variable. If set to \code{NULL} (default), it will assume that the column name is \code{reach}.
   #' @param dist_name The name of the column in \code{reach_dist} indicating your distance variable. If set to \code{NULL} (default), it will assume that the column name is \code{dist}.
+  #' @details Since analytical models assume the presence of 1 (or sometimes 2) linear streams, the \code{apportion_*} functions
+  #' can be used to distribute that depletion to various reaches within a real stream network. These geometric functions are described
+  #' in Zipper et al (2018), which found that \code{apportion_web} a weighting factor (\code{w}) of 2 produced the best results.
   #' @return A data frame with two columns:
   #' \describe{
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}

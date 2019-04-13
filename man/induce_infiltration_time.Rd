@@ -2,7 +2,7 @@
 % Please edit documentation in R/induce_infiltration_time.R
 \name{induce_infiltration_time}
 \alias{induce_infiltration_time}
-\title{Calculate critical time at which stream transitions from gaining to losing.}
+\title{Calculate the critical time at which stream transitions from gaining to losing.}
 \usage{
 induce_infiltration_time(d, S, Tr, Qa, Qw)
 }
@@ -21,10 +21,12 @@ induce_infiltration_time(d, S, Tr, Qa, Qw)
 A numeric of \code{tc}, the critical time at which induced infiltration begins [T].
 }
 \description{
-This is the time at which induced infiltration due to groundwater pumping begins,
-based on the \link{glover} model of streamflow depletion. Derived in Chen (2003) Eq. 4.
+Calculate the critical time at which stream transitions from gaining to losing.
 }
 \details{
+This calculates the critical time at which induced infiltration due to groundwater pumping begins,
+based on the \link{glover} model of streamflow depletion. Derived in Chen (2003) Eq. 4.
+
 Assumptions:
 \itemize{
   \item Groundwater flow is perpendicular to stream

@@ -16,7 +16,11 @@ A numeric of length two with the proportion of steady-state
 capture fraction from the first (lower) and second (upper) streams.
 }
 \description{
-Streams are two linear tributaries that meet at the origin. From Yeh et al. (2008), Eq. 18 & 19.
+Distribute streamflow depletion between two streams in a wedge-shaped aquifer.
+}
+\details{
+This function assumes that streams are two linear tributaries which meet at the origin. This function
+specifically corresponds to Equations 18 and 19 in Yeh et al. (2008).
 }
 \examples{
 apportion_wedge(angle_total = (50*pi/2), angle_well = (10*pi/2))

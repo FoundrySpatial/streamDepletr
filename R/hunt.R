@@ -1,8 +1,14 @@
 hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
   #' Streamflow depletion in partially penetrating stream with semipervious streambed.
   #'
-  #' Described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \code{glover}.
-  #' Assumptions:
+  #' @param t times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @param lmda streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.
+  #' @param lmda_max maximum allowed `lmda` [L/T]. If `lmda` is too high, exp and erfc calculations in Hunt solution are not computationally possible, so you may need to artifically reduce `lmda` using this term.
+  #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
+  #' @details This function is described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \link{glover}. It contains numerous assumptions:
   #' \itemize{
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
   #'   \item Homogeneous, isotropic aquifer
@@ -14,14 +20,6 @@ hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
   #'   \item Constant pumping rate
   #'   \item Aquifer extends to infinity
   #' }
-  #'
-  #' @param t times you want output for [T]
-  #' @param d distance from well to stream [L]
-  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
-  #' @param Tr aquifer transmissivity [L2/T]
-  #' @param lmda streambed conductance term, lambda [L/T]. Can be estimated with \code{streambed_conductance}.
-  #' @param lmda_max maximum allowed `lmda` [L/T]. If `lmda` is too high, exp and erfc calculations in Hunt solution are not computationally possible, so you may need to artifically reduce `lmda` using this term.
-  #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
   #' @importFrom magrittr %>%

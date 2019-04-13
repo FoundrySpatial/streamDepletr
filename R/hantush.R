@@ -1,9 +1,15 @@
 hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   #' Streamflow depletion in partially penetrating stream with semipervious streambed.
   #'
-  #' Described in Hantush (1965). As the leakance term \code{(b*Kh/Kriv)} approaches 0 this is equivalent to \code{glover}.
-  #'
-  #' Assumptions:
+  #' @param t times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Kh aquifer horizontal hydraulic conductivity [L/T]
+  #' @param b aquifer saturated thickness [L]
+  #' @param Kriv streambed semipervious layer hydraulic conductivity [L/T]
+  #' @param briv streambed semipervious layer thickness [L]
+  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
+  #' @details This function is described in Hantush (1965). As the leakance term \code{(b*Kh/Kriv)} approaches 0 this is equivalent to \link{glover}. It contains numerous assumptions:
   #' \itemize{
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
   #'   \item Homogeneous, isotropic aquifer
@@ -15,15 +21,6 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   #'   \item Constant pumping rate
   #'   \item Aquifer extends to infinity
   #' }
-  #'
-  #' @param t times you want output for [T]
-  #' @param d distance from well to stream [L]
-  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
-  #' @param Kh aquifer horizontal hydraulic conductivity [L/T]
-  #' @param b aquifer saturated thickness [L]
-  #' @param Kriv streambed semipervious layer hydraulic conductivity [L/T]
-  #' @param briv streambed semipervious layer thickness [L]
-  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
   #' @importFrom magrittr %>%

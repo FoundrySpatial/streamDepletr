@@ -1,10 +1,10 @@
 apportion_wedge <- function(angle_total, angle_well) {
   #' Distribute streamflow depletion between two streams in a wedge-shaped aquifer.
   #'
-  #' Streams are two linear tributaries that meet at the origin. From Yeh et al. (2008), Eq. 18 & 19.
-  #'
   #' @param angle_total angle [radians] between the two streams.
   #' @param angle_well angle [radians] from the first (lower boundary) stream and the well.
+  #' @details This function assumes that streams are two linear tributaries which meet at the origin. This function
+  #' specifically corresponds to Equations 18 and 19 in Yeh et al. (2008).
   #' @return A numeric of length two with the proportion of steady-state
   #' capture fraction from the first (lower) and second (upper) streams.
   #' @references

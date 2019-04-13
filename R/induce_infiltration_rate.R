@@ -1,7 +1,9 @@
 induce_infiltration_rate <- function(d, Qa) {
-  #' Calculate pumping rate at which pumping will induce infiltration from stream.
+  #' Calculate the pumping rate at which pumping will induce infiltration from stream.
   #'
-  #' This is the critical pumping rate above which induced infiltration due to groundwater pumping will occur,
+  #' @param d distance from well to stream [L]
+  #' @param Qa ambient groundwater inflow rate per unit length of stream [L2/T]
+  #' @details This calculates the critical pumping rate above which induced infiltration due to groundwater pumping will occur,
   #' based on the \link{glover} model of streamflow depletion. Derived in Wilson (1993) Eq. 5.
   #'
   #' Assumptions:
@@ -19,9 +21,6 @@ induce_infiltration_rate <- function(d, Qa) {
   #'   \item Stream fully penetrates through aquifer
   #'   \item No streambed resistance to flow (see \link{hunt} or \link{hantush} for streambed resistance)
   #' }
-  #'
-  #' @param d distance from well to stream [L]
-  #' @param Qa ambient groundwater inflow rate per unit length of stream [L2/T]
   #' @return A numeric of \code{Qc}, critical pumping rate above which induced infiltration due to groundwater pumping will occur [L3/T].
   #' @references
   #' Wilson, JL (1993). Induced Infiltration in Aquifers with Ambient Flow. Water Resources Research

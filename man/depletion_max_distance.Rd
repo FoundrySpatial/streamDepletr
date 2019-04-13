@@ -2,7 +2,7 @@
 % Please edit documentation in R/depletion_max_distance.R
 \name{depletion_max_distance}
 \alias{depletion_max_distance}
-\title{Calculate maximum distance at which streamflow depletion will exceed a user-selected threshold.}
+\title{Calculate maximum distance at which streamflow depletion will exceed a user-selected threshold. Note that this only considers a single stream - depletion apportionment does not occur.}
 \usage{
 depletion_max_distance(Qf_thres = 0.01, d_interval = 100, d_min = NULL,
   d_max = 5000, method = "glover", t, S, Tr, ...)
@@ -31,11 +31,19 @@ If `d_min`=NULL (default), `d_min` will be set to `d_interval'`}
 A numeric of the distance at which streamflow depletion fraction (\code{Qf}) drops below the threshold at time `t`.
 }
 \description{
-Note that this only considers a single stream - depletion apportionment does not occur.  #'
+Calculate maximum distance at which streamflow depletion will exceed a user-selected threshold. Note that this only considers a single stream - depletion apportionment does not occur.
+}
+\details{
+This function is useful for the 'Expanding' stream proximity criteria described in Zipper et al. (2018).
 }
 \examples{
 depletion_max_distance(method = "glover", t = 730, S = 0.1, Tr = 100)
 depletion_max_distance(Qf_thres = 0.001, method = "glover", t = 730, S = 0.1, Tr = 100)
 depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 730, S = 0.1, Tr = 100, lmda = 0.01)
 depletion_max_distance(Qf_thres = 0.001, method = "hunt", t = 7300, S = 0.1, Tr = 100, lmda = 0.01)
+}
+\references{
+Zipper, SC, T Gleeson, B Kerr, JK Howard, MM Rohde, J Carah, J Zimmerman (2018). Rapid and accurate estimates
+of streamflow depletion caused by groundwater pumping using analytical depletion functions. EarthArXiv.
+doi:10.31223/osf.io/uqbd7.
 }

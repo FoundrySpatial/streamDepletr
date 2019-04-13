@@ -1,9 +1,11 @@
 glover <- function(t, d, S, Tr) {
   #' Streamflow depletion with fully-penetrating stream and no streambed.
   #'
-  #' Described in Glover & Balmer (1954) based on work by Theis (1941).
-  #'
-  #' Assumptions:
+  #' @param t times you want output for [T]
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @details This function is described in Glover & Balmer (1954) based on work by Theis (1941). It contains numerous assumptions:
   #' \itemize{
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
   #'   \item Homogeneous, isotropic aquifer
@@ -17,11 +19,6 @@ glover <- function(t, d, S, Tr) {
   #'   \item Stream fully penetrates through aquifer (see \link{hunt} or \link{hantush} for partially penetrating stream)
   #'   \item No streambed resistance to flow (see \link{hunt} or \link{hantush} for streambed resistance)
   #' }
-  #'
-  #' @param t times you want output for [T]
-  #' @param d distance from well to stream [L]
-  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
-  #' @param Tr aquifer transmissivity [L2/T]
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
   #' @references

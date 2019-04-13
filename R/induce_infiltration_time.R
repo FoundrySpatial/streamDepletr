@@ -1,7 +1,12 @@
 induce_infiltration_time <- function(d, S, Tr, Qa, Qw) {
-  #' Calculate critical time at which stream transitions from gaining to losing.
+  #' Calculate the critical time at which stream transitions from gaining to losing.
   #'
-  #' This is the time at which induced infiltration due to groundwater pumping begins,
+  #' @param d distance from well to stream [L]
+  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
+  #' @param Tr aquifer transmissivity [L2/T]
+  #' @param Qa ambient groundwater inflow rate per unit length of stream [L2/T]
+  #' @param Qw well pumping rate [L3/T]
+  #' @details This calculates the critical time at which induced infiltration due to groundwater pumping begins,
   #' based on the \link{glover} model of streamflow depletion. Derived in Chen (2003) Eq. 4.
   #'
   #' Assumptions:
@@ -19,12 +24,6 @@ induce_infiltration_time <- function(d, S, Tr, Qa, Qw) {
   #'   \item Stream fully penetrates through aquifer
   #'   \item No streambed resistance to flow (see \link{hunt} or \link{hantush} for streambed resistance)
   #' }
-  #'
-  #' @param d distance from well to stream [L]
-  #' @param S aquifer storage coefficient (specific yield if unconfined; storativity if confined)
-  #' @param Tr aquifer transmissivity [L2/T]
-  #' @param Qa ambient groundwater inflow rate per unit length of stream [L2/T]
-  #' @param Qw well pumping rate [L3/T]
   #' @return A numeric of \code{tc}, the critical time at which induced infiltration begins [T].
   #' @references
   #' Chen, X (2003). Analysis of Pumping-Induced Stream-Aquifer Interactions for Gaining Streams.

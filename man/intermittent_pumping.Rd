@@ -24,15 +24,18 @@ intermittent_pumping(t, starts, stops, rates, method = "glover", d, S, Tr,
 
 \item{Tr}{aquifer transmissivity [L2/T]}
 
-\item{...}{any other inputs required for your \code{method} of choice; for example, \code{hunt} needs \code{lmda} (streambed conductance)}
+\item{...}{any other inputs required for your \code{method} of choice; for example, \link{hunt} needs \code{lmda} (streambed conductance)}
 }
 \value{
-A numeric of \code{Qs}, streamflow depletion rate [L3/T]. Unlike the streamflow depletion models
-(e.g. \link{glover}, \link{hunt}) this is not fractional depletion (\code{Qf}) because there can
-be different pumping rates at different times.
+A numeric of \code{Qs}, streamflow depletion rate [L3/T].
 }
 \description{
 Streamflow depletion for an intermittent pumping schedule using superposition.
+}
+\details{
+This function superimposes wells and image wells to calculate a timeseries of streamflow depletion.
+Unlike the streamflow depletion models (e.g. \link{glover}, \link{hunt}) this is not fractional depletion (\code{Qf})
+because there can be different pumping rates at different times.
 }
 \examples{
 Qs <- intermittent_pumping(t = seq(0, 1000, 5),

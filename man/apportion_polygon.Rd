@@ -43,9 +43,12 @@ A data frame with two columns:
 }
 }
 \description{
-Since analytical models assume the presence of 1 (or sometimes 2) linear streams,
-functions are needed to distribute that depletion to various reaches within a
-real stream network. These geometric functions are described in Zipper et al (2018).
+Distribute streamflow depletion within a stream network using web distance Thiessen polygons.
+}
+\details{
+Since analytical models assume the presence of 1 (or sometimes 2) linear streams, the \code{apportion_*} functions
+can be used to distribute that depletion to various reaches within a real stream network. These geometric functions are described
+in Zipper et al (2018), which found that \code{apportion_web} a weighting factor (\code{w}) of 2 produced the best results.
 }
 \examples{
 rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,

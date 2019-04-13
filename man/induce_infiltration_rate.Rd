@@ -2,7 +2,7 @@
 % Please edit documentation in R/induce_infiltration_rate.R
 \name{induce_infiltration_rate}
 \alias{induce_infiltration_rate}
-\title{Calculate pumping rate at which pumping will induce infiltration from stream.}
+\title{Calculate the pumping rate at which pumping will induce infiltration from stream.}
 \usage{
 induce_infiltration_rate(d, Qa)
 }
@@ -15,10 +15,12 @@ induce_infiltration_rate(d, Qa)
 A numeric of \code{Qc}, critical pumping rate above which induced infiltration due to groundwater pumping will occur [L3/T].
 }
 \description{
-This is the critical pumping rate above which induced infiltration due to groundwater pumping will occur,
-based on the \link{glover} model of streamflow depletion. Derived in Wilson (1993) Eq. 5.
+Calculate the pumping rate at which pumping will induce infiltration from stream.
 }
 \details{
+This calculates the critical pumping rate above which induced infiltration due to groundwater pumping will occur,
+based on the \link{glover} model of streamflow depletion. Derived in Wilson (1993) Eq. 5.
+
 Assumptions:
 \itemize{
   \item Groundwater flow is perpendicular to stream

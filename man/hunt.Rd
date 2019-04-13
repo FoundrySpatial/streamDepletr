@@ -26,8 +26,10 @@ A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
 If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
 }
 \description{
-Described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \code{glover}.
-Assumptions:
+Streamflow depletion in partially penetrating stream with semipervious streambed.
+}
+\details{
+This function is described in Hunt (1999). When \code{lmda} term gets very large, this is equivalent to \link{glover}. It contains numerous assumptions:
 \itemize{
   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
   \item Homogeneous, isotropic aquifer
