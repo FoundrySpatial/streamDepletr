@@ -45,7 +45,7 @@ If you are interested in numerical models, I recommend you check out the excelle
 ## Estimating capture fraction
 streamDepletr has a variety of streamflow depletion models; two of the most commonly used are `glover` (Glover & Balmer, 1954) and `hunt` (Hunt, 1999). They differ in the the representation of the stream-aquifer interface:
 `r knitr::include_graphics('Comparison_Glover+Hunt.png', dpi = 300)`
-`glover` is simpler and assumes a stream that fully penetrates the aquifer and no streambed resistance to flow. In contrast, `hunt` assumes the stream partially penetrates the aquifer and has a partially clogging streambed. `hantush` is a rarely used bridge between `glover` and `hunt` and is included in the package for completeness.
+`glover` is simpler and assumes a stream that fully penetrates the aquifer and no streambed resistance to flow. In contrast, `hunt` assumes the stream partially penetrates the aquifer and has a partially clogging streambed. `hantush` is rarely used but has intermediate functionality between `glover` and `hunt` and is included in the package for completeness.
 
 To see how these compare, let's consider a well 150 m from a stream in a 50 m thick, unconfined aquifer with a specific yield of 0.1 and a hydraulic conductivity of 1e-5 meters/second. For the `hunt` model we also need some information about the stream; we'll say it's width is 5 m, riverbed is 10% as conductive as the aquifer, and riverbed thickness is 1 m.
 
@@ -231,6 +231,8 @@ Briefly:
 - The Thiessen polygon method (`apportion_polygon`) uses the point on each stream reach closest to the well of interest to create Thiessen (or Voronoi) polygons including and ignoring the well, and weights streamflow depletion based on the area of overlap between the polygon associated with each stream reach and the polygon associated with the well.
 - The inverse distance and inverse distance squared methods (`apportion_inverse`) also use the point on each stream closest to the well of interest, but weight depletion based on the distance between the well and each stream reach ; relative to the linear method, the squared method gives more weight to the closer stream reaches. 
 - The web and web squared methods (`apportion_web`) use the same inverse distance approach but divide each stream reach into a series of evenly spaced points to explicitly include stream geometry, instead of only using the closest point on each reach.
+
+Zipper et al. (2018) found that `apportion_web` with a weighting factor (`w`) of 2 provided the best match with more complex, process-based streamflow depletion models.  
 
 The appropriate procedure to integrate the depletion apportionment equations and analytical models is:
 
