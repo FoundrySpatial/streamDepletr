@@ -8,12 +8,18 @@ Description: Implementation of analytical models for estimating streamflow
     resulting from groundwater pumping; and (2) depletion apportionment 
     equations, which distribute estimated streamflow depletion among multiple
     stream reaches within a stream network.
-Authors@R: person("Sam", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"),
-    comment = c(ORCID = "0000-0002-8735-5757"))
+Authors@R: c(
+  person("Samuel C.", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8735-5757")),
+  person("Ben", "Kerr", email = "ben@foundryspatial.com", role = "ctb"),
+  person("Tom", "Gleeson", email = "tgleeson@uvic.ca", role = "ctb", comment = c(ORCID = "0000-0001-9493-7707")),
+  person("Qiang", "Li", email = "liqiang1205@gmail.com", role = "rev", comment = c(ORCID = "0000-0003-2221-6905"))
+  )
+Maintainer: Samuel C. Zipper <samzipper@ku.edu>
+Copyright: Foundry Spatial Ltd.
 URL: https://github.com/samzipper/streamDepletr
 BugReports: https://github.com/samzipper/streamDepletr/issues   
 Depends: R (>= 3.5)
-License: AGPL-3 | file LICENSE
+License: BSD_3_clause + file LICENSE
 Imports:
   Rmpfr,
     dplyr,

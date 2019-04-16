@@ -44,6 +44,10 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   term2 <- Rmpfr::mpfr((((Tr * t) / (S * L * L)) + (d / L)), prec)
   term3 <- Rmpfr::mpfr((sqrt((Tr * t) / (S * L * L)) + sqrt((S * d * d) / (4 * Tr * t))), prec)
 
+  # check for issues
+  errors <- which(!is.finite(term1) | !is.finite(term2) | !is.finite(term3))
+  if (length(errors) > 0) stop(paste0("Non-finite for ", length(errors), " calculation(s). Usually means L or Tr is too low."))
+
   # calculate streamflow depletoin
   Qf <- as.numeric(
     Rmpfr::erfc(term1) - exp(term2) * Rmpfr::erfc(term3)
