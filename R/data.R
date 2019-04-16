@@ -1,4 +1,4 @@
-#' Stream network for Sixmile Creek Watershed, Wisconsin, USA.
+#' Stream network for Sixmile Creek Watershed, Wisconsin, USA. Extracted from US NHDPlus v2.1 national seamless dataset.
 #'
 #' @format A SpatialLinesDataFrame with 49 rows and 2 variables:
 #' \describe{
@@ -6,7 +6,7 @@
 #'   \item{stream}{name of stream for each stream reach (Sixmile Creek or Dorn Creek)}
 #'   ...
 #' }
-#' @source \url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_CONUS_Seamless_Geodatabase_05.7z}
+#' @source \url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/}
 "stream_lines"
 
 #' Streamflow for Sixmile Creek and Dorn Creek.

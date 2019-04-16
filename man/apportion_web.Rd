@@ -14,7 +14,7 @@ the well of interest. There can (and likely will) be more than one \code{dist} p
 if there is only one dist per reach, results will be the same as the \link{apportion_inverse} method.
 Columns can either be named exactly as defined here, or set using \code{reach_name} and \code{dist_name}.}
 
-\item{w}{weighting factor; 1 for inverse distance, 2 for inverse distance squared.}
+\item{w}{weighting factor; 1 for web, 2 for web squared.}
 
 \item{max_dist}{the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.}
 

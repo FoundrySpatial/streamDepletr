@@ -3,7 +3,7 @@
 \docType{data}
 \name{stream_lines}
 \alias{stream_lines}
-\title{Stream network for Sixmile Creek Watershed, Wisconsin, USA.}
+\title{Stream network for Sixmile Creek Watershed, Wisconsin, USA. Extracted from US NHDPlus v2.1 national seamless dataset.}
 \format{A SpatialLinesDataFrame with 49 rows and 2 variables:
 \describe{
   \item{reach}{identifier code for each stream reach}
@@ -11,12 +11,12 @@
   ...
 }}
 \source{
-\url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/NHDPlusV21_NationalData_CONUS_Seamless_Geodatabase_05.7z}
+\url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/}
 }
 \usage{
 stream_lines
 }
 \description{
-Stream network for Sixmile Creek Watershed, Wisconsin, USA.
+Stream network for Sixmile Creek Watershed, Wisconsin, USA. Extracted from US NHDPlus v2.1 national seamless dataset.
 }
 \keyword{datasets}

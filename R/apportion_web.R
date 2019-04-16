@@ -6,7 +6,7 @@ apportion_web <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach_nam
   #' the well of interest. There can (and likely will) be more than one \code{dist} per \code{reach};
   #' if there is only one dist per reach, results will be the same as the \link{apportion_inverse} method.
   #' Columns can either be named exactly as defined here, or set using \code{reach_name} and \code{dist_name}.
-  #' @param w weighting factor; 1 for inverse distance, 2 for inverse distance squared.
+  #' @param w weighting factor; 1 for web, 2 for web squared.
   #' @param max_dist the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.
   #' @param min_frac the minimum \code{frac_depletion} to be returned; defaults to \code{0}, which means all reaches will be considered.
   #' If \code{min_frac > 0} and some reaches have an estimated \code{frac_depletion < min_frac}, depletion in those reaches will be set to 0

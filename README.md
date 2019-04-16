@@ -57,7 +57,7 @@ Qf <- glover(t  = seq(1,100),     # timesteps to evaluate
 plot(seq(1,100), Qf, type="l", xlab="Time [days]", ylab="Qf, Streamflow Depletion Fraction")
 ```
 
-![](README-SamplePlot-1.png)<!-- -->
+![](man/figures/README-SamplePlot-1.png)<!-- -->
 
 For more examples, please check out the package vignette:
 
