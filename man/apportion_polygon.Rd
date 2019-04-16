@@ -4,9 +4,9 @@
 \alias{apportion_polygon}
 \title{Distribute streamflow depletion within a stream network using web distance Thiessen polygons.}
 \usage{
-apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, crs, max_dist = Inf,
-  min_frac = 0, reach_name = NULL, dist_name = NULL, lon_name = NULL,
-  lat_name = NULL)
+apportion_polygon(reach_dist_lon_lat, wel_lon, wel_lat, crs,
+  max_dist = Inf, min_frac = 0, reach_name = NULL,
+  dist_name = NULL, lon_name = NULL, lat_name = NULL)
 }
 \arguments{
 \item{reach_dist_lon_lat}{data frame with four columns: \code{reach}, which is a grouping variable with

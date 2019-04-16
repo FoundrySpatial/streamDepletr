@@ -3,7 +3,7 @@
 This is the first submission of this package.
 
 ## Test environments
-* local windows 10 install, R 3.5.2
+* local windows 10 install, R 3.5.3
 * ubuntu 14.04 (on travis-ci), R 3.5.3
 * win-builder (devel and release)
 

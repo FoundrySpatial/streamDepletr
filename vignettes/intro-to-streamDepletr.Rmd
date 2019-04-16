@@ -25,7 +25,7 @@ require(streamDepletr)
 
 ## Modeling streamflow depletion
 
-Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping (Barlow et al., 2018), cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. streamDepltr is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
+Streamflow depletion, defined as a reduction in streamflow resulting from groundwater pumping (Barlow et al., 2018), cannot be measured directly and therefore is always a modeled quantity. There are two general classes of groundwater models used to quantify streamflow depletion: analytical and numerical models. streamDepletr is a collection of analytical streamflow depletion models and related functions intended to make analytical streamflow depletion models more accessible. 
 
 However, anyone using analytical models should be aware that they have many more assumptions than numerical models, including:
 
