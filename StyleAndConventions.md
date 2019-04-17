@@ -47,3 +47,8 @@ Use these variable names, which are consistent with the hydrogeological literatu
 - `w`    = stream width [L]
 - `beff` = effective transmissivity [L]. Reeves et al. (2009) use the distance from bottom of stream to top of well screen
 - `lmda` = streambed conductance [L/T]
+
+# Prepping for release
+- Check on local machine: `devtools::check()`
+- Check on CRAN win-builder: `devtools::check_win_release()`
+- Check on R-hub defaults: `devtools::check_rhub()`
