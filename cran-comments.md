@@ -1,6 +1,9 @@
 # streamDepletr 0.1.0
 
-This is the first submission of this package.
+## Resubmission
+This is a resubmission. In this version I have:
+* Changed the license file following https://cran.r-project.org/web/licenses/BSD_3_clause
+* Added references to the package description.
 
 ## Test environments
 * local windows 10 install, R 3.5.3

@@ -7,7 +7,11 @@ Description: Implementation of analytical models for estimating streamflow
     models, which estimate streamflow depletion for a single stream reach
     resulting from groundwater pumping; and (2) depletion apportionment 
     equations, which distribute estimated streamflow depletion among multiple
-    stream reaches within a stream network.
+    stream reaches within a stream network. See Zipper et al. (2018) <doi:10.1029/2018WR022707>
+    for more information on depletion apportionment equations and Zipper et
+    al. (2019) <doi:10.31223/osf.io/uqbd7> for more information on analytical
+    depletion functions, which combine analytical models and depletion apportionment
+    equations.
 Authors@R: c(
   person("Samuel C.", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8735-5757")),
   person("Ben", "Kerr", email = "ben@foundryspatial.com", role = "ctb"),

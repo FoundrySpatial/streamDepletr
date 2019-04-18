@@ -13,3 +13,4 @@ cran-comments.md
 ^README-.*\.png$
 ^doc$
 ^Meta$
+^CRAN-RELEASE$
