@@ -2,8 +2,7 @@
 
 ## Resubmission
 This is a resubmission. In this version I have:
-* Changed the license file following https://cran.r-project.org/web/licenses/BSD_3_clause
-* Added references to the package description.
+* Added the copyright holder, Foundry Spatial Ltd., to the Authors@R field of DESCRIPTION
 
 ## Test environments
 * local windows 10 install, R 3.5.3

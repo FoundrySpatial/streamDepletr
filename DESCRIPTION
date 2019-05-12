@@ -1,6 +1,6 @@
 Package: streamDepletr
 Title: Estimate Streamflow Depletion Due to Groundwater Pumping
-Version: 0.1.0
+Version: 0.1.0.9000
 Description: Implementation of analytical models for estimating streamflow 
     depletion due to groundwater pumping, and other related tools. Functions
     are broadly split into two groups: (1) analytical streamflow depletion
@@ -16,7 +16,8 @@ Authors@R: c(
   person("Samuel C.", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8735-5757")),
   person("Ben", "Kerr", email = "ben@foundryspatial.com", role = "ctb"),
   person("Tom", "Gleeson", email = "tgleeson@uvic.ca", role = "ctb", comment = c(ORCID = "0000-0001-9493-7707")),
-  person("Qiang", "Li", email = "liqiang1205@gmail.com", role = "rev", comment = c(ORCID = "0000-0003-2221-6905"))
+  person("Qiang", "Li", email = "liqiang1205@gmail.com", role = "rev", comment = c(ORCID = "0000-0003-2221-6905")),
+  person("Foundry Spatial Ltd.", role = "cph")
   )
 Maintainer: Samuel C. Zipper <samzipper@ku.edu>
 Copyright: Foundry Spatial Ltd.

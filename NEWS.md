@@ -1,3 +1,3 @@
 # streamDepletr 0.1.0
 
-Initial submission of package to CRAN.
+Initial release of package to CRAN, 2019-04-25

@@ -6,6 +6,11 @@
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis-CI Build
 Status](https://travis-ci.org/samzipper/streamDepletr.svg?branch=master)](https://travis-ci.org/samzipper/streamDepletr)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/streamDepletr)](https://cran.r-project.org/package=streamDepletr)
+[![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/streamDepletr?color=brightgreen)](https://CRAN.R-project.org/package=streamDepletr)
+[![cran
+checks](https://cranchecks.info/badges/worst/streamDepletr)](https://cran.rstudio.com/web/checks/check_results_streamDepletr.html)
 
 streamDepletr is an R package with functions for assessing the impacts
 of groundwater pumping on streams. There are two primary categories of
@@ -29,13 +34,13 @@ reaches within a stream network.
 
 ## Installation
 
-You can install streamDepletr from GitHub
-with:
+You can install streamDepletr from CRAN:
+`install.packages("streamDepletr")`
+
+Alternately, you can use `devtools` to install the development version:
 
 ``` r
-# install.packages("devtools")  # uncomment if you don't already have devtools
-devtools::install_github("samzipper/streamDepletr",
-                         build_vignettes=T)
+devtools::install_github("samzipper/streamDepletr", build_vignettes=T)
 ```
 
 ## Example
