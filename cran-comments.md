@@ -1,3 +1,18 @@
+# streamDepletr 0.1.1
+
+## Resubmission
+This is a resubmission. In this version I have:
+* Added the copyright holder, Foundry Spatial Ltd., to the Authors@R field of DESCRIPTION
+
+## Test environments
+* local windows 10 install, R 3.6.2
+
+## R CMD check results
+
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
+
 # streamDepletr 0.1.0
 
 ## Resubmission

@@ -4,8 +4,14 @@
 \alias{apportion_web}
 \title{Distribute streamflow depletion within a stream network using web distance weighting.}
 \usage{
-apportion_web(reach_dist, w, max_dist = Inf, min_frac = 0,
-  reach_name = NULL, dist_name = NULL)
+apportion_web(
+  reach_dist,
+  w,
+  max_dist = Inf,
+  min_frac = 0,
+  reach_name = NULL,
+  dist_name = NULL
+)
 }
 \arguments{
 \item{reach_dist}{data frame with two columns: \code{reach}, which is a grouping variable with

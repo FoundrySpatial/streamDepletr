@@ -4,8 +4,14 @@
 \alias{apportion_inverse}
 \title{Distribute streamflow depletion within a stream network using inverse distance weighting.}
 \usage{
-apportion_inverse(reach_dist, w, max_dist = Inf, min_frac = 0,
-  reach_name = NULL, dist_name = NULL)
+apportion_inverse(
+  reach_dist,
+  w,
+  max_dist = Inf,
+  min_frac = 0,
+  reach_name = NULL,
+  dist_name = NULL
+)
 }
 \arguments{
 \item{reach_dist}{data frame with two columns: \code{reach}, which is a grouping variable with

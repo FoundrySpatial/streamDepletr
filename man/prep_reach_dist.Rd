@@ -5,8 +5,15 @@
 \title{Calculate the distance from a well to each reach within a stream network. This function splits a polyline stream network up into a series of evenly spaced points and
 calculates the distance from each of those points to a well.}
 \usage{
-prep_reach_dist(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_spacing,
-  buffer_width = 0.1, nseed = 1)
+prep_reach_dist(
+  wel_lon,
+  wel_lat,
+  stream_shp,
+  reach_id,
+  stream_pt_spacing,
+  buffer_width = 0.1,
+  nseed = 1
+)
 }
 \arguments{
 \item{wel_lon}{longitude of well}

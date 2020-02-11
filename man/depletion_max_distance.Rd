@@ -4,8 +4,17 @@
 \alias{depletion_max_distance}
 \title{Calculate maximum distance at which streamflow depletion will exceed a user-selected threshold. Note that this only considers a single stream - depletion apportionment does not occur.}
 \usage{
-depletion_max_distance(Qf_thres = 0.01, d_interval = 100,
-  d_min = NULL, d_max = 5000, method = "glover", t, S, Tr, ...)
+depletion_max_distance(
+  Qf_thres = 0.01,
+  d_interval = 100,
+  d_min = NULL,
+  d_max = 5000,
+  method = "glover",
+  t,
+  S,
+  Tr,
+  ...
+)
 }
 \arguments{
 \item{Qf_thres}{streamflow depletion fraction (\code{Qf}) threshold used to define maximum distance. Defaults to 0.01 (1\%).}

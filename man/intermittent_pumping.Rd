@@ -4,8 +4,7 @@
 \alias{intermittent_pumping}
 \title{Streamflow depletion for an intermittent pumping schedule using superposition.}
 \usage{
-intermittent_pumping(t, starts, stops, rates, method = "glover", d, S,
-  Tr, ...)
+intermittent_pumping(t, starts, stops, rates, method = "glover", d, S, Tr, ...)
 }
 \arguments{
 \item{t}{times you want output for [T]}

@@ -1,6 +1,6 @@
 Package: streamDepletr
 Title: Estimate Streamflow Depletion Due to Groundwater Pumping
-Version: 0.1.0.9000
+Version: 0.1.1
 Description: Implementation of analytical models for estimating streamflow 
     depletion due to groundwater pumping, and other related tools. Functions
     are broadly split into two groups: (1) analytical streamflow depletion
