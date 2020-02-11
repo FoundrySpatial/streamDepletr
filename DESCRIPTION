@@ -28,11 +28,8 @@ License: BSD_3_clause + file LICENSE
 Imports:
   Rmpfr,
     dplyr,
-    magrittr
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.1.1
-Suggests: knitr,
+    magrittr,
+    knitr,
     rmarkdown,
     dismo,
     sp,
@@ -43,4 +40,8 @@ Suggests: knitr,
     reshape2,
     sf,
     scales
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+Suggests: 
 VignetteBuilder: knitr
