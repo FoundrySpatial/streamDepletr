@@ -2,6 +2,7 @@
 
 ## Test environments
 * local windows 10 install, R 3.6.2
+* Windows Server 2008 R2 SP1 (on R-hub), R-devel, 32/64 bit
 
 ## R CMD check results
 0 ERRORs | 0 WARNINGs | 0 NOTES
