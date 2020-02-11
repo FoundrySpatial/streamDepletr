@@ -4,8 +4,6 @@
 # streamDepletr
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis-CI Build
-Status](https://travis-ci.org/samzipper/streamDepletr.svg?branch=master)](https://travis-ci.org/samzipper/streamDepletr)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/streamDepletr)](https://cran.r-project.org/package=streamDepletr)
 [![CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/streamDepletr?color=brightgreen)](https://CRAN.R-project.org/package=streamDepletr)
