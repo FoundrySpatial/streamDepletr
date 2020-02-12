@@ -29,10 +29,13 @@ Imports:
   Rmpfr,
     dplyr,
     magrittr,
-    knitr,
+    sp
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+Suggests: knitr,
     rmarkdown,
     dismo,
-    sp,
     raster,
     deldir,
     rgeos,
@@ -40,8 +43,4 @@ Imports:
     reshape2,
     sf,
     scales
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.0.2
-Suggests: 
 VignetteBuilder: knitr
