@@ -50,5 +50,8 @@ Use these variable names, which are consistent with the hydrogeological literatu
 
 # Prepping for release
 - Check on local machine: `devtools::check()`
-- Check on CRAN win-builder: `devtools::check_win_release()`
+- Check on CRAN win-builder, devel version: `devtools::check_win_devel()`
+- Check on CRAN win-builder, release version: `devtools::check_win_release()`
 - Check on R-hub defaults: `devtools::check_rhub()`
+- Update `cran-comments.md` and `NEWS.md`
+- 
