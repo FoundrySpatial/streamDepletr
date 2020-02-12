@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 require(magrittr)
 require(reshape2)
 require(ggplot2)
-require(sf)
 require(dplyr)
 require(scales)
 require(streamDepletr)
@@ -255,25 +254,43 @@ head(fi)
 ```
 
 Let's look at where depletion is occurring:
-```{r fig.width = 6, fig.height = 4}
+```{r fig.width = 6, fig.height = 6}
 # merge fi with stream network shapefile
 stream_lines@data <- dplyr::left_join(stream_lines@data, fi, by = "reach")
 
 # any NA values means they are outside the max_dist and should be set to 0
 stream_lines@data$frac_depletion[is.na(stream_lines@data$frac_depletion)] <- 0
 
-# convert stream_lines to an sf object for plotting
-stream_sf <- sf::st_as_sf(stream_lines)
-
-# plot
-ggplot2::ggplot(stream_sf) +
-  geom_sf(aes(color = 
-                cut(frac_depletion, 
+# cut frac_depletion into groups
+stream_lines@data$frac_depletion_intervals <- 
+  cut(stream_lines@data$frac_depletion, 
                     breaks = c(0, 0.05, 0.1, 0.2, 1),
                     labels = c("<5%", "5-10%", "10-20%", ">20%"),
-                    include.lowest = T))) +
-  scale_color_manual(name = "frac_depletion", drop = F,
-                     values = c("blue", "forestgreen", "orange", "red"))
+                    include.lowest = T)
+
+# make id field which will be used for joining/plotting later
+stream_lines@data$id <- as.character(as.numeric(rownames(stream_lines@data)) - 1)
+
+# convert to data frame
+stream_df <- ggplot2::fortify(stream_lines, region = "id")
+
+# add depletion data
+stream_df <- dplyr::left_join(stream_df, stream_lines@data, by = "id")
+
+# plot
+ggplot2::ggplot(stream_df) +
+  geom_path(aes(x = long, y = lat, group = group, 
+                color = frac_depletion_intervals)) +
+  scale_color_manual(name = "Fraction of Depletion", drop = F,
+                     values = c("blue", "forestgreen", "orange", "red")) +
+  scale_x_continuous(name = "UTM 16N Northing [m]") +
+  scale_y_continuous(name = "UTM 16N Easting [m]") +
+  coord_equal() +
+  theme_bw() +
+  theme(axis.text.y = element_text(angle = 90),
+        panel.grid = element_blank(),
+        legend.position = "bottom")
+  
 ```
 
 Looks like some of the depletion is sources from Sixmile Creek after all - at least 10% within a single reach! We can use `dplyr` to determine the portion of depletion in Dorn and Sixmile creeks:
@@ -293,9 +310,9 @@ Now, let's calculate the analytical depletion timeseries for each reach. For the
 fi <- 
   rdll %>% 
   subset(reach %in% fi$reach) %>%  # only calculate for reaches with some depletion
-  group_by(reach) %>% 
-  summarize(dist_min = min(dist)) %>% 
-  left_join(fi, ., by="reach")  # join to data frame with apportionment
+  dplyr::group_by(reach) %>% 
+  dplyr::summarize(dist_min = min(dist)) %>% 
+  dplyr::left_join(fi, ., by="reach")  # join to data frame with apportionment
 head(fi)
 ```
 

@@ -41,6 +41,5 @@ Suggests: knitr,
     rgeos,
     ggplot2,
     reshape2,
-    sf,
     scales
 VignetteBuilder: knitr
