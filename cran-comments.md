@@ -1,24 +1,42 @@
 # streamDepletr 0.1.1
 
+## Resubmission
+This is a resubmission. In this version I have:
+* Fixed a broken URL in readme.md.
+
 ## Submission notes
 This submission is intended to address a dataset dependency issue
  noted by Brian Ripley.
 
 ## Test environments
-* local windows 10 install, R 3.6.2
+* local windows 10 install, R 3.6.3
 * win-builder (devel and release)
 * Windows Server 2008 R2 SP1 (on R-hub), R-devel, 32/64 bit
 * Ubuntu Linux 16.04 LTS (on R-hub), R-release, GCC
 * Fedora Linux (on R-hub), R-devel, clang, gfortran
 
 ## R CMD check results
-### Windows
-0 ERRORs | 0 WARNINGs | 0 NOTES
-
-### Linux (Ubuntu and Fedora on R-hub)
+### Windows on win-builder
 0 ERRORs | 0 WARNINGs | 1 NOTES
 
 There was 1 note:
+* checking CRAN incoming feasibility ... NOTE
+Some potentially mis-spelled words in DESCRIPTION are suggested;
+ however, the spelling is correct.
+
+There is a note regarding the data() dependency which caused the previous
+version to be removed from CRAN. This is corrected in this release.
+
+### Linux (Ubuntu and Fedora on R-hub)
+0 ERRORs | 0 WARNINGs | 2 NOTES
+
+There were 2 notes:
+* checking CRAN incoming feasibility ... NOTE
+Some potentially mis-spelled words in DESCRIPTION are suggested;
+ however, the spelling is correct.
+
+There is a note regarding the data() dependency which caused the previous
+version to be removed from CRAN. This is corrected in this release.
 
 * checking examples ... NOTE
 Examples with CPU or elapsed time > 5s

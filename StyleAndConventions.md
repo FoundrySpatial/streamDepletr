@@ -54,4 +54,4 @@ Use these variable names, which are consistent with the hydrogeological literatu
 - Check on CRAN win-builder, release version: `devtools::check_win_release()`
 - Check on R-hub defaults: `devtools::check_rhub()`
 - Update `cran-comments.md` and `NEWS.md`
-- 
+- Release: `devtools::release()`
