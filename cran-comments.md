@@ -1,3 +1,9 @@
+# streamDepletr 0.1.2
+
+## Submission notes
+This submission updates the CRS for `stream_lines` to address a stale sp data 
+object issue following instructions sent by Roger Bivand.
+
 # streamDepletr 0.1.1
 
 ## Resubmission
