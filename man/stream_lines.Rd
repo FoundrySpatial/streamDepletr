@@ -4,12 +4,14 @@
 \name{stream_lines}
 \alias{stream_lines}
 \title{Stream network for Sixmile Creek Watershed, Wisconsin, USA. Extracted from US NHDPlus v2.1 national seamless dataset.}
-\format{A SpatialLinesDataFrame with 49 rows and 2 variables:
+\format{
+A SpatialLinesDataFrame with 49 rows and 2 variables:
 \describe{
   \item{reach}{identifier code for each stream reach}
   \item{stream}{name of stream for each stream reach (Sixmile Creek or Dorn Creek)}
   ...
-}}
+}
+}
 \source{
 \url{http://www.horizon-systems.com/NHDPlusData/NHDPlusV21/Data/NationalData/}
 }

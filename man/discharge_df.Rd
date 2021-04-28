@@ -4,13 +4,15 @@
 \name{discharge_df}
 \alias{discharge_df}
 \title{Streamflow for Sixmile Creek and Dorn Creek.}
-\format{A data frame with 1450 rows and 2 variables:
+\format{
+A data frame with 1450 rows and 2 variables:
 \describe{
   \item{date}{date of streamflow measurement}
   \item{Q_m3d}{discharge, in cubic meters per day}
   \item{stream}{name of stream for each stream reach (Sixmile Creek or Dorn Creek)}
   ...
-}}
+}
+}
 \source{
 \url{https://waterdata.usgs.gov/nwis/dv?referred_module=sw&agency_code=USGS&site_no=05427910}
 
