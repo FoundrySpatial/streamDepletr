@@ -8,7 +8,7 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   #' @param b aquifer saturated thickness [L]
   #' @param Kriv streambed semipervious layer hydraulic conductivity [L/T]
   #' @param briv streambed semipervious layer thickness [L]
-  #' @param prec precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.
+  #' @param prec precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time. If set to `NULL`, the `mpfr` function is not used which can address an occasional issue on Mac computers but lead to problems under some combinations of `Tr` and `lmda`.
   #' @details This function is described in Hantush (1965). As the leakance term \code{(b*Kh/Kriv)} approaches 0 this is equivalent to \link{glover}. It contains numerous assumptions:
   #' \itemize{
   #'   \item Horizontal flow >> vertical flow (Dupuit assumptions hold)
@@ -40,15 +40,21 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   Tr <- Kh * b
 
   # erfc and exp terms can get really huge; use the mpfr package to deal with them
-  term1 <- Rmpfr::mpfr(sqrt(S * d * d / (4 * Tr * t)), prec)
-  term2 <- Rmpfr::mpfr((((Tr * t) / (S * L * L)) + (d / L)), prec)
-  term3 <- Rmpfr::mpfr((sqrt((Tr * t) / (S * L * L)) + sqrt((S * d * d) / (4 * Tr * t))), prec)
+  if (is.null(prec)){
+    term1 <- sqrt(S * d * d / (4 * Tr * t))
+    term2 <- (((Tr * t) / (S * L * L)) + (d / L))
+    term3 <- (sqrt((Tr * t) / (S * L * L)) + sqrt((S * d * d) / (4 * Tr * t)))
+  } else {
+    term1 <- Rmpfr::mpfr(sqrt(S * d * d / (4 * Tr * t)), prec)
+    term2 <- Rmpfr::mpfr((((Tr * t) / (S * L * L)) + (d / L)), prec)
+    term3 <- Rmpfr::mpfr((sqrt((Tr * t) / (S * L * L)) + sqrt((S * d * d) / (4 * Tr * t))), prec)
+  }
 
   # check for issues
   errors <- which(!is.finite(term1) | !is.finite(term2) | !is.finite(term3))
   if (length(errors) > 0) stop(paste0("Non-finite for ", length(errors), " calculation(s). Usually means L or Tr is too low."))
 
-  # calculate streamflow depletoin
+  # calculate streamflow depletion
   Qf <- as.numeric(
     Rmpfr::erfc(term1) - exp(term2) * Rmpfr::erfc(term3)
   )
