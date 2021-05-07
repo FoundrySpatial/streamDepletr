@@ -63,13 +63,18 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
     } else {
       lmda_max <- Inf
     }
+    if (exists("prec", where = list(...))) {
+      prec <- list(...)$prec
+    } else {
+      prec <- 80
+    }
 
 
     # calculate depletion
     Qs.all.vec[t.starts.vec > 0] <-
       rates.all.vec[t.starts.vec > 0] *
-        (hunt(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max) -
-          hunt(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max))
+        (hunt(t = t.starts.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max, prec = prec) -
+          hunt(t = t.stops.vec[t.starts.vec > 0], d = d, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max, prec = prec))
   }
 
   # convert back to matrix and take rowsums

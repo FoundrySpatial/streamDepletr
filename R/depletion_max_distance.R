@@ -61,10 +61,15 @@ depletion_max_distance <- function(Qf_thres = 0.01, d_interval = 100, d_min = NU
     } else {
       lmda_max <- Inf
     }
+    if (exists("prec", where = list(...))) {
+      prec <- list(...)$prec
+    } else {
+      prec <- 80
+    }
 
     while (Qf > Qf_thres) {
       # calculate depletion
-      Qf <- hunt(t = t, d = d_test, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max)
+      Qf <- hunt(t = t, d = d_test, S = S, Tr = Tr, lmda = lmda, lmda_max = lmda_max, prec = prec)
 
       # check if Qf < Qf_thres
       if (Qf < Qf_thres) {
