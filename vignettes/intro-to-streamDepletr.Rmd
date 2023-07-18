@@ -49,102 +49,126 @@ To see how these compare, let's consider a well 150 m from a stream in a 50 m th
 
 First, we'll define the aquifer parameters common to both models:
 ```{r}
-times  <- seq(1,100) # time [days]
-K <- 1e-5*86400      # hydraulic conductivity [m/d]
-b <- 50              # aquifer thickness [m]
-trans <- b*K         # transmissivity [m2/d]
-d <- 250             # well to stream distance [m]
-Sy <- 0.1            # specific yield [-]
+times <- seq(1, 100) # time [days]
+K <- 1e-5 * 86400 # hydraulic conductivity [m/d]
+b <- 50 # aquifer thickness [m]
+trans <- b * K # transmissivity [m2/d]
+d <- 250 # well to stream distance [m]
+Sy <- 0.1 # specific yield [-]
 ```
 
 For `hunt`, we also need some information about flow properties of the streambed. We can estimate that using the `streambed_conductance` function:
 ```{r}
-str_cond <- streambed_conductance(w = 5,        # river width [m]
-                                  Kriv = 0.1*K, # streambed K is 10% that of the aquifer
-                                  briv = 1)     # thickness of streambed
+str_cond <- streambed_conductance(
+  w = 5, # river width [m]
+  Kriv = 0.1 * K, # streambed K is 10% that of the aquifer
+  briv = 1
+) # thickness of streambed
 ```
 
 Now, we can use our analytical models to calculate the capture fraction (`Qf`), which is streamflow depletion expressed as a fraction of the pumping rate:
 
 ```{r fig.width = 6, fig.height = 4}
 df_depletion <-
-  data.frame(times = times,
-             Qf_glover = glover(t = times, d = d, S = Sy, Tr = trans),
-             Qf_hunt = hunt(t = times, d = d, S = Sy, Tr = trans, lmda = str_cond))
+  data.frame(
+    times = times,
+    Qf_glover = glover(t = times, d = d, S = Sy, Tr = trans),
+    Qf_hunt = hunt(t = times, d = d, S = Sy, Tr = trans, lmda = str_cond)
+  )
 
-df_depletion |> 
-  tidyr::pivot_longer(-times, values_to = "Qf", names_to = "model") |> 
+df_depletion |>
+  tidyr::pivot_longer(-times, values_to = "Qf", names_to = "model") |>
   ggplot2::ggplot(aes(x = times, y = Qf, color = model)) +
-    geom_line() +
-    scale_y_continuous(limits = c(0,1))
+  geom_line() +
+  scale_y_continuous(limits = c(0, 1))
 ```
 
 To demonstrate the importance of the parameterization of the streambed in the `hunt` model, we can compare capture fraction at the end of the 100 day period:
 ```{r}
-df_depletion[dim(df_depletion)[1], ]  # glover is ~2x hunt
+df_depletion[dim(df_depletion)[1], ] # glover is ~2x hunt
 ```
 
 ## Converting capture fraction to streamflow depletion
 To convert capture fraction, `Qf`, to volumetric streamflow depletion, `Qs`, we simply multiply `Qf` by the pumping rate, `Qw`.
 ```{r fig.width = 6, fig.height = 4}
-Qw <- 500      # pumping rate, [m3/d]
-df_depletion$Qs_glover <- df_depletion$Qf_glover*Qw # streamflow depletion, [m3/d]
-df_depletion$Qs_hunt   <- df_depletion$Qf_hunt*Qw   # streamflow depletion, [m3/d]
+Qw <- 500 # pumping rate, [m3/d]
+df_depletion$Qs_glover <- df_depletion$Qf_glover * Qw # streamflow depletion, [m3/d]
+df_depletion$Qs_hunt <- df_depletion$Qf_hunt * Qw # streamflow depletion, [m3/d]
 
 # plot results
-df_depletion |> 
-  dplyr::select(c("times", "Qs_glover", "Qs_hunt")) |> 
-  tidyr::pivot_longer(-times, values_to = "Qs", names_to = "model") |> 
+df_depletion |>
+  dplyr::select(c("times", "Qs_glover", "Qs_hunt")) |>
+  tidyr::pivot_longer(-times, values_to = "Qs", names_to = "model") |>
   ggplot2::ggplot(aes(x = times, y = Qs, color = model)) +
-    geom_line()
+  geom_line()
 ```
 
 ## Intermittent pumping schedules
 While `glover` and `hunt` were originally developed and described for continuous pumping, Jenkins (1968) demonstrated that the principles of superposition can be used to estimate depletion under intermittent pumping schedules. Let's see what happens if we turn a well on/off 3 times during a two year period:
 ```{r fig.width = 6, fig.height = 4}
 # define pumping schedule
-t_starts <- c(10, 200, 400)  # days that well turns on
-t_stops <- c(60, 350, 700)   # days that well turns off
+t_starts <- c(10, 200, 400) # days that well turns on
+t_stops <- c(60, 350, 700) # days that well turns off
 
 # calculate depletion through time
-df_intermittent <- 
-  data.frame(times = seq(1,730),
-             Qs_intermittent = 
-               intermittent_pumping(t = seq(1,730), starts = t_starts, stops = t_stops, 
-                       rates = rep(Qw, length(t_starts)), 
-                       method = "glover", d = d, S = Sy, Tr = trans))
-  
+df_intermittent <-
+  data.frame(
+    times = seq(1, 730),
+    Qs_intermittent =
+      intermittent_pumping(
+        t = seq(1, 730), starts = t_starts, stops = t_stops,
+        rates = rep(Qw, length(t_starts)),
+        method = "glover", d = d, S = Sy, Tr = trans
+      )
+  )
+
 
 # plot - times when the well is turned on are shaded red
-ggplot2::ggplot(df_intermittent, 
-                aes(x = times, y = Qs_intermittent)) +
-  annotate("rect", xmin = t_starts[1], xmax = t_stops[1], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-  annotate("rect", xmin = t_starts[2], xmax = t_stops[2], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-  annotate("rect", xmin = t_starts[3], xmax = t_stops[3], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
+ggplot2::ggplot(
+  df_intermittent,
+  aes(x = times, y = Qs_intermittent)
+) +
+  annotate("rect",
+    xmin = t_starts[1], xmax = t_stops[1],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  annotate("rect",
+    xmin = t_starts[2], xmax = t_stops[2],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  annotate("rect",
+    xmin = t_starts[3], xmax = t_stops[3],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
   geom_line()
 ```
 
 We can also pump at different rates at different times; let's see how that changes the estimated depletion:
 ```{r fig.width = 6, fig.height = 4}
 pump_rates <- c(100, 1000, 100) # [m3/d] - must be same length as t_starts and t_stops
-df_intermittent$Qs_variableRate <- 
-  intermittent_pumping(t = seq(1,730), starts = t_starts, stops = t_stops, 
-                       rates = pump_rates, method = "glover", d = d, S = Sy, Tr = trans)
+df_intermittent$Qs_variableRate <-
+  intermittent_pumping(
+    t = seq(1, 730), starts = t_starts, stops = t_stops,
+    rates = pump_rates, method = "glover", d = d, S = Sy, Tr = trans
+  )
 
 
 # plot - times when the well is turned on are shaded red
-df_intermittent |> 
-  tidyr::pivot_longer(-times, values_to = "Qs", names_to = "pumpSchedule") |> 
+df_intermittent |>
+  tidyr::pivot_longer(-times, values_to = "Qs", names_to = "pumpSchedule") |>
   ggplot2::ggplot(aes(x = times, y = Qs, linetype = pumpSchedule)) +
-  annotate("rect", xmin = t_starts[1], xmax = t_stops[1], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-  annotate("rect", xmin = t_starts[2], xmax = t_stops[2], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-  annotate("rect", xmin = t_starts[3], xmax = t_stops[3], 
-           ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
+  annotate("rect",
+    xmin = t_starts[1], xmax = t_stops[1],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  annotate("rect",
+    xmin = t_starts[2], xmax = t_stops[2],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  annotate("rect",
+    xmin = t_starts[3], xmax = t_stops[3],
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
   geom_line()
 ```
 
@@ -158,23 +182,25 @@ As an example, let's consider the hypothetical case of a proposed high-capacity 
 The stream network and discharge data are included in the package (`stream_lines` and `discharge_df`, respectively). First, let's define the properties of the well and the aquifer:
 ```{r}
 # well properties
-Qw <- 1000  # well pumping rate [m3/d]
-wel_lon <- 295500  # easting of well [m]
+Qw <- 1000 # well pumping rate [m3/d]
+wel_lon <- 295500 # easting of well [m]
 wel_lat <- 4783200 # northing of well [m]
-date_pump_start <- as.Date("2014-03-01")  # pumping start date
-date_pump_stop  <- as.Date("2015-08-01")  # pumping stop date
+date_pump_start <- as.Date("2014-03-01") # pumping start date
+date_pump_stop <- as.Date("2015-08-01") # pumping stop date
 
 # aquifer properties
-K <- 1e-5*86400      # hydraulic conductivity [m/d]
-b <- 250             # aquifer thickness [m]
-trans <- b*K         # transmissivity [m2/d]
-Sy <- 0.05           # specific yield [-]
+K <- 1e-5 * 86400 # hydraulic conductivity [m/d]
+b <- 250 # aquifer thickness [m]
+trans <- b * K # transmissivity [m2/d]
+Sy <- 0.05 # specific yield [-]
 ```
 
 First, we need to determine the position of the well relative to the stream network. In streamDepletr this information is contained within the `reach_dist_lat_lon` data frame, which splits the stream network up into equally spaced points and determines the distance from each point to the well:
 ```{r}
-rdll <- prep_reach_dist(wel_lon = wel_lon, wel_lat = wel_lat, 
-                        stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+rdll <- prep_reach_dist(
+  wel_lon = wel_lon, wel_lat = wel_lat,
+  stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1
+)
 head(rdll)
 ```
 
@@ -182,42 +208,48 @@ Now, let's figure out what would happen if we assumed all groundwater pumping de
 ```{r fig.width = 6, fig.height = 4}
 # figure out which stream is closest
 closest_reach <- rdll[which.min(rdll$dist), "reach"]
-closest_dist  <- rdll[which.min(rdll$dist), "dist"]
+closest_dist <- rdll[which.min(rdll$dist), "dist"]
 closest_stream <- stream_lines$stream[stream_lines$reach == closest_reach]
 closest_discharge <- subset(discharge_df, stream == closest_stream)
 
-# since time inputs for the streamflow depletion models are numeric (not dates), 
+# since time inputs for the streamflow depletion models are numeric (not dates),
 # we need to figure out the start and stop date in days since the start of our period of interest
 t_pump_start <- as.numeric(date_pump_start - min(closest_discharge$date))
-t_pump_stop  <- as.numeric(date_pump_stop  - min(closest_discharge$date))
+t_pump_stop <- as.numeric(date_pump_stop - min(closest_discharge$date))
 times <- as.numeric(closest_discharge$date - min(closest_discharge$date))
 
-# calculate depletion - since the pumping starts and stops during our period of interest, 
+# calculate depletion - since the pumping starts and stops during our period of interest,
 #  we will use the intermittent_pumping function even though it is only one pumping cycle
-Qs <- intermittent_pumping(t = times, starts = t_pump_start, stops = t_pump_stop, rates = Qw,
-                           method = "glover", d = closest_dist, S = Sy, Tr = trans)
+Qs <- intermittent_pumping(
+  t = times, starts = t_pump_start, stops = t_pump_stop, rates = Qw,
+  method = "glover", d = closest_dist, S = Sy, Tr = trans
+)
 
 # plot capture fraction through time - the shaded interval indicates when pumping is occurring
-data.frame(date = closest_discharge$date, Qs = Qs) |> 
+data.frame(date = closest_discharge$date, Qs = Qs) |>
   ggplot2::ggplot(aes(x = date, y = Qs)) +
-    annotate("rect", xmin = date_pump_start, xmax = date_pump_stop, 
-             ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-    geom_line() +
-    scale_y_continuous(name = "Qs, Streamflow Depletion [m3/d]")
+  annotate("rect",
+    xmin = date_pump_start, xmax = date_pump_stop,
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  geom_line() +
+  scale_y_continuous(name = "Qs, Streamflow Depletion [m3/d]")
 ```
 
 If we assume that there are no changes to surface water-groundwater exchange elsewhere in the network, we can estimate the streamflow at the gauging station as the discharge in the no-pumping scenario minus the streamflow depletion.
 ```{r fig.width = 6, fig.height = 4}
-# calculate streamflow 
-closest_discharge$Q_pumped <- closest_discharge$Q_m3d - Qs 
+# calculate streamflow
+closest_discharge$Q_pumped <- closest_discharge$Q_m3d - Qs
 
-closest_discharge |> 
-  tidyr::pivot_longer(cols = c("Q_m3d", "Q_pumped"), names_to = "variable", values_to = "discharge_m3d") |> 
+closest_discharge |>
+  tidyr::pivot_longer(cols = c("Q_m3d", "Q_pumped"), names_to = "variable", values_to = "discharge_m3d") |>
   ggplot2::ggplot(aes(x = date, y = discharge_m3d, color = variable)) +
-    annotate("rect", xmin = date_pump_start, xmax = date_pump_stop, 
-             ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-    geom_line() +
-    coord_trans(y = scales::log1p_trans())
+  annotate("rect",
+    xmin = date_pump_start, xmax = date_pump_stop,
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  geom_line() +
+  coord_trans(y = scales::log1p_trans())
 ```
 
 ### Integrating analytical models with depletion apportionment equations
@@ -241,8 +273,10 @@ The appropriate procedure to integrate the depletion apportionment equations and
 
 First, we'll use the `depletion_max_distance` function to determine our the depletion apportionment radius as the area that will depleted by at least 1% of the pumping rate during the pumped interval:
 ```{r}
-max_dist <- depletion_max_distance(Qf_thres = 0.01, method="glover", d_max = 10000,
-                                   t = (t_pump_stop - t_pump_start), S = Sy, Tr = trans)
+max_dist <- depletion_max_distance(
+  Qf_thres = 0.01, method = "glover", d_max = 10000,
+  t = (t_pump_stop - t_pump_start), S = Sy, Tr = trans
+)
 max_dist
 ```
 
@@ -261,31 +295,35 @@ stream_lines_fi <- dplyr::left_join(stream_lines, fi, by = "reach")
 stream_lines_fi$frac_depletion[is.na(stream_lines_fi$frac_depletion)] <- 0
 
 # cut frac_depletion into groups
-stream_lines_fi$frac_depletion_intervals <- 
-  cut(stream_lines_fi$frac_depletion, 
-                    breaks = c(0, 0.05, 0.1, 0.2, 1),
-                    labels = c("<5%", "5-10%", "10-20%", ">20%"),
-                    include.lowest = T)
+stream_lines_fi$frac_depletion_intervals <-
+  cut(stream_lines_fi$frac_depletion,
+    breaks = c(0, 0.05, 0.1, 0.2, 1),
+    labels = c("<5%", "5-10%", "10-20%", ">20%"),
+    include.lowest = T
+  )
 
 # plot
 ggplot2::ggplot(stream_lines_fi, aes(color = frac_depletion_intervals)) +
   geom_sf() +
-  scale_color_manual(name = "Fraction of Depletion", drop = F,
-                     values = c("blue", "forestgreen", "orange", "red")) +
+  scale_color_manual(
+    name = "Fraction of Depletion", drop = F,
+    values = c("blue", "forestgreen", "orange", "red")
+  ) +
   theme_bw() +
-  theme(axis.text.y = element_text(angle = 90),
-        panel.grid = element_blank(),
-        legend.position = "bottom")
-  
+  theme(
+    axis.text.y = element_text(angle = 90),
+    panel.grid = element_blank(),
+    legend.position = "bottom"
+  )
 ```
 
 Looks like some of the depletion is sources from Sixmile Creek after all - at least 10% within a single reach! We can use `dplyr` to determine the portion of depletion in Dorn and Sixmile creeks:
 ```{r}
-fi <- 
-  dplyr::left_join(fi, unique(stream_lines[,c("reach", "stream")]), by = "reach")
+fi <-
+  dplyr::left_join(fi, unique(stream_lines[, c("reach", "stream")]), by = "reach")
 
-fi |> 
-  dplyr::group_by(stream) |> 
+fi |>
+  dplyr::group_by(stream) |>
   dplyr::summarize(sum_depletion = sum(frac_depletion))
 ```
 
@@ -293,33 +331,37 @@ Wow- it turns out the well is capturing about the same amount of depletion from 
 
 Now, let's calculate the analytical depletion timeseries for each reach. For the distance between the well and the stream (`d`), we'll use the closest point on each reach:
 ```{r}
-fi <- 
-  rdll |> 
-  subset(reach %in% fi$reach) |>  # only calculate for reaches with some depletion
-  dplyr::group_by(reach) |> 
-  dplyr::summarize(dist_min = min(dist)) |> 
-  dplyr::left_join(fi, ., by="reach")  # join to data frame with apportionment
+fi <-
+  rdll |>
+  subset(reach %in% fi$reach) |> # only calculate for reaches with some depletion
+  dplyr::group_by(reach) |>
+  dplyr::summarize(dist_min = min(dist)) |>
+  dplyr::left_join(fi, ., by = "reach") # join to data frame with apportionment
 head(fi)
 ```
 
 We want to calculate the capture fraction for each stream reach (which has a unique distance) and at all timesteps. The simplest way to do this is by looping over each stream reach:
 ```{r}
 for (r in 1:length(fi$reach)) {
-  df_r <- data.frame(stream = fi$stream[r], 
-                     reach = fi$reach[r], 
-                     frac_depletion = fi$frac_depletion[r], 
-                     times = times,
-                     date = closest_discharge$date,
-                     Qs_analytical = 
-                       intermittent_pumping(t = times, 
-                                            starts = t_pump_start, 
-                                            stops = t_pump_stop, 
-                                            rates = Qw, 
-                                            method = "glover", 
-                                            d = fi$dist_min[r], 
-                                            S = Sy, 
-                                            Tr = trans))
-  
+  df_r <- data.frame(
+    stream = fi$stream[r],
+    reach = fi$reach[r],
+    frac_depletion = fi$frac_depletion[r],
+    times = times,
+    date = closest_discharge$date,
+    Qs_analytical =
+      intermittent_pumping(
+        t = times,
+        starts = t_pump_start,
+        stops = t_pump_stop,
+        rates = Qw,
+        method = "glover",
+        d = fi$dist_min[r],
+        S = Sy,
+        Tr = trans
+      )
+  )
+
   if (r == 1) {
     df_all <- df_r
   } else {
@@ -336,8 +378,10 @@ df_all$Qs_apportioned <- df_all$Qs_analytical * df_all$frac_depletion
 Let's look at the trajectory of each stream reach over time, with a different line for each stream reach:
 ```{r fig.width = 6, fig.height = 4}
 ggplot2::ggplot(df_all, aes(x = date, y = Qs_apportioned, group = reach, linetype = stream)) +
-    annotate("rect", xmin = date_pump_start, xmax = date_pump_stop, 
-             ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
+  annotate("rect",
+    xmin = date_pump_start, xmax = date_pump_stop,
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
   geom_line()
 ```
 
@@ -345,30 +389,34 @@ Hmm... It doesn't look like the Sixmile Creek lines would add up to equal the sa
 
 Maybe we want to know which stream reaches are most affected at the end of the pumping period:
 ```{r}
-df_all |> 
+df_all |>
   subset(date == date_pump_stop & Qs_apportioned >= 20)
 ```
 
 Finally, let's take a look at streamflow for the two tributaries through time:
 ```{r fig.width = 6, fig.height = 4}
-df_all |> 
+df_all |>
   # sum depletion for all reaches in each tributary
-  dplyr::group_by(stream, date) |> 
-  dplyr::summarize(Qs_sum = sum(Qs_apportioned)) |> 
+  dplyr::group_by(stream, date) |>
+  dplyr::summarize(Qs_sum = sum(Qs_apportioned)) |>
   # join with raw discharge data
-  dplyr::left_join(discharge_df, by = c("date", "stream")) |> 
+  dplyr::left_join(discharge_df, by = c("date", "stream")) |>
   # calculate depleted streamflow
-  transform(Q_depleted = Q_m3d - Qs_sum) |> 
+  transform(Q_depleted = Q_m3d - Qs_sum) |>
   # melt for plot
-  reshape2::melt(id=c("stream", "date", "Qs_sum"), 
-                 value.name = "discharge_m3d") |> 
+  reshape2::melt(
+    id = c("stream", "date", "Qs_sum"),
+    value.name = "discharge_m3d"
+  ) |>
   # plot
   ggplot2::ggplot(aes(x = date, y = discharge_m3d, color = variable)) +
-    annotate("rect", xmin = date_pump_start, xmax = date_pump_stop, 
-             ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5) +
-    geom_line() +
-    facet_wrap(stream ~ ., ncol = 1) +
-    coord_trans(y = scales::log1p_trans())
+  annotate("rect",
+    xmin = date_pump_start, xmax = date_pump_stop,
+    ymin = -Inf, ymax = Inf, fill = "red", alpha = 0.5
+  ) +
+  geom_line() +
+  facet_wrap(stream ~ ., ncol = 1) +
+  coord_trans(y = scales::log1p_trans())
 ```
 
 In this case, the depletion from this well is fairly small relative to the overall discharge.

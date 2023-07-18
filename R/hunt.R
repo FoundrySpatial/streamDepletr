@@ -40,14 +40,14 @@ hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
   lmda[lmda > lmda_max] <- lmda_max
 
   # erfc and exp terms can get really huge; use the Rmpfr package to deal with them
-  if (is.null(prec)){
+  if (is.null(prec)) {
     term1 <- Rmpfr::erfc(sqrt((S * d * d) / (4 * Tr * t)))
     term2 <- exp(((lmda * lmda * t) / (4 * S * Tr) + (lmda * d) / (2 * Tr)))
     term3 <- Rmpfr::erfc(sqrt((lmda * lmda * t) / (4 * S * Tr)) + sqrt((S * d * d) / (4 * Tr * t)))
   } else {
     term1 <- Rmpfr::erfc(Rmpfr::mpfr(sqrt((S * d * d) / (4 * Tr * t)), prec))
     term2 <- exp(Rmpfr::mpfr(((lmda * lmda * t) / (4 * S * Tr) + (lmda * d) / (2 * Tr)), prec))
-    term3 <- Rmpfr::erfc(Rmpfr::mpfr(sqrt((lmda * lmda * t) / (4 * S * Tr)) + sqrt((S * d * d) / (4 * Tr * t)), prec))    
+    term3 <- Rmpfr::erfc(Rmpfr::mpfr(sqrt((lmda * lmda * t) / (4 * S * Tr)) + sqrt((S * d * d) / (4 * Tr * t)), prec))
   }
 
   # check for issues

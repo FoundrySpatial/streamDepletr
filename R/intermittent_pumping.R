@@ -48,7 +48,6 @@ intermittent_pumping <- function(t, starts, stops, rates, method = "glover", d, 
 
   # select analytical model and calculate depletion
   if (method == "glover") {
-
     # calculate depletion
     Qs.all.vec[t.starts.vec > 0] <-
       rates.all.vec[t.starts.vec > 0] *

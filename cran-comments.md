@@ -1,3 +1,27 @@
+# streamDepletr 0.2.0
+
+## Resubmission
+This is a resubmission to remove dependencies on sp, rgeos, and rgdal due to 
+the anticipated deprecation of these packages. streamDepletr now relies primarily
+on sf for spatial operations.
+
+## Submission notes
+This submission is intended to address the issues described by rsbivand on 
+the following GitHub issue: https://github.com/FoundrySpatial/streamDepletr/issues/19
+
+## Test environments
+
+
+## R CMD check results
+### Windows on win-builder
+
+
+### Linux (Ubuntu and Fedora on R-hub)
+
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
+
 # streamDepletr 0.1.2
 
 ## Submission notes

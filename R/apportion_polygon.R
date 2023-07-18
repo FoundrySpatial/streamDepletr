@@ -36,71 +36,73 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, coord_crs, m
   #' apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
   #'    max_dist = 5000, coord_crs = sf::st_crs(stream_lines))
   #' @export
-  
+
   # set column names in data frame if necessary
   if (!is.null(reach_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == reach_name] <- "reach"
   if (!is.null(dist_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == dist_name] <- "dist"
   if (!is.null(lon_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == lon_name] <- "lon"
   if (!is.null(lat_name)) names(reach_dist_lon_lat)[names(reach_dist_lon_lat) == lat_name] <- "lat"
-  
+
   # get closest point on each stream reach to the well
   reach_closest <-
     reach_dist_lon_lat[, c("reach", "dist", "lon", "lat")] |>
     dplyr::group_by(reach) |>
     dplyr::summarize(dist_closest = min(dist)) |>
     dplyr::left_join(reach_dist_lon_lat[, c("reach", "dist", "lon", "lat")],
-                     by = c("reach" = "reach", "dist_closest" = "dist")
+      by = c("reach" = "reach", "dist_closest" = "dist")
     )
   reach_closest <- reach_closest[!duplicated(reach_closest$reach), ]
-  
+
   reach_closest_sf <-
-    reach_closest |> 
-    subset(dist_closest <= max_dist) |> 
+    reach_closest |>
+    subset(dist_closest <= max_dist) |>
     sf::st_as_sf(coords = c("lon", "lat"), crs = coord_crs)
-  
+
   # make polygons for all stream points with no well
-  stream_polys <- 
-    reach_closest_sf |> 
-    sf::st_union() |> 
-    sf::st_voronoi() |> 
+  stream_polys <-
+    reach_closest_sf |>
+    sf::st_union() |>
+    sf::st_voronoi() |>
     sf::st_collection_extract()
   # voronoi returns polys in random order - use intersection with points to reorder to match input sf
   sp <- unlist(sf::st_intersects(reach_closest_sf, stream_polys))
-  stream_polys_ordered <- 
-    stream_polys[sp] |> 
+  stream_polys_ordered <-
+    stream_polys[sp] |>
     sf::st_sf()
   stream_polys_ordered$reach <- sf::st_drop_geometry(reach_closest_sf[[reach_id]])
-  
+
   # make polygons for all stream points including well (reach for well = -9999)
-  reaches_with_well_sf <- 
-    data.frame(lon = wel_lon, lat = wel_lat,
-               reach = "-9999", dist_closest = 0) |> 
-    sf::st_as_sf(coords = c("lon", "lat"), crs = coord_crs) |> 
+  reaches_with_well_sf <-
+    data.frame(
+      lon = wel_lon, lat = wel_lat,
+      reach = "-9999", dist_closest = 0
+    ) |>
+    sf::st_as_sf(coords = c("lon", "lat"), crs = coord_crs) |>
     dplyr::bind_rows(reach_closest_sf)
-  
+
   well_polys <-
-    reaches_with_well_sf  |> 
-    sf::st_union() |> 
-    sf::st_voronoi() |> 
+    reaches_with_well_sf |>
+    sf::st_union() |>
+    sf::st_voronoi() |>
     sf::st_collection_extract()
   wp <- unlist(sf::st_intersects(reaches_with_well_sf, well_polys))
-  well_polys_ordered <- 
-    well_polys[wp] |> 
+  well_polys_ordered <-
+    well_polys[wp] |>
     sf::st_sf()
   well_polys_ordered$reach <- sf::st_drop_geometry(reaches_with_well_sf[[reach_id]])
   well_poly <- subset(well_polys_ordered, reach == -9999)
-  
+
   # for the polygon containing the well (reach=-9999), figure out what % is contained
   # in the polygons corresponding to each stream reach without the well
-  stream_polys_overlap <- suppressWarnings(sf::st_intersection(stream_polys_ordered, well_poly))   # get overlapping polygons
-  stream_polys_overlap$overlap_area_m2 <- as.numeric(sf::st_area(stream_polys_overlap))  # calculate overlapping area
+  stream_polys_overlap <- suppressWarnings(sf::st_intersection(stream_polys_ordered, well_poly)) # get overlapping polygons
+  stream_polys_overlap$overlap_area_m2 <- as.numeric(sf::st_area(stream_polys_overlap)) # calculate overlapping area
 
   df_out <-
     data.frame(
       reach = stream_polys_overlap$reach,
       frac_depletion = stream_polys_overlap$overlap_area_m2 / sum(stream_polys_overlap$overlap_area_m2)
     )
-  
+
   # screen for depletion below min_frac
   if (min(df_out$frac_depletion) < min_frac) {
     depl_low <- sum(df_out$frac_depletion[df_out$frac_depletion < min_frac])

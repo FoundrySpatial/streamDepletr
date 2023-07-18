@@ -33,16 +33,16 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_sf, reach_id, stream_pt_spa
   stream_sf_pts <- sf::st_sample(stream_sf, size = n_stream_pts, type = "regular")
 
   # figure out what stream reach each point corresponds to
-  for (i in 1:dim(stream_sf)[1]){
-    df_i <- 
-      stream_sf_pts[[i]] |> 
-      sf::st_coordinates() |> 
-      as.data.frame() |> 
-      dplyr::rename(lon = X, lat = Y) |> 
+  for (i in 1:dim(stream_sf)[1]) {
+    df_i <-
+      stream_sf_pts[[i]] |>
+      sf::st_coordinates() |>
+      as.data.frame() |>
+      dplyr::rename(lon = X, lat = Y) |>
       dplyr::select(-L1)
-    df_i[,reach_id] <- sf::st_drop_geometry(stream_sf[i, reach_id])
-    
-    if (i == 1){
+    df_i[, reach_id] <- sf::st_drop_geometry(stream_sf[i, reach_id])
+
+    if (i == 1) {
       stream_df_pts <- df_i
     } else {
       stream_df_pts <- dplyr::bind_rows(stream_df_pts, df_i)

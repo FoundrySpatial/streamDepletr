@@ -39,7 +39,7 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   Tr <- Kh * b
 
   # erfc and exp terms can get really huge; use the mpfr package to deal with them
-  if (is.null(prec)){
+  if (is.null(prec)) {
     term1 <- sqrt(S * d * d / (4 * Tr * t))
     term2 <- (((Tr * t) / (S * L * L)) + (d / L))
     term3 <- (sqrt((Tr * t) / (S * L * L)) + sqrt((S * d * d) / (4 * Tr * t)))
