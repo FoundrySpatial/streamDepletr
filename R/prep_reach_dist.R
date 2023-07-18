@@ -1,15 +1,14 @@
-prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_spacing, buffer_width = 0.1, nseed = 1) {
+prep_reach_dist <- function(wel_lon, wel_lat, stream_sf, reach_id, stream_pt_spacing, nseed = 1) {
   #' Calculate the distance from a well to each reach within a stream network. This function splits a polyline stream network up into a series of evenly spaced points and
   #' calculates the distance from each of those points to a well.
   #'
   #' @param wel_lon longitude of well
   #' @param wel_lat latitude of well
-  #' @param stream_shp shapefile of stream reaches
-  #' @param reach_id string indicating name of column in \code{stream_shp} that
+  #' @param stream_sf simple feature collection of stream lines
+  #' @param reach_id string indicating name of column in \code{stream_sf} that
   #' @param stream_pt_spacing distance between points used for sampling each stream reach. The actual distance
   #' between points will be close to this (but not necessarily exact) due to sampling rounding error. The finer
   #' spacing you use, the more accurate your results will be but the function will run slower and use more memory.
-  #' @param buffer_width width of buffer around stream used to match points with polylines
   #' @param nseed seed for random number generator (this is used to convert stream polylines to points)
   #' @return A data frame with four columns:
   #' \describe{
@@ -22,32 +21,33 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_shp, reach_id, stream_pt_sp
   #' or \link{apportion_web}
   #' @examples
   #' rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-  #'    stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+  #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
   #' head(rdll)
   #' @export
 
-  # only a couple functions need a bunch of spatial packages, so they are
-  # Suggests rather than Imports. Check to make sure they are loaded here.
-  if (!requireNamespace(c("dismo", "sp", "raster", "deldir", "rgeos"), quietly = TRUE)) {
-    stop("Several spatial packages (\"dismo\", \"sp\", \"raster\", \"deldir\", \"rgeos\") are needed for this function to work. Please install them.",
-      call. = FALSE
-    )
-  }
-
   # figure out how many points you will need to make
-  n_stream_pts <- round(rgeos::gLength(stream_shp) / stream_pt_spacing)
+  n_stream_pts <- round(as.numeric(sum(sf::st_length(stream_sf))) / stream_pt_spacing)
 
   # sample points
   set.seed(nseed)
-  stream_shp_pts <- sp::spsample(stream_shp, n = n_stream_pts, type = "regular")
+  stream_sf_pts <- sf::st_sample(stream_sf, size = n_stream_pts, type = "regular")
 
   # figure out what stream reach each point corresponds to
-  stream_shp_buffer <- raster::buffer(stream_shp, buffer_width, dissolve = F)
-  int <- raster::intersect(stream_shp_pts, stream_shp_buffer)
-  stream_df_pts <-
-    as.data.frame(stream_shp_pts) %>%
-    cbind(int@data[, reach_id]) %>%
-    magrittr::set_colnames(c("lon", "lat", "reach"))
+  for (i in 1:dim(stream_sf)[1]){
+    df_i <- 
+      stream_sf_pts[[i]] |> 
+      sf::st_coordinates() |> 
+      as.data.frame() |> 
+      dplyr::rename(lon = X, lat = Y) |> 
+      dplyr::select(-L1)
+    df_i[,reach_id] <- sf::st_drop_geometry(stream_sf[i, reach_id])
+    
+    if (i == 1){
+      stream_df_pts <- df_i
+    } else {
+      stream_df_pts <- dplyr::bind_rows(stream_df_pts, df_i)
+    }
+  }
 
   # calculate euclidean distance to well
   stream_df_pts$dist <- sqrt((stream_df_pts$lon - wel_lon)^2 + (stream_df_pts$lat - wel_lat)^2)
