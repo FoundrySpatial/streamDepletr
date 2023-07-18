@@ -21,7 +21,7 @@ hantush(t, d, S, Kh, b, Kriv, briv, prec = 80)
 
 \item{briv}{streambed semipervious layer thickness [L]}
 
-\item{prec}{precision for mpfr package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results.}
+\item{prec}{precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time. If set to `NULL`, the `mpfr` function is not used which can address an occasional issue on Mac computers but lead to problems under some combinations of `Tr` and `lmda`.}
 }
 \value{
 A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].

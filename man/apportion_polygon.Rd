@@ -8,7 +8,7 @@ apportion_polygon(
   reach_dist_lon_lat,
   wel_lon,
   wel_lat,
-  crs,
+  coord_crs,
   max_dist = Inf,
   min_frac = 0,
   reach_name = NULL,
@@ -28,7 +28,7 @@ Columns can either be named exactly as defined here, or set using \code{reach_na
 
 \item{wel_lat}{latitude of well}
 
-\item{crs}{object of class CRS with projection info of latitude and longitude input}
+\item{coord_crs}{coordinate reference system for sf or sfc object (create with \code{sf::st_crs}).}
 
 \item{max_dist}{the maximum distance of a stream to be depleted; defaults to \code{Inf}, which means all reaches will be considered.}
 
@@ -61,9 +61,9 @@ in Zipper et al (2018), which found that \code{apportion_web} a weighting factor
 }
 \examples{
 rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-   stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
 apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
-   max_dist = 5000, crs = raster::crs(stream_lines))
+   max_dist = 5000, coord_crs = sf::st_crs(stream_lines))
 }
 \references{
 Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts

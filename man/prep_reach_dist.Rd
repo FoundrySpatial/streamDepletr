@@ -8,10 +8,9 @@ calculates the distance from each of those points to a well.}
 prep_reach_dist(
   wel_lon,
   wel_lat,
-  stream_shp,
+  stream_sf,
   reach_id,
   stream_pt_spacing,
-  buffer_width = 0.1,
   nseed = 1
 )
 }
@@ -20,15 +19,13 @@ prep_reach_dist(
 
 \item{wel_lat}{latitude of well}
 
-\item{stream_shp}{shapefile of stream reaches}
+\item{stream_sf}{simple feature collection of stream lines}
 
-\item{reach_id}{string indicating name of column in \code{stream_shp} that}
+\item{reach_id}{string indicating name of column in \code{stream_sf} that}
 
 \item{stream_pt_spacing}{distance between points used for sampling each stream reach. The actual distance
 between points will be close to this (but not necessarily exact) due to sampling rounding error. The finer
 spacing you use, the more accurate your results will be but the function will run slower and use more memory.}
-
-\item{buffer_width}{width of buffer around stream used to match points with polylines}
 
 \item{nseed}{seed for random number generator (this is used to convert stream polylines to points)}
 }
@@ -49,6 +46,6 @@ calculates the distance from each of those points to a well.
 }
 \examples{
 rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-   stream_shp = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
 head(rdll)
 }

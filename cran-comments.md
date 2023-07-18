@@ -10,14 +10,14 @@ This submission is intended to address the issues described by rsbivand on
 the following GitHub issue: https://github.com/FoundrySpatial/streamDepletr/issues/19
 
 ## Test environments
-
+TO DO
 
 ## R CMD check results
 ### Windows on win-builder
-
+TO DO
 
 ### Linux (Ubuntu and Fedora on R-hub)
-
+TO DO
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.

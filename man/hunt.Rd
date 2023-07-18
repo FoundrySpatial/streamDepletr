@@ -19,7 +19,7 @@ hunt(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80)
 
 \item{lmda_max}{maximum allowed `lmda` [L/T]. If `lmda` is too high, exp and erfc calculations in Hunt solution are not computationally possible, so you may need to artifically reduce `lmda` using this term.}
 
-\item{prec}{precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time.}
+\item{prec}{precision for \code{Rmpfr} package for storing huge numbers; 80 seems to generally work but tweak this if you get weird results. Reducing this value will reduce accuracy but speed up computation time. If set to `NULL`, the `mpfr` function is not used which can address an occasional issue on Mac computers but lead to problems under some combinations of `Tr` and `lmda`.}
 }
 \value{
 A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
