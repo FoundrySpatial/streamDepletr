@@ -22,7 +22,6 @@ apportion_inverse <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach
   #'   \item{reach}{the grouping variable input in \code{reach_dist}}
   #'   \item{frac_depletion}{the proportion of streamflow depletion from the well occurring in that reach.}
   #' }
-  #' @importFrom magrittr %>%
   #' @references
   #' Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts
   #' on Real Stream Networks: Testing the Performance of Simple Management Tools. Water Resources Research.
@@ -43,11 +42,11 @@ apportion_inverse <- function(reach_dist, w, max_dist = Inf, min_frac = 0, reach
 
   # apportion
   df_out <-
-    reach_dist %>%
-    subset(dist <= max_dist) %>%
-    dplyr::group_by(reach) %>%
-    dplyr::summarize(dist_min = min(dist)) %>%
-    transform(frac_depletion = (1 / dist_min^w) / sum((1 / dist_min^w))) %>%
+    reach_dist |>
+    subset(dist <= max_dist) |>
+    dplyr::group_by(reach) |>
+    dplyr::summarize(dist_min = min(dist)) |>
+    transform(frac_depletion = (1 / dist_min^w) / sum((1 / dist_min^w))) |>
     dplyr::select(reach, frac_depletion)
 
   # screen for depletion below min_frac

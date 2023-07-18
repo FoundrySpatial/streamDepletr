@@ -23,7 +23,6 @@ hantush <- function(t, d, S, Kh, b, Kriv, briv, prec = 80) {
   #' }
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
-  #' @importFrom magrittr %>%
   #' @references
   #' Hantush, MS (1965). Wells near Streams with Semipervious Beds. Journal of Geophysical Research 70(12): 2829-38. doi:10.1029/JZ070i012p02829.
   #' @examples

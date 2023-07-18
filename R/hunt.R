@@ -22,7 +22,6 @@ hunt <- function(t, d, S, Tr, lmda, lmda_max = Inf, prec = 80) {
   #' }
   #' @return A numeric of \code{Qf}, streamflow depletion as fraction of pumping rate [-].
   #' If the pumping rate of the well (\code{Qw}; [L3/T]) is known, you can calculate volumetric streamflow depletion [L3/T] as \code{Qf*Qw}
-  #' @importFrom magrittr %>%
   #' @references
   #' Hunt, B (1999). Unsteady Stream Depletion from Ground Water Pumping.
   #' Ground Water 37 (1): 98-102. doi:10.1111/j.1745-6584.1999.tb00962.x.
