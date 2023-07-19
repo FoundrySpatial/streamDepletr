@@ -32,7 +32,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, coord_crs, m
   #' doi:10.1029/2018WR022707.
   #' @examples
   #' rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-  #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+  #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5)
   #' apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
   #'    max_dist = 5000, coord_crs = sf::st_crs(stream_lines))
   #' @export
