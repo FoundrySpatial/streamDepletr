@@ -19,9 +19,9 @@ prep_reach_dist(
 
 \item{wel_lat}{latitude of well}
 
-\item{stream_sf}{simple feature collection of stream lines}
+\item{stream_sf}{simple feature collection of stream lines, i.e., loaded from a shapefile using \code{sf::st_read}.}
 
-\item{reach_id}{string indicating name of column in \code{stream_sf} that}
+\item{reach_id}{string indicating name of column in \code{stream_sf} that has the unique identifier for each stream line segment.}
 
 \item{stream_pt_spacing}{distance between points used for sampling each stream reach. The actual distance
 between points will be close to this (but not necessarily exact) due to sampling rounding error. The finer
@@ -46,6 +46,6 @@ calculates the distance from each of those points to a well.
 }
 \examples{
 rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5)
 head(rdll)
 }

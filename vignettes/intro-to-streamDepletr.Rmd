@@ -199,7 +199,7 @@ First, we need to determine the position of the well relative to the stream netw
 ```{r}
 rdll <- prep_reach_dist(
   wel_lon = wel_lon, wel_lat = wel_lat,
-  stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1
+  stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5
 )
 head(rdll)
 ```
@@ -404,9 +404,10 @@ df_all |>
   # calculate depleted streamflow
   transform(Q_depleted = Q_m3d - Qs_sum) |>
   # melt for plot
-  reshape2::melt(
-    id = c("stream", "date", "Qs_sum"),
-    value.name = "discharge_m3d"
+  tidyr::pivot_longer(
+    cols = -c("stream", "date", "Qs_sum"),
+    names_to = "variable",
+    values_to = "discharge_m3d"
   ) |>
   # plot
   ggplot2::ggplot(aes(x = date, y = discharge_m3d, color = variable)) +

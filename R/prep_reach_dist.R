@@ -4,8 +4,8 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_sf, reach_id, stream_pt_spa
   #'
   #' @param wel_lon longitude of well
   #' @param wel_lat latitude of well
-  #' @param stream_sf simple feature collection of stream lines
-  #' @param reach_id string indicating name of column in \code{stream_sf} that
+  #' @param stream_sf simple feature collection of stream lines, i.e., loaded from a shapefile using \code{sf::st_read}.
+  #' @param reach_id string indicating name of column in \code{stream_sf} that has the unique identifier for each stream line segment.
   #' @param stream_pt_spacing distance between points used for sampling each stream reach. The actual distance
   #' between points will be close to this (but not necessarily exact) due to sampling rounding error. The finer
   #' spacing you use, the more accurate your results will be but the function will run slower and use more memory.
@@ -21,7 +21,7 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_sf, reach_id, stream_pt_spa
   #' or \link{apportion_web}
   #' @examples
   #' rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-  #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+  #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5)
   #' head(rdll)
   #' @export
 

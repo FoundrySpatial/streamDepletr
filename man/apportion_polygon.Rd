@@ -61,9 +61,11 @@ in Zipper et al (2018), which found that \code{apportion_web} a weighting factor
 }
 \examples{
 rdll <- prep_reach_dist(wel_lon = 295500, wel_lat = 4783200,
-   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 1)
+   stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5)
 apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
    max_dist = 5000, coord_crs = sf::st_crs(stream_lines))
+apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
+   max_dist = 5000, min_frac = 0.05, coord_crs = sf::st_crs(stream_lines))
 }
 \references{
 Zipper, SC, T Dallemagne, T Gleeson, TC Boerman, A Hartmann (2018). Groundwater Pumping Impacts

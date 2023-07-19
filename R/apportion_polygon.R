@@ -35,6 +35,8 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, coord_crs, m
   #'    stream_sf = stream_lines, reach_id = "reach", stream_pt_spacing = 5)
   #' apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
   #'    max_dist = 5000, coord_crs = sf::st_crs(stream_lines))
+  #' apportion_polygon(reach_dist_lon_lat = rdll, wel_lon = 295500, wel_lat = 4783200,
+  #'    max_dist = 5000, min_frac = 0.05, coord_crs = sf::st_crs(stream_lines))
   #' @export
 
   # set column names in data frame if necessary
@@ -69,7 +71,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, coord_crs, m
   stream_polys_ordered <-
     stream_polys[sp] |>
     sf::st_sf()
-  stream_polys_ordered$reach <- sf::st_drop_geometry(reach_closest_sf[[reach_id]])
+  stream_polys_ordered$reach <- sf::st_drop_geometry(reach_closest_sf$reach)
 
   # make polygons for all stream points including well (reach for well = -9999)
   reaches_with_well_sf <-
@@ -89,7 +91,7 @@ apportion_polygon <- function(reach_dist_lon_lat, wel_lon, wel_lat, coord_crs, m
   well_polys_ordered <-
     well_polys[wp] |>
     sf::st_sf()
-  well_polys_ordered$reach <- sf::st_drop_geometry(reaches_with_well_sf[[reach_id]])
+  well_polys_ordered$reach <- sf::st_drop_geometry(reaches_with_well_sf$reach)
   well_poly <- subset(well_polys_ordered, reach == -9999)
 
   # for the polygon containing the well (reach=-9999), figure out what % is contained

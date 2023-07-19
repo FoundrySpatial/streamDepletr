@@ -10,14 +10,36 @@ This submission is intended to address the issues described by rsbivand on
 the following GitHub issue: https://github.com/FoundrySpatial/streamDepletr/issues/19
 
 ## Test environments
-TO DO
+* local windows 10 install, R 4.2.2
+* win-builder (devel and release)
+* Windows Server 2022, R-devel, 64 bit (on r-hub)
+* Ubuntu Linux 20.04.1 LTS, R-release, GCC (on r-hub)
+* Fedora Linux, R-devel, clang, gfortran (on r-hub)
 
 ## R CMD check results
 ### Windows on win-builder
-TO DO
+0 ERRORs | 0 WARNINGs | 0 NOTES
+
+### Windows on r-hub
+0 ERRORs | 0 WARNINGs | 2 NOTES
+
+Both notes were related to `lastMiKTeXException`: 
+```
+* checking for non-standard things in the check directory ... NOTE
+* checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'
+```
+This [appears to be a bug in r-hub and does not require action](https://github.com/r-hub/rhub/issues/503).
 
 ### Linux (Ubuntu and Fedora on R-hub)
-TO DO
+0 ERRORs | 0 WARNINGs | 1 NOTES
+(same on Ubuntu and Fedora)
+```
+* checking HTML version of manual ... NOTE
+Skipping checking HTML validation: no command 'tidy' found
+```
+This is an r-hub issue and therefore does not require action.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.

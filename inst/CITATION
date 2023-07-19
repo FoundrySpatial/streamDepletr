@@ -1,0 +1,24 @@
+bibentry(bibtype = "Manual",
+         title = "streamDepletr: Estimate Streamflow Depletion Due to Groundwater Pumping",
+         author = c(person("Sam", "Zipper", email = "samzipper@ku.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8735-5757")),
+		 person("Ben", "Kerr", email = "ben@foundryspatial.com", role = "ctb"),
+		 person("Tom", "Gleeson", email = "tgleeson@uvic.ca", role = "ctb", comment = c(ORCID = "0000-0001-9493-7707")),
+		 person("Qiang", "Li", email = "liqiang1205@gmail.com", role = "rev", comment = c(ORCID = "0000-0003-2221-6905")),
+		 person("Foundry Spatial Ltd.", role = "cph")),
+		 year = "2023",
+     note = "R package version 0.2.0",
+     url = "https://cran.r-project.org/package=streamDepletr",
+	 header = "To cite streamDepletr, please use:"
+)
+
+bibentry(bibtype = "Article",
+         title = "Rapid and Accurate Estimates of Streamflow Depletion Caused by Groundwater Pumping Using Analytical Depletion Functions",
+         author = c(as.person("Samuel C. Zipper"), as.person("Tom Gleeson"), as.person("Ben Kerr"), as.person("Jeanette K. Howard"), as.person("Melissa M. Rohde"), as.person("Jennifer Carah"), as.person("Julie Zimmerman")),
+         journal      = "Water Resources Research",
+         year         = "2019",
+	 volume       = "55",
+	 number       = "7",
+	 pages        = "5807--5829",
+	 doi          = "10.1029/2018WR024403",
+	 header = "If you use analytical depletion functions, please cite:"
+)
