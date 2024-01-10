@@ -52,6 +52,9 @@ prep_reach_dist <- function(wel_lon, wel_lat, stream_sf, reach_id, stream_pt_spa
   # calculate euclidean distance to well
   stream_df_pts$dist <- sqrt((stream_df_pts$lon - wel_lon)^2 + (stream_df_pts$lat - wel_lat)^2)
 
+  # set name of 'reach' column to reach
+  names(stream_df_pts)[names(stream_df_pts) == reach_id] <- "reach"
+  
   # put columns in order and return
   return(stream_df_pts[, c("reach", "dist", "lat", "lon")])
 }
